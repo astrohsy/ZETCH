@@ -1,0 +1,15 @@
+version: "3.8"
+
+services:
+  zetch_db:
+    image: postgres:14.5
+    volumes:
+      - zetch_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: zetch
+      POSTGRES_PASSWORD: secret
+    ports:
+      - "5432:5432"
+
+volumes:
+  zetch_data:
