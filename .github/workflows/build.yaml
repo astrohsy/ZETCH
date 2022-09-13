@@ -16,5 +16,6 @@ jobs:
         with:
           java-version: '17'
           distribution: 'adopt'
+          project: 'demo'
       - name: Build with Maven
-        run: mvn --batch-mode --update-snapshots package
+        run: ${project}/mvn --batch-mode --update-snapshots package
