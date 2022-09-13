@@ -6,9 +6,11 @@ package com.example.demo.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
-public class ZetchUser {
+@Table(name = "zetch_user") // "User" is a keyword in some DBs
+public class User {
     @Id
     private String username;
     private String name;

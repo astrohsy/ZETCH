@@ -1,6 +1,6 @@
 package com.example.demo.web;
 
-import com.example.demo.domain.ZetchUser;
+import com.example.demo.domain.User;
 import com.example.demo.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,32 +14,32 @@ public class UserController {
     private final UserRepository userRepository;
 
     @Autowired
-    public UserController(UserRepository userRepository) {
+    UserController(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
     // Aggregate root
     @GetMapping(path="/")
-    public @ResponseBody Iterable<ZetchUser> getAllUsers() {
+    @ResponseBody Iterable<User> getAllUsers() {
         // This returns a JSON or XML with the users
         return userRepository.findAll();
     }
 
     @PostMapping(path="/")
-    public @ResponseBody String addNewUser(@RequestBody ZetchUser newUser) {
+    @ResponseBody String addNewUser(@RequestBody User newUser) {
         userRepository.save(newUser);
         return "Saved";
     }
 
     // Single item
     @GetMapping("/{username}")
-    ZetchUser getOne(@PathVariable String username) {
+    User getOne(@PathVariable String username) {
         return userRepository.findById(username)
                 .orElseThrow(() -> new NoSuchElementException("User does not exist: " + username));
     }
 
     @PatchMapping("/{username}")
-    ZetchUser updateUser(@RequestBody ZetchUser newUser, @PathVariable String username) {
+    User updateUser(@RequestBody User newUser, @PathVariable String username) {
         return userRepository.findById(username).map(user -> {
             user.setName(newUser.getName());
             user.setEmail(newUser.getEmail());
@@ -54,7 +54,7 @@ public class UserController {
      */
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NoSuchElementException.class)
-    public String return404(NoSuchElementException ex) {
+    String return404(NoSuchElementException ex) {
         return ex.getMessage();
     }
 }
