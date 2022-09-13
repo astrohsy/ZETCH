@@ -1,5 +1,8 @@
 name: ZETCH Build
 
+env:
+  API_SERVER_PROJECT: demo
+
 on:
   push:
   pull_request:
@@ -16,6 +19,6 @@ jobs:
         with:
           java-version: '17'
           distribution: 'adopt'
-          project: 'demo'
+          project: ${{ env.API_SERVER_PROJECT }}
       - name: Build with Maven
         run: ${project}/mvn --batch-mode --update-snapshots package
