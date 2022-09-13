@@ -3,15 +3,13 @@ package com.example.demo.web;
 import com.example.demo.domain.ZetchUser;
 import com.example.demo.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
-@Controller // This means that this class is a Controller
-@RequestMapping(path="/users")
+import java.util.NoSuchElementException;
+
+@RestController
+@RequestMapping(path = "/users")
 public class UserController {
     private final UserRepository userRepository;
 
@@ -20,24 +18,43 @@ public class UserController {
         this.userRepository = userRepository;
     }
 
-    @PostMapping(path="/add") // Map ONLY POST Requests
-    public @ResponseBody String addNewUser(@RequestParam String name,
-                                           @RequestParam String email,
-                                           @RequestParam String username) {
-        // @ResponseBody means the returned String is the response, not a view name
-        // @RequestParam means it is a parameter from the GET or POST request
-
-        ZetchUser n = new ZetchUser();
-        n.setName(name);
-        n.setEmail(email);
-        n.setUsername(username);
-        userRepository.save(n);
-        return "Saved";
-    }
-
-    @GetMapping(path="/all")
+    // Aggregate root
+    @GetMapping(path="/")
     public @ResponseBody Iterable<ZetchUser> getAllUsers() {
         // This returns a JSON or XML with the users
         return userRepository.findAll();
+    }
+
+    @PostMapping(path="/")
+    public @ResponseBody String addNewUser(@RequestBody ZetchUser newUser) {
+        userRepository.save(newUser);
+        return "Saved";
+    }
+
+    // Single item
+    @GetMapping("/{username}")
+    ZetchUser getOne(@PathVariable String username) {
+        return userRepository.findById(username)
+                .orElseThrow(() -> new NoSuchElementException("User does not exist: " + username));
+    }
+
+    @PatchMapping("/{username}")
+    ZetchUser updateUser(@RequestBody ZetchUser newUser, @PathVariable String username) {
+        return userRepository.findById(username).map(user -> {
+            user.setName(newUser.getName());
+            user.setEmail(newUser.getEmail());
+            return userRepository.save(user);
+        }).orElseThrow(() -> new NoSuchElementException("User does not exist: " + username));
+    }
+
+    /**
+     * Exception handler if NoSuchElementException is thrown in this Controller
+     * @param ex Exception
+     * @return Error message string
+     */
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(NoSuchElementException.class)
+    public String return404(NoSuchElementException ex) {
+        return ex.getMessage();
     }
 }
