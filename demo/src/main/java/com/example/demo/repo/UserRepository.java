@@ -1,11 +1,7 @@
 package com.example.demo.repo;
 
 import com.example.demo.domain.ZetchUser;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-/**
- * User Repository Interface
- * Will be AUTO IMPLEMENTED by Spring into a Bean called userRepository
- */
-public interface UserRepository extends CrudRepository<ZetchUser, Integer> {
+public interface UserRepository extends JpaRepository<ZetchUser, String> {
 }
