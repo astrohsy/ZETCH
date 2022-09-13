@@ -20,4 +20,4 @@ jobs:
           java-version: '17'
           distribution: 'adopt'
       - name: Build with Maven
-        run: ${API_SERVER_PROJECT}/mvn --batch-mode --update-snapshots package
+        run: ${API_SERVER_PROJECT}/mvnw clean install
