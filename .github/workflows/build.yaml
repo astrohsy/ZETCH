@@ -19,6 +19,7 @@ jobs:
         with:
           java-version: '17'
           distribution: 'adopt'
-          project: ${{ env.API_SERVER_PROJECT }}
+        env:
+          PROJECT: ${{ env.API_SERVER_PROJECT }}
       - name: Build with Maven
-        run: ${project}/mvn --batch-mode --update-snapshots package
+        run: ${PROJECT}/mvn --batch-mode --update-snapshots package
