@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.web;
 
 import com.example.demo.domain.ZetchUser;
 import com.example.demo.repo.UserRepository;
