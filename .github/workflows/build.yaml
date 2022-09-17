@@ -1,7 +1,7 @@
 name: ZETCH Build
 
 env:
-  API_SERVER_PROJECT: demo
+  API_SERVER_PROJECT: api_server
 
 on:
   push:

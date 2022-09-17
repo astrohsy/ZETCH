@@ -2,7 +2,7 @@
  * User entity definition
  * Keyword `user` is reserved in PostgreSQL, hence `ZetchUser`
  */
-package com.example.demo.domain;
+package io.zetch.app.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;

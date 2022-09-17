@@ -1,4 +1,4 @@
-package com.example.demo.web;
+package io.zetch.app.web;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
