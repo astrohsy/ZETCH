@@ -24,3 +24,5 @@ curl --location --request GET 'http://localhost:8080/users/'
 ```bash
 docker-compose down
 ```
+### View swagger UI of apis: 
+localhost:8080/swagger-ui.html
