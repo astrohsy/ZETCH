@@ -1,7 +1,7 @@
-package com.example.demo.web;
+package io.zetch.app.web;
 
-import com.example.demo.domain.User;
-import com.example.demo.repo.UserRepository;
+import io.zetch.app.domain.User;
+import io.zetch.app.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

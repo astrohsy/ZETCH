@@ -1,4 +1,4 @@
-# DEMO
+# Zetch API Server
 
 ### 1. Run the DB container
 ```bash

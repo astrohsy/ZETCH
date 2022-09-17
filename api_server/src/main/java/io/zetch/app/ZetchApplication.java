@@ -1,4 +1,4 @@
-package com.example.demo;
+package io.zetch.app;
 
 import java.util.Arrays;
 
