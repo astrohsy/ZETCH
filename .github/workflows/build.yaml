@@ -9,6 +9,15 @@ on:
     types: [opened, reopened]
 
 jobs:
+
+  formatting:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: axel-op/googlejavaformat-action@v3
+        with:
+          args: "--set-exit-if-changed"
+
   build:
     runs-on: ubuntu-latest
 
@@ -19,11 +28,6 @@ jobs:
         with:
           java-version: '17'
           distribution: 'adopt'
-      - name: "Test with GoogleJavaFormat Linter"
-        uses: axel-op/googlejavaformat-action@v3
-        working-directory: ./${{ env.API_SERVER_PROJECT }}
-        with:
-          args: "--skip-sorting-imports --replace"
       - name: Build with Maven
         working-directory: ./${{ env.API_SERVER_PROJECT }}
         run: ./mvnw clean install
