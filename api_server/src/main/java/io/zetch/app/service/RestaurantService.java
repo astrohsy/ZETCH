@@ -41,10 +41,10 @@ public class RestaurantService {
      *
      * @param id Restaurant id
      * @return Restaurant
+     * @throws NoSuchElementException If Restaurant not found
      */
-    public Restaurant getOne(Long id) {
-        return restaurantRepository.findById(id).orElseThrow(
-                () -> new NoSuchElementException("Restaurant does not exist: " + id));
+    public Restaurant getOne(Long id) throws NoSuchElementException {
+        return verifyRestaurant(id);
     }
 
     /**
@@ -59,6 +59,18 @@ public class RestaurantService {
         List<User> restaurantOwner = verifyOwners(ownerUsernames);
         Restaurant newRestaurant = new Restaurant(restaurantOwner, name, cuisine, address);
         restaurantRepository.save(newRestaurant);
+    }
+
+    /**
+     * Verify and return Restaurant for a particular id
+     *
+     * @param id Restaurant Id
+     * @return Found Restaurant
+     * @throws NoSuchElementException If Restaurant not found
+     */
+    private Restaurant verifyRestaurant(Long id) throws NoSuchElementException {
+        return restaurantRepository.findById(id).orElseThrow(
+                () -> new NoSuchElementException("Restaurant does not exist: " + id));
     }
 
     /**
