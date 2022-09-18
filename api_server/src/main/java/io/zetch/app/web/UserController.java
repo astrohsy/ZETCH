@@ -1,5 +1,7 @@
 package io.zetch.app.web;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import io.zetch.app.domain.User;
 import io.zetch.app.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,7 @@ import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping(path = "/users")
+@Tag(name = "Users")
 public class UserController {
     private final UserRepository userRepository;
 
@@ -18,28 +21,30 @@ public class UserController {
         this.userRepository = userRepository;
     }
 
-    // Aggregate root
     @GetMapping(path="/")
+    @Operation(summary = "Retrieve all users")
     @ResponseBody Iterable<User> getAllUsers() {
         // This returns a JSON or XML with the users
         return userRepository.findAll();
     }
 
     @PostMapping(path="/")
+    @Operation(summary = "Create a new user")
     @ResponseBody String addNewUser(@RequestBody User newUser) {
         userRepository.save(newUser);
-        return "Saved";
+        return "User saved";
     }
 
-    // Single item
     @GetMapping("/{username}")
-    User getOne(@PathVariable String username) {
+    @Operation(summary = "Retrieve a single user")
+    User getOneUser(@PathVariable String username) {
         return userRepository.findById(username)
                 .orElseThrow(() -> new NoSuchElementException("User does not exist: " + username));
     }
 
-    @PatchMapping("/{username}")
-    User updateUser(@RequestBody User newUser, @PathVariable String username) {
+    @PutMapping("/{username}")
+    @Operation(summary = "Modify user attributes")
+    User updateUserWithPatch(@RequestBody User newUser, @PathVariable String username) {
         return userRepository.findById(username).map(user -> {
             user.setName(newUser.getName());
             user.setEmail(newUser.getEmail());

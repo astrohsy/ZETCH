@@ -1,5 +1,7 @@
 package io.zetch.app.web;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import io.zetch.app.domain.Restaurant;
 import io.zetch.app.domain.RestaurantDto;
 import io.zetch.app.domain.User;
@@ -14,6 +16,7 @@ import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping(path = "/restaurants")
+@Tag(name = "Restaurants")
 public class RestaurantController {
     private final RestaurantRepository restaurantRepository;
     private final UserRepository userRepository;
@@ -28,8 +31,8 @@ public class RestaurantController {
      * @return A list of all restraurants
      */
     @GetMapping(path="/")
-    @ResponseBody
-    Iterable<Restaurant> getAllUsers() {
+    @Operation(summary = "Retrieve all restaurants")
+    @ResponseBody Iterable<Restaurant> getAllRestaurants() {
         return restaurantRepository.findAll();
     }
 
@@ -38,7 +41,8 @@ public class RestaurantController {
      * @return A restaurant by id
      */
     @GetMapping("/{restaurantId}")
-    Restaurant getOne(@PathVariable Integer restaurantId) {
+    @Operation(summary = "Retrieve a single restaurant")
+    Restaurant getOneRestaurant(@PathVariable Integer restaurantId) {
         return restaurantRepository.findById(restaurantId)
                 .orElseThrow(() -> new NoSuchElementException("Restaurant does not exist: " + restaurantId));
     }
@@ -49,6 +53,7 @@ public class RestaurantController {
      * @return Confirmation message if successful
      */
     @PostMapping(path="/")
+    @Operation(summary = "Create a new restaurant")
     @ResponseBody String addNewRestaurant(@RequestBody @Validated RestaurantDto restaurantDto) {
         User restaurantOwner = verifyOwner(restaurantDto.getOwnerUsername());
         Restaurant newRestaurant = new Restaurant(restaurantOwner, restaurantDto.getName(),
