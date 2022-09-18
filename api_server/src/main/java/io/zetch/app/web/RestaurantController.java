@@ -12,7 +12,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "/restaurants")
@@ -55,7 +59,7 @@ public class RestaurantController {
     @PostMapping(path="/")
     @Operation(summary = "Create a new restaurant")
     @ResponseBody String addNewRestaurant(@RequestBody @Validated RestaurantDto restaurantDto) {
-        User restaurantOwner = verifyOwner(restaurantDto.getOwnerUsername());
+        List<User> restaurantOwner = verifyOwners(restaurantDto.getOwnerUsernames());
         Restaurant newRestaurant = new Restaurant(restaurantOwner, restaurantDto.getName(),
                 restaurantDto.getCuisine(), restaurantDto.getAddress());
         restaurantRepository.save(newRestaurant);
@@ -64,19 +68,29 @@ public class RestaurantController {
     }
 
     /**
-     * Verify and return User corresponding to restaurant's owner.
+     * Verify and return Users corresponding to a list of usernames of restaurant owners.
      *
-     * @param username Owner's username
-     * @return the found User
-     * @throws NoSuchElementException if no User found
+     * @param usernames List of usernames of owners
+     * @return List of found Users
+     * @throws NoSuchElementException If at least one User was not found
      */
-    private User verifyOwner(String username) throws NoSuchElementException {
-        if (username == null) {
+    private List<User> verifyOwners(List<String> usernames) throws NoSuchElementException {
+        if (usernames == null) {
             return null;
         }
 
-        return userRepository.findById(username).orElseThrow(() ->
-                new NoSuchElementException("User does not exist: " + username));
+        Set<String> usernamesSet = new HashSet<>(usernames);
+        List<User> users = userRepository.findAllById(usernames);
+        Set<String> foundUsernames = users.stream().map(User::getUsername).collect(Collectors.toSet());
+
+        // Remove found usernames from provided usernames to check whether all were found
+        usernamesSet.removeAll(foundUsernames);
+
+        if (usernamesSet.isEmpty()) {
+            return users;
+        } else {
+            throw new NoSuchElementException("User(s) not found: " + usernamesSet);
+        }
     }
 
     /**

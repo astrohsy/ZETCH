@@ -2,13 +2,15 @@ package io.zetch.app.domain;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * A Data Transfer Object for the {@link Restaurant} entity
  */
 public class RestaurantDto implements Serializable {
-    private final String ownerUsername;
+    private final List<String> ownerUsernames;
     @NotNull  // Every restaurant must have a name
     private final String name;
     private final String cuisine;
@@ -17,13 +19,13 @@ public class RestaurantDto implements Serializable {
     /**
      * Constructor to fully initialize Restaurant Dto
      *
-     * @param ownerUsername Username of the restaurant's owner
+     * @param ownerUsernames List of usernames of the restaurant's owners
      * @param name Restaurant's name
      * @param cuisine Restaurant's cuisine
      * @param address Restaurant's address
      */
-    public RestaurantDto(String ownerUsername, String name, String cuisine, String address) {
-        this.ownerUsername = ownerUsername;
+    public RestaurantDto(List<String> ownerUsernames, String name, String cuisine, String address) {
+        this.ownerUsernames = ownerUsernames;
         this.name = name;
         this.cuisine = cuisine;
         this.address = address;
@@ -35,12 +37,12 @@ public class RestaurantDto implements Serializable {
      * @param restaurant Restaurant object
      */
     public RestaurantDto(Restaurant restaurant) {
-        this(restaurant.getOwner().getUsername(), restaurant.getName(),
-                restaurant.getCuisine(), restaurant.getAddress());
+        this(restaurant.getOwners().stream().map(User::getUsername).collect(Collectors.toList()),
+                restaurant.getName(), restaurant.getCuisine(), restaurant.getAddress());
     }
 
-    public String getOwnerUsername() {
-        return ownerUsername;
+    public List<String> getOwnerUsernames() {
+        return ownerUsernames;
     }
 
     public String getName() {
@@ -59,24 +61,23 @@ public class RestaurantDto implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        RestaurantDto entity = (RestaurantDto) o;
-        return Objects.equals(this.ownerUsername, entity.ownerUsername) &&
-                Objects.equals(this.name, entity.name) &&
-                Objects.equals(this.cuisine, entity.cuisine) &&
-                Objects.equals(this.address, entity.address);
+        RestaurantDto that = (RestaurantDto) o;
+        return Objects.equals(ownerUsernames, that.ownerUsernames) && name.equals(that.name)
+                && Objects.equals(cuisine, that.cuisine) && Objects.equals(address, that.address);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(ownerUsername, name, cuisine, address);
+        return Objects.hash(ownerUsernames, name, cuisine, address);
     }
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "(" +
-                "ownerUsername = " + ownerUsername + ", " +
-                "name = " + name + ", " +
-                "cuisine = " + cuisine + ", " +
-                "address = " + address + ")";
+        return getClass().getSimpleName() +
+                String.format("{ownerUsernames=%s, name=%s, cuisine=%s, address=%s}",
+                        ownerUsernames,
+                        name,
+                        cuisine,
+                        address);
     }
 }

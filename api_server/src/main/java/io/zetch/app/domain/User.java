@@ -3,10 +3,8 @@
  */
 package io.zetch.app.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "zetch_user") // "User" is a reserved keyword in some DBs
@@ -19,6 +17,9 @@ public class User {
 
     @Column
     private String email;
+
+    @ManyToMany(mappedBy = "owners")  // A restaurant might have multiple owners; a User might own multiple restaurants
+    private List<Restaurant> ownedRestaurants;
 
     public User(String username, String name, String email) {
         this.username = username;

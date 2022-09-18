@@ -4,6 +4,7 @@
 package io.zetch.app.domain;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Restaurant {
@@ -12,8 +13,8 @@ public class Restaurant {
     @GeneratedValue
     private Long id;
 
-    @OneToOne  // A restaurant can only have one owner
-    private User owner;
+    @ManyToMany  // A restaurant might have multiple owners; a User might own multiple restaurants
+    private List<User> owners;
 
     @Column(nullable = false)  // Every restaurant must have a name
     private String name;
@@ -24,8 +25,8 @@ public class Restaurant {
     @Column
     private String address;
 
-    public Restaurant(User owner, String name, String cuisine, String address) {
-        this.owner = owner;
+    public Restaurant(List<User> owner, String name, String cuisine, String address) {
+        this.owners = owner;
         this.name = name;
         this.cuisine = cuisine;
         this.address = address;
@@ -42,12 +43,12 @@ public class Restaurant {
         this.id = id;
     }
 
-    public User getOwner() {
-        return owner;
+    public List<User> getOwners() {
+        return owners;
     }
 
-    public void setOwner(User owner) {
-        this.owner = owner;
+    public void setOwners(List<User> owner) {
+        this.owners = owner;
     }
 
     public String getName() {
@@ -77,9 +78,9 @@ public class Restaurant {
     @Override
     public String toString() {
         return String.format(
-                "Restaurant{id=%s, owner_username=%s, name=%s, cuisine=%s, address=%s}",
+                "Restaurant{id=%s, owner_usernames=%s, name=%s, cuisine=%s, address=%s}",
                 id,
-                owner.getUsername(),
+                owners,
                 name,
                 cuisine,
                 address
