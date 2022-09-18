@@ -42,7 +42,7 @@ public class RestaurantController {
      */
     @GetMapping("/{restaurantId}")
     @Operation(summary = "Retrieve a single restaurant")
-    Restaurant getOneRestaurant(@PathVariable Integer restaurantId) {
+    Restaurant getOneRestaurant(@PathVariable Long restaurantId) {
         return restaurantRepository.findById(restaurantId)
                 .orElseThrow(() -> new NoSuchElementException("Restaurant does not exist: " + restaurantId));
     }

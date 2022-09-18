@@ -10,7 +10,7 @@ public class Restaurant {
 
     @Id
     @GeneratedValue
-    private Integer id;
+    private Long id;
 
     @OneToOne  // A restaurant can only have one owner
     private User owner;
@@ -34,11 +34,11 @@ public class Restaurant {
     protected Restaurant() {
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
