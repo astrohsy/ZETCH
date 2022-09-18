@@ -76,12 +76,13 @@ public class Restaurant {
 
     @Override
     public String toString() {
-        return "Restaurant{" +
-                "id=" + id +
-                ", owner=" + owner +
-                ", name='" + name + '\'' +
-                ", cuisine='" + cuisine + '\'' +
-                ", address='" + address + '\'' +
-                '}';
+        return String.format(
+                "Restaurant{id=%s, owner_username=%s, name=%s, cuisine=%s, address=%s}",
+                id,
+                owner.getUsername(),
+                name,
+                cuisine,
+                address
+        );
     }
 }

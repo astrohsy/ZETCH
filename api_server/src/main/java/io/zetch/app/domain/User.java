@@ -55,10 +55,11 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" +
-                "username='" + username + '\'' +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                '}';
+        return String.format(
+                "User{username=%s, name=%s, email=%s}",
+                username,
+                name,
+                email
+        );
     }
 }
