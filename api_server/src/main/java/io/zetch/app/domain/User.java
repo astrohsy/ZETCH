@@ -26,6 +26,14 @@ public class User {
         this.username = username;
         this.name = name;
         this.email = email;
+        this.ownedRestaurants = null;
+    }
+
+    public User(String username, String name, String email, List<Restaurant> ownedRestaurants) {
+        this.username = username;
+        this.name = name;
+        this.email = email;
+        this.ownedRestaurants = ownedRestaurants;
     }
 
     protected User() {
@@ -53,6 +61,14 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public List<Restaurant> getOwnedRestaurants() {
+        return ownedRestaurants;
+    }
+
+    public void setOwnedRestaurants(List<Restaurant> ownedRestaurants) {
+        this.ownedRestaurants = ownedRestaurants;
     }
 
     @Override
