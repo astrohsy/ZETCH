@@ -5,6 +5,7 @@ package io.zetch.app.domain;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "zetch_user") // "User" is a reserved keyword in some DBs
@@ -52,6 +53,20 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return username.equals(user.username) && Objects.equals(name, user.name) && Objects.equals(email, user.email)
+                && Objects.equals(ownedRestaurants, user.ownedRestaurants);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(username, name, email, ownedRestaurants);
     }
 
     @Override

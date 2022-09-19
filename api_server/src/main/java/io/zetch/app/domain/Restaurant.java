@@ -5,6 +5,7 @@ package io.zetch.app.domain;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class Restaurant {
@@ -73,6 +74,20 @@ public class Restaurant {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Restaurant that = (Restaurant) o;
+        return id.equals(that.id) && Objects.equals(owners, that.owners) && name.equals(that.name) &&
+                Objects.equals(cuisine, that.cuisine) && Objects.equals(address, that.address);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, owners, name, cuisine, address);
     }
 
     @Override
