@@ -42,6 +42,9 @@ public class UserService {
      * @param newUser New User object
      */
     public void createNew(User newUser) {
+        if (userRepository.existsById(newUser.getUsername())) {
+            throw new IllegalArgumentException("Username unavailable: " + newUser.getUsername());
+        }
         userRepository.save(newUser);
     }
 
@@ -76,7 +79,7 @@ public class UserService {
      * @return Found User
      * @throws NoSuchElementException If User not found
      */
-    private User verifyUser(String username) throws NoSuchElementException {
+    public User verifyUser(String username) throws NoSuchElementException {
         return userRepository.findById(username).orElseThrow(
                 () -> new NoSuchElementException("User does not exist: " + username));
     }

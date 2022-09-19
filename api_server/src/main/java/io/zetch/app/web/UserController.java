@@ -47,13 +47,24 @@ public class UserController {
     }
 
     /**
-     * Exception handler if NoSuchElementException is thrown in this Controller
+     * Return 404 Not Found if NoSuchElementException is thrown in this Controller
      * @param ex Exception
      * @return Error message string
      */
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NoSuchElementException.class)
     String return404(NoSuchElementException ex) {
+        return ex.getMessage();
+    }
+
+    /**
+     * Return 400 Bad Request if IllegalArgumentException is thrown in this Controller
+     * @param ex Exception
+     * @return Error message string
+     */
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(IllegalArgumentException.class)
+    String return404(IllegalArgumentException ex) {
         return ex.getMessage();
     }
 }
