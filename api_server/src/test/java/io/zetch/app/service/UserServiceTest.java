@@ -1,8 +1,6 @@
 package io.zetch.app.service;
 
-import io.zetch.app.domain.Restaurant;
 import io.zetch.app.domain.User;
-import io.zetch.app.repo.RestaurantRepository;
 import io.zetch.app.repo.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -78,5 +76,6 @@ public class UserServiceTest {
         assertThat(value.getUsername(), is(USERNAME));
         assertThat(value.getName(), is(NAME));
         assertThat(value.getEmail(), is(EMAIL));
+        assertThat(value.getOwnedRestaurants().isEmpty(), is(true));
     }
 }
