@@ -42,7 +42,8 @@ public class RestaurantServiceTest {
 
     @Test
     public void getAll() {
-        when(restaurantRepositoryMock.findAll()).thenReturn(List.of(restaurantMock));
+        when(restaurantRepositoryMock.findAll()).thenReturn(List.of(restaurantMock, restaurantMock, restaurantMock));
+        assertThat(restaurantService.getAll().size(), is(3));
         assertThat(restaurantService.getAll().get(0), is(restaurantMock));
     }
 
@@ -50,7 +51,7 @@ public class RestaurantServiceTest {
 
     @Test
     public void createNew() {
-        // Prepare to capture a User object
+        // Prepare to capture a Restaurant object
         ArgumentCaptor<Restaurant> restaurantCaptor = ArgumentCaptor.forClass(Restaurant.class);
 
         restaurantService.createNew(NAME, CUISINE, ADDRESS);

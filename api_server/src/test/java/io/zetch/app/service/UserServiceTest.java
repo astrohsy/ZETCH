@@ -40,7 +40,8 @@ public class UserServiceTest {
 
     @Test
     public void getAll() {
-        when(userRepositoryMock.findAll()).thenReturn(List.of(userMock));
+        when(userRepositoryMock.findAll()).thenReturn(List.of(userMock, userMock, userMock));
+        assertThat(service.getAll().size(), is(3));
         assertThat(service.getAll().get(0), is(userMock));
     }
 
