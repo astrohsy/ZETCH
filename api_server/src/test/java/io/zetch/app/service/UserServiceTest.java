@@ -1,6 +1,8 @@
 package io.zetch.app.service;
 
+import io.zetch.app.domain.Restaurant;
 import io.zetch.app.domain.User;
+import io.zetch.app.repo.RestaurantRepository;
 import io.zetch.app.repo.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -49,7 +51,7 @@ public class UserServiceTest {
     @Test
     public void update() {
         when(userRepositoryMock.findById(USERNAME)).thenReturn(Optional.of(userMock));
-        service.update(new User(USERNAME, NAME, EMAIL), USERNAME);
+        service.update(USERNAME, NAME, EMAIL);
 
         // Verify save() invoked
         verify(userRepositoryMock).save(any(User.class));
@@ -66,7 +68,7 @@ public class UserServiceTest {
         // Prepare to capture a User object
         ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
 
-        service.createNew(new User(USERNAME, NAME, EMAIL));
+        service.createNew(USERNAME, NAME, EMAIL);
 
         // Verify save() invoked
         verify(userRepositoryMock).save(userCaptor.capture());

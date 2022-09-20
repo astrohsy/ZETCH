@@ -28,20 +28,21 @@ public class UserServiceIntegrationTest {
 
     @Test
     public void createNew() {
-        userService.createNew(new User(USERNAME, NAME, EMAIL));
+        userService.createNew(USERNAME, NAME, EMAIL);
 
         // Verify User created
         User newUser = userService.verifyUser(USERNAME);
         assertThat(newUser.getUsername(), is(USERNAME));
         assertThat(newUser.getName(), is(NAME));
         assertThat(newUser.getEmail(), is(EMAIL));
+        assertThat(newUser.getOwnedRestaurants().isEmpty(), is(true));
     }
 
     @Test
     public void createNewFailsWhenUsernameExists() {
-        userService.createNew(new User(USERNAME, NAME, EMAIL));
+        userService.createNew(USERNAME, NAME, EMAIL);
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            userService.createNew(new User(USERNAME, NAME, EMAIL));
+            userService.createNew(USERNAME, NAME, EMAIL);
         });
 
         String expectedMsg = "Username unavailable";
@@ -53,7 +54,7 @@ public class UserServiceIntegrationTest {
     @Test
     public void update() {
         createNew();
-        User user = userService.update(new User(null, "newName", "newEmail"), USERNAME);
+        User user = userService.update(USERNAME, "newName", "newEmail");
         assertThat(user.getUsername(), is(USERNAME));
         assertThat(user.getName(), is("newName"));
         assertThat(user.getEmail(), is("newEmail"));
@@ -62,7 +63,7 @@ public class UserServiceIntegrationTest {
     @Test
     public void updateFailsWhenUserNotFound() {
         Exception exception = assertThrows(NoSuchElementException.class, () -> {
-            User user = userService.update(new User(null, "newName", "newEmail"), INVALID_USERNAME);
+            User user = userService.update(INVALID_USERNAME, "newName", "newEmail");
         });
 
         String expectedMsg = "User does not exist";

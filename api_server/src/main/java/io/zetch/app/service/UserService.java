@@ -1,6 +1,8 @@
 package io.zetch.app.service;
 
+import io.zetch.app.domain.Restaurant;
 import io.zetch.app.domain.User;
+import io.zetch.app.repo.RestaurantRepository;
 import io.zetch.app.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,10 +13,12 @@ import java.util.NoSuchElementException;
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private final RestaurantRepository restaurantRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, RestaurantRepository restaurantRepository) {
         this.userRepository = userRepository;
+        this.restaurantRepository = restaurantRepository;
     }
 
     /**
@@ -38,36 +42,35 @@ public class UserService {
 
     /**
      * Create a new User in the database
-     *
-     * @param newUser New User object
      */
-    public void createNew(User newUser) {
-        if (userRepository.existsById(newUser.getUsername())) {
-            throw new IllegalArgumentException("Username unavailable: " + newUser.getUsername());
+    public void createNew(String username, String name, String email) {
+        if (userRepository.existsById(username)) {
+            throw new IllegalArgumentException("Username unavailable: " + username);
         }
+
+        User newUser = new User(username, name, email);
         userRepository.save(newUser);
     }
 
     /**
      * Update existing User with any non-null attributes. Changing username is not supported.
      *
-     * @param newUser User object with new attributes
-     * @param username Username of User to be updated
+     * @param currUsername Username of User to be updated
+     * @param newName New name
+     * @param newEmail New email
      * @return Updated User object
      * @throws NoSuchElementException If User not found
      */
-    public User update(User newUser, String username) throws NoSuchElementException {
-        User currUser = verifyUser(username);
+    public User update(String currUsername, String newName, String newEmail) throws NoSuchElementException {
+        User currUser = verifyUser(currUsername);
 
-        // TODO: Maybe there is a better way to check for null and set
-        String name = newUser.getName();
-        if (name != null) {
-            currUser.setName(name);
+        // TODO: Maybe there is a better way to set
+        if (newName != null) {
+            currUser.setName(newName);
         }
 
-        String email = newUser.getEmail();
-        if (email != null) {
-            currUser.setEmail(email);
+        if (newEmail != null) {
+            currUser.setEmail(newEmail);
         }
 
         return userRepository.save(currUser);
@@ -75,6 +78,7 @@ public class UserService {
 
     /**
      * Verify and return the User for a particular username
+     *
      * @param username Username to find
      * @return Found User
      * @throws NoSuchElementException If User not found

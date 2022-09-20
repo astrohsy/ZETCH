@@ -4,6 +4,7 @@
 package io.zetch.app.domain;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -26,11 +27,11 @@ public class Restaurant {
     @Column
     private String address;
 
-    public Restaurant(List<User> owner, String name, String cuisine, String address) {
-        this.owners = owner;
+    public Restaurant(String name, String cuisine, String address) {
         this.name = name;
         this.cuisine = cuisine;
         this.address = address;
+        this.owners = new ArrayList<>();
     }
 
     protected Restaurant() {
