@@ -64,7 +64,7 @@ public class UserServiceIntegrationTest {
     @Test
     public void updateFailsWhenUserNotFound() {
         Exception exception = assertThrows(NoSuchElementException.class, () -> {
-            User user = userService.update(INVALID_USERNAME, "newName", "newEmail");
+            userService.update(INVALID_USERNAME, "newName", "newEmail");
         });
 
         String expectedMsg = "User does not exist";

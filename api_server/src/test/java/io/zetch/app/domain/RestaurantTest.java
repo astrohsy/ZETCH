@@ -2,8 +2,6 @@ package io.zetch.app.domain;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -11,9 +9,6 @@ import static org.hamcrest.core.Is.is;
 public class RestaurantTest {
     @Test
     public void testConstructorAndGetters() {
-        User u1 = new User("b123", "Bob", "bob@example.com");
-        User u2 = new User("c123", "Cat", "cat@example.com");
-
         Restaurant r = new Restaurant("Bob's restaurant", "American", "NY");
 
         assertNull(r.getId());
@@ -25,10 +20,6 @@ public class RestaurantTest {
 
     @Test
     public void equalsHashcodeVerify() {
-        User u1 = new User("b123", "Bob", "bob@example.com");
-        User u2 = new User("c123", "Cat", "cat@example.com");
-        List<User> owners = List.of(u1, u2);
-
         Restaurant r1 = new Restaurant("Bob's restaurant", "American", "NY");
         r1.setId(1L);
         Restaurant r2 = new Restaurant("Bob's restaurant", "American", "NY");

@@ -2,7 +2,6 @@ package io.zetch.app.service;
 
 import io.zetch.app.domain.Restaurant;
 import io.zetch.app.repo.RestaurantRepository;
-import io.zetch.app.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,12 +14,10 @@ import java.util.NoSuchElementException;
 @Service
 public class RestaurantService {
     private final RestaurantRepository restaurantRepository;
-    private final UserRepository userRepository;
 
     @Autowired
-    public RestaurantService(RestaurantRepository restaurantRepository, UserRepository userRepository) {
+    public RestaurantService(RestaurantRepository restaurantRepository) {
         this.restaurantRepository = restaurantRepository;
-        this.userRepository = userRepository;
     }
 
     /**
