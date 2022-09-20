@@ -12,6 +12,7 @@ public class UserTest {
         assertThat(u.getUsername(), is("b123"));
         assertThat(u.getName(), is("Bob"));
         assertThat(u.getEmail(), is("bob@example.com"));
+        assertThat(u.getOwnedRestaurants().isEmpty(), is(true));
     }
 
     @Test

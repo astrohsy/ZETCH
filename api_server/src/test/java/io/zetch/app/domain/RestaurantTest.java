@@ -13,14 +13,14 @@ public class RestaurantTest {
     public void testConstructorAndGetters() {
         User u1 = new User("b123", "Bob", "bob@example.com");
         User u2 = new User("c123", "Cat", "cat@example.com");
-        List<User> owners = List.of(u1, u2);
 
-        Restaurant r = new Restaurant(owners, "Bob's restaurant", "American", "NY");
+        Restaurant r = new Restaurant("Bob's restaurant", "American", "NY");
 
         assertNull(r.getId());
         assertThat(r.getName(), is("Bob's restaurant"));
         assertThat(r.getCuisine(), is("American"));
         assertThat(r.getAddress(), is("NY"));
+        assertThat(r.getOwners().isEmpty(), is(true));
     }
 
     @Test
@@ -29,9 +29,9 @@ public class RestaurantTest {
         User u2 = new User("c123", "Cat", "cat@example.com");
         List<User> owners = List.of(u1, u2);
 
-        Restaurant r1 = new Restaurant(owners, "Bob's restaurant", "American", "NY");
+        Restaurant r1 = new Restaurant("Bob's restaurant", "American", "NY");
         r1.setId(1L);
-        Restaurant r2 = new Restaurant(owners, "Bob's restaurant", "American", "NY");
+        Restaurant r2 = new Restaurant("Bob's restaurant", "American", "NY");
         r2.setId(1L);
 
         assertThat(r1, is(r2));
