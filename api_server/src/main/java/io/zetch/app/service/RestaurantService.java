@@ -1,17 +1,13 @@
 package io.zetch.app.service;
 
 import io.zetch.app.domain.Restaurant;
-import io.zetch.app.domain.User;
 import io.zetch.app.repo.RestaurantRepository;
 import io.zetch.app.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * Restaurant business logic
@@ -66,7 +62,7 @@ public class RestaurantService {
      * @return Found Restaurant
      * @throws NoSuchElementException If Restaurant not found
      */
-    private Restaurant verifyRestaurant(Long id) throws NoSuchElementException {
+    public Restaurant verifyRestaurant(Long id) throws NoSuchElementException {
         return restaurantRepository.findById(id).orElseThrow(
                 () -> new NoSuchElementException("Restaurant does not exist: " + id));
     }
