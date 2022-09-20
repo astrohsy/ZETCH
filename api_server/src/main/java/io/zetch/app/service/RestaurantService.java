@@ -50,14 +50,12 @@ public class RestaurantService {
     /**
      * Create a new Restaurant in the database
      *
-     * @param ownerUsernames List of usernames of owners
      * @param name Restaurant name
      * @param cuisine Restaurant cuisine
      * @param address Restaurant address
      */
-    public void createNew(List<String> ownerUsernames, String name, String cuisine, String address ) {
-        List<User> restaurantOwner = verifyOwners(ownerUsernames);
-        Restaurant newRestaurant = new Restaurant(restaurantOwner, name, cuisine, address);
+    public void createNew(String name, String cuisine, String address ) {
+        Restaurant newRestaurant = new Restaurant(name, cuisine, address);
         restaurantRepository.save(newRestaurant);
     }
 
@@ -71,31 +69,5 @@ public class RestaurantService {
     private Restaurant verifyRestaurant(Long id) throws NoSuchElementException {
         return restaurantRepository.findById(id).orElseThrow(
                 () -> new NoSuchElementException("Restaurant does not exist: " + id));
-    }
-
-    /**
-     * Verify and return Users corresponding to a list of usernames of restaurant owners.
-     *
-     * @param usernames List of usernames of owners
-     * @return List of found Users
-     * @throws NoSuchElementException If at least one User was not found
-     */
-    private List<User> verifyOwners(List<String> usernames) throws NoSuchElementException {
-        if (usernames == null) {
-            return null;
-        }
-
-        Set<String> usernamesSet = new HashSet<>(usernames);
-        List<User> users = userRepository.findAllById(usernames);
-        Set<String> foundUsernames = users.stream().map(User::getUsername).collect(Collectors.toSet());
-
-        // Remove found usernames from provided usernames to check whether all were found
-        usernamesSet.removeAll(foundUsernames);
-
-        if (usernamesSet.isEmpty()) {
-            return users;
-        } else {
-            throw new NoSuchElementException("User(s) not found: " + usernamesSet);
-        }
     }
 }

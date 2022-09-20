@@ -4,6 +4,7 @@
 package io.zetch.app.domain;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -26,14 +27,7 @@ public class User {
         this.username = username;
         this.name = name;
         this.email = email;
-        this.ownedRestaurants = null;
-    }
-
-    public User(String username, String name, String email, List<Restaurant> ownedRestaurants) {
-        this.username = username;
-        this.name = name;
-        this.email = email;
-        this.ownedRestaurants = ownedRestaurants;
+        this.ownedRestaurants = new ArrayList<>();
     }
 
     protected User() {

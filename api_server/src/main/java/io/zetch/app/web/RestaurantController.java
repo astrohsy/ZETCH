@@ -4,13 +4,16 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.zetch.app.domain.Restaurant;
 import io.zetch.app.domain.RestaurantDto;
+import io.zetch.app.domain.User;
 import io.zetch.app.service.RestaurantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "/restaurants")
@@ -28,8 +31,8 @@ public class RestaurantController {
      */
     @GetMapping(path="/")
     @Operation(summary = "Retrieve all restaurants")
-    @ResponseBody Iterable<Restaurant> getAllRestaurants() {
-        return restaurantService.getAll();
+    @ResponseBody Iterable<RestaurantDto> getAllRestaurants() {
+        return restaurantService.getAll().stream().map(this::toDto).collect(Collectors.toList());
     }
 
     /**
@@ -38,8 +41,8 @@ public class RestaurantController {
      */
     @GetMapping("/{restaurantId}")
     @Operation(summary = "Retrieve a single restaurant")
-    Restaurant getOneRestaurant(@PathVariable Long restaurantId) {
-        return restaurantService.getOne(restaurantId);
+    RestaurantDto getOneRestaurant(@PathVariable Long restaurantId) {
+        return toDto(restaurantService.getOne(restaurantId));
     }
 
     /**
@@ -49,10 +52,19 @@ public class RestaurantController {
     @PostMapping(path="/")
     @Operation(summary = "Create a new restaurant")
     @ResponseBody String addNewRestaurant(@RequestBody @Validated RestaurantDto restaurantDto) {
-        restaurantService.createNew(restaurantDto.getOwnerUsernames(), restaurantDto.getName(),
-                restaurantDto.getCuisine(), restaurantDto.getAddress());
+        restaurantService.createNew(restaurantDto.getName(), restaurantDto.getCuisine(), restaurantDto.getAddress());
 
         return "Restaurant saved";
+    }
+
+    /**
+     * Convert the Restaurant entity to a Restaurant data transfer object
+     *
+     * @param restaurant Restaurant to convert
+     * @return Restaurant DTO
+     */
+    private RestaurantDto toDto(Restaurant restaurant) {
+        return new RestaurantDto(restaurant.getName(), restaurant.getCuisine(), restaurant.getAddress());
     }
 
     /**
