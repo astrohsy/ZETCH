@@ -27,6 +27,14 @@ public class Restaurant {
     @Column
     private String address;
 
+    public Restaurant(Long id, String name, String cuisine, String address) {
+        this.id = id;
+        this.name = name;
+        this.cuisine = cuisine;
+        this.address = address;
+        this.owners = new ArrayList<>();
+    }
+
     public Restaurant(String name, String cuisine, String address) {
         this.name = name;
         this.cuisine = cuisine;

@@ -39,13 +39,13 @@ public class UserService {
     /**
      * Create a new User in the database
      */
-    public void createNew(String username, String name, String email) {
+    public User createNew(String username, String name, String email) {
         if (userRepository.existsById(username)) {
             throw new IllegalArgumentException("Username unavailable: " + username);
         }
 
         User newUser = new User(username, name, email);
-        userRepository.save(newUser);
+        return userRepository.save(newUser);
     }
 
     /**

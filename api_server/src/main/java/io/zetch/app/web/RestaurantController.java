@@ -49,10 +49,8 @@ public class RestaurantController {
      */
     @PostMapping(path="/")
     @Operation(summary = "Create a new restaurant")
-    @ResponseBody String addNewRestaurant(@RequestBody @Validated RestaurantDto restaurantDto) {
-        restaurantService.createNew(restaurantDto.getName(), restaurantDto.getCuisine(), restaurantDto.getAddress());
-
-        return "Restaurant saved";
+    @ResponseBody RestaurantDto addNewRestaurant(@RequestBody @Validated RestaurantDto restaurantDto) {
+        return toDto(restaurantService.createNew(restaurantDto.getName(), restaurantDto.getCuisine(), restaurantDto.getAddress()));
     }
 
     /**

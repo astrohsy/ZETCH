@@ -47,9 +47,9 @@ public class RestaurantService {
      * @param cuisine Restaurant cuisine
      * @param address Restaurant address
      */
-    public void createNew(String name, String cuisine, String address ) {
+    public Restaurant createNew(String name, String cuisine, String address ) {
         Restaurant newRestaurant = new Restaurant(name, cuisine, address);
-        restaurantRepository.save(newRestaurant);
+        return restaurantRepository.save(newRestaurant);
     }
 
     /**

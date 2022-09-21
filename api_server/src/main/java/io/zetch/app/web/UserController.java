@@ -31,9 +31,8 @@ public class UserController {
 
     @PostMapping(path="/")
     @Operation(summary = "Create a new user")
-    @ResponseBody String addNewUser(@RequestBody UserDto newUserDto) {
-        userService.createNew(newUserDto.getUsername(), newUserDto.getName(), newUserDto.getEmail());
-        return "User saved";
+    @ResponseBody UserDto addNewUser(@RequestBody UserDto newUserDto) {
+        return toDto(userService.createNew(newUserDto.getUsername(), newUserDto.getName(), newUserDto.getEmail()));
     }
 
     @GetMapping("/{username}")
