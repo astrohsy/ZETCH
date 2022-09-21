@@ -55,7 +55,7 @@ public class RestaurantControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("*", notNullValue()))
                 .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[0].*", hasSize(3)))  // Make sure ID is not returned
+                .andExpect(jsonPath("$[0].*", hasSize(4)))
                 .andExpect(jsonPath("$[0].name", is(NAME_1)))
                 .andExpect(jsonPath("$[1].name", is(NAME_2)));
     }
@@ -67,6 +67,8 @@ public class RestaurantControllerTest {
         mockMvc.perform(get(RESTAURANT_ENDPOINT + r1.getId()).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("*", notNullValue()))
+                .andExpect(jsonPath("$.*", hasSize(4)))
+                .andExpect(jsonPath("$.id", is(r1.getId().intValue())))
                 .andExpect(jsonPath("$.name", is(r1.getName())))
                 .andExpect(jsonPath("$.cuisine", is(r1.getCuisine())))
                 .andExpect(jsonPath("$.address", is(r1.getAddress())));
@@ -79,7 +81,7 @@ public class RestaurantControllerTest {
         MockHttpServletRequestBuilder mockRequest = post(RESTAURANT_ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .content(mapper.writeValueAsString(new RestaurantDto(r1.getName(), r1.getCuisine(), r1.getAddress())));
+                .content(mapper.writeValueAsString(new RestaurantDto(r1.getId(), r1.getName(), r1.getCuisine(), r1.getAddress())));
 
         mockMvc.perform(mockRequest)
                 .andExpect(status().isOk())

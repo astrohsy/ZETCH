@@ -60,7 +60,7 @@ public class RestaurantController {
      * @return Restaurant DTO
      */
     private RestaurantDto toDto(Restaurant restaurant) {
-        return new RestaurantDto(restaurant.getName(), restaurant.getCuisine(), restaurant.getAddress());
+        return new RestaurantDto(restaurant.getId(), restaurant.getName(), restaurant.getCuisine(), restaurant.getAddress());
     }
 
     /**

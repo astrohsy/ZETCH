@@ -1,5 +1,7 @@
 package io.zetch.app.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -8,18 +10,14 @@ import java.util.Objects;
  */
 public class RestaurantDto implements Serializable {
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private final Long id;
     private final String name;
     private final String cuisine;
     private final String address;
 
-    /**
-     * Constructor to fully initialize Restaurant Dto
-     *
-     * @param name Restaurant's name
-     * @param cuisine Restaurant's cuisine
-     * @param address Restaurant's address
-     */
-    public RestaurantDto(String name, String cuisine, String address) {
+    public RestaurantDto(Long id, String name, String cuisine, String address) {
+        this.id = id;
         this.name = name;
         this.cuisine = cuisine;
         this.address = address;
@@ -35,6 +33,10 @@ public class RestaurantDto implements Serializable {
 
     public String getAddress() {
         return address;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     @Override
