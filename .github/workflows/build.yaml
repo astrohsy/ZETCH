@@ -12,11 +12,13 @@ jobs:
 
   formatting:
     runs-on: ubuntu-latest
+    env:
+      FormattingCommitMessage: "style: formatted by GoogleJavaFormat 🤖"
     steps:
       - uses: actions/checkout@v3
       - uses: axel-op/googlejavaformat-action@v3
         with:
-          args: "--replace"
+          args: "--replace --commitMessage $FormattingCommitMessage"
 
   build:
     runs-on: ubuntu-latest
