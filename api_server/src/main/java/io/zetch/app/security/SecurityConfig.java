@@ -2,7 +2,7 @@ package io.zetch.app.security;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.http.HttpMethod;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
@@ -13,6 +13,7 @@ import org.springframework.security.web.SecurityFilterChain;
 /**
  * Configures our application with Spring Security to restrict access to our API endpoints.
  */
+@Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
@@ -29,7 +30,6 @@ public class SecurityConfig {
         an OAuth2 Resource Server, using JWT validation.
         */
         http.authorizeRequests()
-            .mvcMatchers(HttpMethod.GET, "/users/{username}").authenticated()
             .anyRequest().permitAll()
             .and().cors()
             .and().oauth2ResourceServer().jwt();
