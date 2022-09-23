@@ -1,3 +1,7 @@
+/**
+ * This code is from the Auth0 documentation:
+ * https://auth0.com/docs/quickstart/backend/java-spring-security5/interactive
+ */
 package io.zetch.app.security;
 
 import org.springframework.security.oauth2.core.OAuth2Error;

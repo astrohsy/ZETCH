@@ -1,3 +1,7 @@
+/**
+ * This code is mostly from the Auth0 documentation:
+ * https://auth0.com/docs/quickstart/backend/java-spring-security5/interactive
+ */
 package io.zetch.app.security;
 
 import org.springframework.beans.factory.annotation.Value;
