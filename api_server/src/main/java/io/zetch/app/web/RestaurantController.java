@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping(path = "/restaurants")
 @Tag(name = "Restaurants")
+@CrossOrigin(origins = "*")
 public class RestaurantController {
     private final RestaurantService restaurantService;
 

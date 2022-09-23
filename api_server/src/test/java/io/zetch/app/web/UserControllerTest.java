@@ -4,13 +4,20 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.zetch.app.domain.User;
 import io.zetch.app.domain.UserDto;
 import io.zetch.app.service.UserService;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -23,8 +30,12 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.*;
 
-@WebMvcTest(UserController.class)
+
+@SpringBootTest
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration
 public class UserControllerTest {
 
     private static final String USERS_ENDPOINT = "/users/";
@@ -36,12 +47,24 @@ public class UserControllerTest {
     private static final String NAME_2 = "Cat";
     private static final String EMAIL_2 = "cat@example.com";
 
-    @Autowired
-    private MockMvc mockMvc;
+	private MockMvc mockMvc;
+
+	@Autowired
+	private WebApplicationContext context;
+
     @Autowired
     ObjectMapper mapper;
+
     @MockBean
     private UserService userServiceMock;
+
+	@BeforeEach
+	public void setup() {
+		mockMvc = MockMvcBuilders
+				.webAppContextSetup(context)
+				.apply(springSecurity())
+				.build();
+	}
 
     User u1 = new User(USERNAME_1, NAME_1, EMAIL_1);
     User u2 = new User(USERNAME_2, NAME_2, EMAIL_2);

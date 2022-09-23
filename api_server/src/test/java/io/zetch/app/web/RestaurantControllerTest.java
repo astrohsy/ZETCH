@@ -4,13 +4,20 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.zetch.app.domain.Restaurant;
 import io.zetch.app.domain.RestaurantDto;
 import io.zetch.app.service.RestaurantService;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.util.List;
 
@@ -22,8 +29,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.*;
 
-@WebMvcTest(RestaurantController.class)
+
+@SpringBootTest
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration
 public class RestaurantControllerTest {
 
     private static final String RESTAURANT_ENDPOINT = "/restaurants/";
@@ -37,12 +48,24 @@ public class RestaurantControllerTest {
     private static final String CUISINE_2 = "French";
     private static final String ADDRESS_2 = "15 Amsterdam";
 
-    @Autowired
-    private MockMvc mockMvc;
+	private MockMvc mockMvc;
+
+	@Autowired
+	private WebApplicationContext context;
+
     @Autowired
     ObjectMapper mapper;
+
     @MockBean
     private RestaurantService restaurantServiceMock;
+
+    @BeforeEach
+	public void setup() {
+		mockMvc = MockMvcBuilders
+				.webAppContextSetup(context)
+				.apply(springSecurity())
+				.build();
+	}
 
     Restaurant r1 = new Restaurant(ID_1, NAME_1, CUISINE_1, ADDRESS_1);
     Restaurant r2 = new Restaurant(ID_2, NAME_2, CUISINE_2, ADDRESS_2);
