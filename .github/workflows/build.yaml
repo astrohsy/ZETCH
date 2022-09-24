@@ -6,7 +6,7 @@ env:
 on:
   push:
   pull_request:
-    types: [opened, reopened]
+    types: [ opened, reopened ]
 
 jobs:
 
@@ -16,7 +16,8 @@ jobs:
       - uses: actions/checkout@v3
       - uses: axel-op/googlejavaformat-action@v3
         with:
-          args: "--set-exit-if-changed"
+          commitMessage: "style: formatted by GoogleJavaFormat 🤖"
+          args: "--replace"
 
   build:
     runs-on: ubuntu-latest

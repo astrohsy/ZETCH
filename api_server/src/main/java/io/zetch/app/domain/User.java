@@ -1,42 +1,85 @@
-/**
- * User entity definition
- * Keyword `user` is reserved in PostgreSQL, hence `ZetchUser`
- */
+/** User entity definition */
 package io.zetch.app.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 @Entity
-@Table(name = "zetch_user") // "User" is a keyword in some DBs
+@Table(name = "zetch_user") // "User" is a reserved keyword in some DBs
 public class User {
-    @Id
-    private String username;
-    private String name;
-    private String email;
+  @Id private String username;
 
-    public String getName() {
-        return name;
-    }
+  @Column private String name;
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  @Column private String email;
 
-    public String getEmail() {
-        return email;
-    }
+  @ManyToMany(
+      mappedBy =
+          "owners") // A restaurant might have multiple owners; a User might own multiple
+                    // restaurants
+  private List<Restaurant> ownedRestaurants;
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+  public User(String username, String name, String email) {
+    this.username = username;
+    this.name = name;
+    this.email = email;
+    this.ownedRestaurants = new ArrayList<>();
+  }
 
-    public String getUsername() {
-        return username;
-    }
+  protected User() {}
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public String getEmail() {
+    return email;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+  public String getUsername() {
+    return username;
+  }
+
+  public void setUsername(String username) {
+    this.username = username;
+  }
+
+  public List<Restaurant> getOwnedRestaurants() {
+    return ownedRestaurants;
+  }
+
+  public void setOwnedRestaurants(List<Restaurant> ownedRestaurants) {
+    this.ownedRestaurants = ownedRestaurants;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    User user = (User) o;
+    return username.equals(user.username)
+        && Objects.equals(name, user.name)
+        && Objects.equals(email, user.email)
+        && Objects.equals(ownedRestaurants, user.ownedRestaurants);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(username, name, email, ownedRestaurants);
+  }
+
+  @Override
+  public String toString() {
+    return String.format("User{username=%s, name=%s, email=%s}", username, name, email);
+  }
 }
