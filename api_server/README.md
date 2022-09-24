@@ -55,3 +55,9 @@ localhost:8080/swagger-ui.html
 mvn test
 # Generated in target/site/jacoco/index.html
 ```
+
+### Run PMD static analysis bug finder:
+```bash
+mvn pmd:pmd
+# Generated in target/site/pmd.html
+```
