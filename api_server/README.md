@@ -25,4 +25,11 @@ curl --location --request GET 'http://localhost:8080/users/'
 docker-compose down
 ```
 ### View swagger UI of apis: 
+```bash
 localhost:8080/swagger-ui.html
+```
+### Run Jacoco test coverage:
+```bash
+mvn test
+# Generated in target/site/jacoco/index.html
+```
