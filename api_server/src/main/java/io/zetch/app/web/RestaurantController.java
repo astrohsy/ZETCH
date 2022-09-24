@@ -5,12 +5,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import io.zetch.app.domain.Restaurant;
 import io.zetch.app.domain.RestaurantDto;
 import io.zetch.app.service.RestaurantService;
-import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "/restaurants")

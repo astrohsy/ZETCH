@@ -2,10 +2,11 @@ package io.zetch.app.service;
 
 import io.zetch.app.domain.Restaurant;
 import io.zetch.app.repo.RestaurantRepository;
-import java.util.List;
-import java.util.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.NoSuchElementException;
 
 /** Restaurant business logic */
 @Service

@@ -1,10 +1,10 @@
 /** Restaurant entity definition */
 package io.zetch.app.domain;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import javax.persistence.*;
 
 @Entity
 public class Restaurant {

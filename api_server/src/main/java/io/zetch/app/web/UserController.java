@@ -5,11 +5,12 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import io.zetch.app.domain.User;
 import io.zetch.app.domain.UserDto;
 import io.zetch.app.service.UserService;
-import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "/users")
