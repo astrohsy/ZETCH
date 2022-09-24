@@ -41,4 +41,17 @@ curl --location --request POST 'http://localhost:8080/users/' \
 curl --location --request GET 'http://localhost:8080/users/'
 ```
 
+### 3. Shut down the DB container
+```bash
+docker-compose down
+```
+### View swagger UI of apis: 
+```bash
+localhost:8080/swagger-ui.html
+```
 
+### Run Jacoco test coverage:
+```bash
+mvn test
+# Generated in target/site/jacoco/index.html
+```
