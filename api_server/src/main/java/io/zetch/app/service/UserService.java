@@ -52,8 +52,8 @@ public class UserService {
      * Update existing User with any non-null attributes. Changing username is not supported.
      *
      * @param currUsername Username of User to be updated
-     * @param newName New name
-     * @param newEmail New email
+     * @param newName      New name
+     * @param newEmail     New email
      * @return Updated User object
      * @throws NoSuchElementException If User not found
      */

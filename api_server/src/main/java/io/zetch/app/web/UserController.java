@@ -24,15 +24,17 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping(path="/")
+    @GetMapping(path = "/")
     @Operation(summary = "Retrieve all users")
-    @ResponseBody Iterable<UserDto> getAllUsers() {
+    @ResponseBody
+    Iterable<UserDto> getAllUsers() {
         return userService.getAll().stream().map(this::toDto).collect(Collectors.toList());
     }
 
-    @PostMapping(path="/")
+    @PostMapping(path = "/")
     @Operation(summary = "Create a new user")
-    @ResponseBody UserDto addNewUser(@RequestBody UserDto newUserDto) {
+    @ResponseBody
+    UserDto addNewUser(@RequestBody UserDto newUserDto) {
         return toDto(userService.createNew(newUserDto.getUsername(), newUserDto.getName(), newUserDto.getEmail()));
     }
 
@@ -60,6 +62,7 @@ public class UserController {
 
     /**
      * Return 404 Not Found if NoSuchElementException is thrown in this Controller
+     *
      * @param ex Exception
      * @return Error message string
      */
@@ -71,6 +74,7 @@ public class UserController {
 
     /**
      * Return 400 Bad Request if IllegalArgumentException is thrown in this Controller
+     *
      * @param ex Exception
      * @return Error message string
      */

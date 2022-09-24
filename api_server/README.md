@@ -1,11 +1,13 @@
 # Zetch API Server
 
 ### 1. Run the DB container
+
 ```bash
 docker-compose up -d
 ```
 
 ### 2. Sample API interaction
+
 ```bash
 # Add a user to database
 curl --location --request POST 'http://localhost:8080/users/' \
@@ -21,8 +23,11 @@ curl --location --request GET 'http://localhost:8080/users/'
 ```
 
 ### 3. Shut down the DB container
+
 ```bash
 docker-compose down
 ```
-### View swagger UI of apis: 
+
+### View swagger UI of apis:
+
 localhost:8080/swagger-ui.html

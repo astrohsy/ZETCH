@@ -28,9 +28,10 @@ public class RestaurantController {
     /**
      * @return A list of all restraurants
      */
-    @GetMapping(path="/")
+    @GetMapping(path = "/")
     @Operation(summary = "Retrieve all restaurants")
-    @ResponseBody Iterable<RestaurantDto> getAllRestaurants() {
+    @ResponseBody
+    Iterable<RestaurantDto> getAllRestaurants() {
         return restaurantService.getAll().stream().map(this::toDto).collect(Collectors.toList());
     }
 
@@ -48,9 +49,10 @@ public class RestaurantController {
      * @param restaurantDto Restaurant data transfer object
      * @return Confirmation message if successful
      */
-    @PostMapping(path="/")
+    @PostMapping(path = "/")
     @Operation(summary = "Create a new restaurant")
-    @ResponseBody RestaurantDto addNewRestaurant(@RequestBody @Validated RestaurantDto restaurantDto) {
+    @ResponseBody
+    RestaurantDto addNewRestaurant(@RequestBody @Validated RestaurantDto restaurantDto) {
         return toDto(restaurantService.createNew(restaurantDto.getName(), restaurantDto.getCuisine(), restaurantDto.getAddress()));
     }
 
@@ -66,6 +68,7 @@ public class RestaurantController {
 
     /**
      * Exception handler if NoSuchElementException is thrown in this Controller
+     *
      * @param ex Exception
      * @return Error message string
      */

@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.zetch.app.domain.Restaurant;
 import io.zetch.app.domain.RestaurantDto;
 import io.zetch.app.service.RestaurantService;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,11 +24,11 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.*;
 
 
 @SpringBootTest
@@ -48,10 +47,10 @@ public class RestaurantControllerTest {
     private static final String CUISINE_2 = "French";
     private static final String ADDRESS_2 = "15 Amsterdam";
 
-	private MockMvc mockMvc;
+    private MockMvc mockMvc;
 
-	@Autowired
-	private WebApplicationContext context;
+    @Autowired
+    private WebApplicationContext context;
 
     @Autowired
     ObjectMapper mapper;
@@ -60,12 +59,12 @@ public class RestaurantControllerTest {
     private RestaurantService restaurantServiceMock;
 
     @BeforeEach
-	public void setup() {
-		mockMvc = MockMvcBuilders
-				.webAppContextSetup(context)
-				.apply(springSecurity())
-				.build();
-	}
+    public void setup() {
+        mockMvc = MockMvcBuilders
+                .webAppContextSetup(context)
+                .apply(springSecurity())
+                .build();
+    }
 
     Restaurant r1 = new Restaurant(ID_1, NAME_1, CUISINE_1, ADDRESS_1);
     Restaurant r2 = new Restaurant(ID_2, NAME_2, CUISINE_2, ADDRESS_2);

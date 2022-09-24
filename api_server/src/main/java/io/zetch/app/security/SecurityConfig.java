@@ -21,11 +21,11 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
-   @Value("${auth0.audience}")
-   private String audience;
+    @Value("${auth0.audience}")
+    private String audience;
 
-   @Value("${spring.security.oauth2.resourceserver.jwt.issuer-uri}")
-   private String issuer;
+    @Value("${spring.security.oauth2.resourceserver.jwt.issuer-uri}")
+    private String issuer;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -34,9 +34,9 @@ public class SecurityConfig {
         an OAuth2 Resource Server, using JWT validation.
         */
         http.authorizeRequests()
-            .anyRequest().permitAll()
-            .and().cors()
-            .and().oauth2ResourceServer().jwt();
+                .anyRequest().permitAll()
+                .and().cors()
+                .and().oauth2ResourceServer().jwt();
 
         http.csrf().disable();
 
