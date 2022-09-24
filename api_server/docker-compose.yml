@@ -1,15 +1,27 @@
-version: "3.8"
+version: "4.0"
 
 services:
-  zetch_db:
-    image: postgres:14.5
-    volumes:
-      - zetch_data:/var/lib/postgresql/data
+  db:
+    image: 'postgres:13.1-alpine'
+    container_name: db
     environment:
-      POSTGRES_DB: zetch
-      POSTGRES_PASSWORD: secret
-    ports:
-      - "5432:5432"
+      - POSTGRES_USER=zetch
+      - POSTGRES_PASSWORD=secret
 
-volumes:
-  zetch_data:
+  api:
+    image: 'zetchtest.azurecr.io/zetch-api:latest'
+    build:
+      context: .
+    container_name: api
+    depends_on:
+      - db
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/zetch
+      - SPRING_DATASOURCE_USERNAME=zetch
+      - SPRING_DATASOURCE_PASSWORD=secret
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+
+
+
