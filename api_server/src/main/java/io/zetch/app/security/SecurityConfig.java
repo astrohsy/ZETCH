@@ -25,13 +25,12 @@ public class SecurityConfig {
     */
     http.cors().and().csrf().disable();
 
-    http.authorizeRequests(authReqCustomizer
-            -> authReqCustomizer
-              .antMatchers("/private").authenticated()
-              .anyRequest().permitAll())
-    .oauth2ResourceServer().jwt();
+    http.authorizeRequests(
+            authReqCustomizer ->
+                authReqCustomizer.antMatchers("/private").authenticated().anyRequest().permitAll())
+        .oauth2ResourceServer()
+        .jwt();
 
     return http.build();
   }
-
 }
