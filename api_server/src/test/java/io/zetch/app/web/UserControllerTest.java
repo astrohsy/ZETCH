@@ -1,21 +1,9 @@
 package io.zetch.app.web;
 
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.core.Is.is;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.when;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.zetch.app.domain.User;
-import io.zetch.app.domain.UserDto;
+import io.zetch.app.domain.user.UserDto;
+import io.zetch.app.domain.user.UserEntity;
 import io.zetch.app.service.UserService;
-import java.util.List;
-import java.util.NoSuchElementException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,6 +18,19 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.List;
+import java.util.NoSuchElementException;
+
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.core.Is.is;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration
@@ -37,28 +38,32 @@ public class UserControllerTest {
 
   private static final String USERS_ENDPOINT = "/users/";
 
+  private static final Long ID_1 = 1L;
   private static final String USERNAME_1 = "bob";
   private static final String NAME_1 = "Bob";
   private static final String EMAIL_1 = "bob@example.com";
   private static final String USERNAME_2 = "cat";
   private static final String NAME_2 = "Cat";
   private static final String EMAIL_2 = "cat@example.com";
-
-  private MockMvc mockMvc;
-
-  @Autowired private WebApplicationContext context;
-
   @Autowired ObjectMapper mapper;
-
+  UserEntity u1 = UserEntity.builder()
+          .username(USERNAME_1)
+          .name(NAME_1)
+          .email(EMAIL_1)
+          .build();
+  UserEntity u2 = UserEntity.builder()
+          .username(USERNAME_2)
+          .name(NAME_2)
+          .email(EMAIL_2)
+          .build();
+  private MockMvc mockMvc;
+  @Autowired private WebApplicationContext context;
   @MockBean private UserService userServiceMock;
 
   @BeforeEach
   public void setup() {
     mockMvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
   }
-
-  User u1 = new User(USERNAME_1, NAME_1, EMAIL_1);
-  User u2 = new User(USERNAME_2, NAME_2, EMAIL_2);
 
   @Test
   public void getAllUsers() throws Exception {
@@ -96,7 +101,7 @@ public class UserControllerTest {
             .accept(MediaType.APPLICATION_JSON)
             .content(
                 mapper.writeValueAsString(
-                    new UserDto(u1.getUsername(), u1.getName(), u1.getEmail())));
+                    new UserDto(u1.getId(), u1.getUsername(), u1.getName(), u1.getEmail())));
 
     mockMvc
         .perform(mockRequest)
@@ -122,14 +127,19 @@ public class UserControllerTest {
 
   @Test
   public void updateUserName() throws Exception {
-    User updated = new User(USERNAME_1, "New Bob", EMAIL_1);
+    UserEntity updated = UserEntity.builder()
+            .username(USERNAME_1)
+            .name("New Bob")
+            .email(EMAIL_1)
+            .build();
+
     when(userServiceMock.update(u1.getUsername(), updated.getName(), null)).thenReturn(updated);
 
     MockHttpServletRequestBuilder mockRequest =
         put(USERS_ENDPOINT + USERNAME_1)
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
-            .content(mapper.writeValueAsString(new UserDto(USERNAME_1, "New Bob", null)));
+            .content(mapper.writeValueAsString(new UserDto(ID_1, USERNAME_1, "New Bob", null)));
 
     mockMvc
         .perform(mockRequest)
@@ -142,14 +152,18 @@ public class UserControllerTest {
 
   @Test
   public void updateUserEmail() throws Exception {
-    User updated = new User(USERNAME_1, NAME_1, "new_bob@me.com");
+    UserEntity updated = UserEntity.builder()
+            .username(USERNAME_1)
+            .name(NAME_1)
+            .email("new_bob@me.com")
+            .build();
     when(userServiceMock.update(u1.getUsername(), null, updated.getEmail())).thenReturn(updated);
 
     MockHttpServletRequestBuilder mockRequest =
         put(USERS_ENDPOINT + USERNAME_1)
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
-            .content(mapper.writeValueAsString(new UserDto(USERNAME_1, null, "new_bob@me.com")));
+            .content(mapper.writeValueAsString(new UserDto(ID_1, USERNAME_1, null, "new_bob@me.com")));
 
     mockMvc
         .perform(mockRequest)
@@ -162,7 +176,11 @@ public class UserControllerTest {
 
   @Test
   public void updateUserNameAndEmail() throws Exception {
-    User updated = new User(USERNAME_1, "Bob New", "bob_new@me.com");
+    UserEntity updated = UserEntity.builder()
+            .username(USERNAME_1)
+            .name("Bob New")
+            .email("bob_new@me.com")
+            .build();
     when(userServiceMock.update(u1.getUsername(), updated.getName(), updated.getEmail()))
         .thenReturn(updated);
 
@@ -171,7 +189,7 @@ public class UserControllerTest {
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
             .content(
-                mapper.writeValueAsString(new UserDto(USERNAME_1, "Bob New", "bob_new@me.com")));
+                mapper.writeValueAsString(new UserDto(ID_1, USERNAME_1, "Bob New", "bob_new@me.com")));
 
     mockMvc
         .perform(mockRequest)
@@ -184,7 +202,11 @@ public class UserControllerTest {
 
   @Test
   public void updateUser_UserNotFound() throws Exception {
-    User updated = new User(USERNAME_1, "Bob New", "bob_new@me.com");
+    UserEntity updated = UserEntity.builder()
+            .username(USERNAME_1)
+            .name("Bob New")
+            .email("bob_new@me.com")
+            .build();
     when(userServiceMock.update(u1.getUsername(), updated.getName(), updated.getEmail()))
         .thenThrow(NoSuchElementException.class);
 
@@ -193,7 +215,7 @@ public class UserControllerTest {
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
             .content(
-                mapper.writeValueAsString(new UserDto(USERNAME_1, "Bob New", "bob_new@me.com")));
+                mapper.writeValueAsString(new UserDto(ID_1, USERNAME_1, "Bob New", "bob_new@me.com")));
 
     mockMvc.perform(mockRequest).andExpect(status().isNotFound());
   }

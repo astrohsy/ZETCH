@@ -1,20 +1,21 @@
 package io.zetch.app.service;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import io.zetch.app.domain.Restaurant;
+import io.zetch.app.domain.restaurant.RestaurantEntity;
 import io.zetch.app.repo.RestaurantRepository;
-import java.util.List;
-import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.List;
+import java.util.Optional;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class RestaurantServiceTest {
@@ -26,7 +27,7 @@ public class RestaurantServiceTest {
 
   @Mock private RestaurantRepository restaurantRepositoryMock;
   @InjectMocks private RestaurantService restaurantService;
-  @Mock private Restaurant restaurantMock;
+  @Mock private RestaurantEntity restaurantMock;
 
   // VERIFY SERVICE RETURN VALUE
 
@@ -49,7 +50,7 @@ public class RestaurantServiceTest {
   @Test
   public void createNew() {
     // Prepare to capture a Restaurant object
-    ArgumentCaptor<Restaurant> restaurantCaptor = ArgumentCaptor.forClass(Restaurant.class);
+    ArgumentCaptor<RestaurantEntity> restaurantCaptor = ArgumentCaptor.forClass(RestaurantEntity.class);
 
     restaurantService.createNew(NAME, CUISINE, ADDRESS);
 
@@ -57,7 +58,7 @@ public class RestaurantServiceTest {
     verify(restaurantRepositoryMock).save(restaurantCaptor.capture());
 
     // Verify the attributes of the Restaurant object
-    Restaurant value = restaurantCaptor.getValue();
+    RestaurantEntity value = restaurantCaptor.getValue();
     assertThat(value.getName(), is(NAME));
     assertThat(value.getCuisine(), is(CUISINE));
     assertThat(value.getAddress(), is(ADDRESS));

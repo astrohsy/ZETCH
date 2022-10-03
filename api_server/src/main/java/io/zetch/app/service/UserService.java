@@ -1,11 +1,13 @@
 package io.zetch.app.service;
 
-import io.zetch.app.domain.User;
+import io.zetch.app.domain.user.UserEntity;
 import io.zetch.app.repo.UserRepository;
-import java.util.List;
-import java.util.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class UserService {
@@ -21,7 +23,7 @@ public class UserService {
    *
    * @return List of all users
    */
-  public List<User> getAll() {
+  public List<UserEntity> getAll() {
     return userRepository.findAll();
   }
 
@@ -31,17 +33,22 @@ public class UserService {
    * @param username User's username
    * @return User
    */
-  public User getOne(String username) {
+  public UserEntity getOne(String username) {
     return verifyUser(username);
   }
 
   /** Create a new User in the database */
-  public User createNew(String username, String name, String email) {
+  public UserEntity createNew(String username, String name, String email) {
     if (userRepository.existsById(username)) {
       throw new IllegalArgumentException("Username unavailable: " + username);
     }
 
-    User newUser = new User(username, name, email);
+    UserEntity newUser =  UserEntity.builder()
+            .username(username)
+            .name(name)
+            .email(email)
+            .ownedRestaurants(new ArrayList<>())
+            .build();
     return userRepository.save(newUser);
   }
 
@@ -54,9 +61,9 @@ public class UserService {
    * @return Updated User object
    * @throws NoSuchElementException If User not found
    */
-  public User update(String currUsername, String newName, String newEmail)
+  public UserEntity update(String currUsername, String newName, String newEmail)
       throws NoSuchElementException {
-    User currUser = verifyUser(currUsername);
+    UserEntity currUser = verifyUser(currUsername);
 
     // TODO: Maybe there is a better way to set
     if (newName != null) {
@@ -77,7 +84,7 @@ public class UserService {
    * @return Found User
    * @throws NoSuchElementException If User not found
    */
-  public User verifyUser(String username) throws NoSuchElementException {
+  public UserEntity verifyUser(String username) throws NoSuchElementException {
     return userRepository
         .findById(username)
         .orElseThrow(() -> new NoSuchElementException("User does not exist: " + username));

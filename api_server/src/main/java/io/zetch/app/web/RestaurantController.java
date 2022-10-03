@@ -2,15 +2,16 @@ package io.zetch.app.web;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import io.zetch.app.domain.Restaurant;
-import io.zetch.app.domain.RestaurantDto;
+import io.zetch.app.domain.restaurant.RestaurantDto;
+import io.zetch.app.domain.restaurant.RestaurantEntity;
 import io.zetch.app.service.RestaurantService;
-import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "/restaurants")
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = "*")
 public class RestaurantController {
   private final RestaurantService restaurantService;
+
 
   @Autowired
   public RestaurantController(RestaurantService restaurantService) {
@@ -63,9 +65,12 @@ public class RestaurantController {
    * @param restaurant Restaurant to convert
    * @return Restaurant DTO
    */
-  private RestaurantDto toDto(Restaurant restaurant) {
+  private RestaurantDto toDto(RestaurantEntity restaurant) {
     return new RestaurantDto(
-        restaurant.getId(), restaurant.getName(), restaurant.getCuisine(), restaurant.getAddress());
+            restaurant.getId(),
+            restaurant.getName(),
+            restaurant.getCuisine(),
+            restaurant.getAddress());
   }
 
   /**

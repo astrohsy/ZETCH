@@ -1,11 +1,13 @@
 package io.zetch.app.service;
 
-import io.zetch.app.domain.Restaurant;
+import io.zetch.app.domain.restaurant.RestaurantEntity;
 import io.zetch.app.repo.RestaurantRepository;
-import java.util.List;
-import java.util.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
 
 /** Restaurant business logic */
 @Service
@@ -22,7 +24,7 @@ public class RestaurantService {
    *
    * @return List of all restaurants
    */
-  public List<Restaurant> getAll() {
+  public List<RestaurantEntity> getAll() {
     return restaurantRepository.findAll();
   }
 
@@ -33,7 +35,7 @@ public class RestaurantService {
    * @return Restaurant
    * @throws NoSuchElementException If Restaurant not found
    */
-  public Restaurant getOne(Long id) throws NoSuchElementException {
+  public RestaurantEntity getOne(Long id) throws NoSuchElementException {
     return verifyRestaurant(id);
   }
 
@@ -44,8 +46,13 @@ public class RestaurantService {
    * @param cuisine Restaurant cuisine
    * @param address Restaurant address
    */
-  public Restaurant createNew(String name, String cuisine, String address) {
-    Restaurant newRestaurant = new Restaurant(name, cuisine, address);
+  public RestaurantEntity createNew(String name, String cuisine, String address) {
+    RestaurantEntity newRestaurant = RestaurantEntity.builder()
+            .name(name)
+            .cuisine(cuisine)
+            .address(address)
+            .owners(new ArrayList<>())
+            .build();
     return restaurantRepository.save(newRestaurant);
   }
 
@@ -56,7 +63,7 @@ public class RestaurantService {
    * @return Found Restaurant
    * @throws NoSuchElementException If Restaurant not found
    */
-  public Restaurant verifyRestaurant(Long id) throws NoSuchElementException {
+  public RestaurantEntity verifyRestaurant(Long id) throws NoSuchElementException {
     return restaurantRepository
         .findById(id)
         .orElseThrow(() -> new NoSuchElementException("Restaurant does not exist: " + id));
