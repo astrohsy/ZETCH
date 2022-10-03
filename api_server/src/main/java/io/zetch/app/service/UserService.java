@@ -4,16 +4,34 @@ import io.zetch.app.domain.User;
 import io.zetch.app.repo.UserRepository;
 import java.util.List;
 import java.util.NoSuchElementException;
+import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
+import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.cognitoidentityprovider.CognitoIdentityProviderClient;
+import software.amazon.awssdk.services.cognitoidentityprovider.model.SignUpRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
   private final UserRepository userRepository;
+  private String clientId;
+  private AwsBasicCredentials awsCreds;
+  private CognitoIdentityProviderClient cognito;
 
   @Autowired
-  public UserService(UserRepository userRepository) {
+  public UserService(UserRepository userRepository,
+                     @Value("${cognito.access-key-id}") String accessKey,
+                     @Value("${cognito.secret-key}") String secretKey,
+                     @Value("${cognito.client-id}") String clientId) {
     this.userRepository = userRepository;
+    this.clientId = clientId;
+    this.awsCreds = AwsBasicCredentials.create(accessKey, secretKey);
+    this.cognito = CognitoIdentityProviderClient.builder()
+      .region(Region.US_EAST_1)
+      .credentialsProvider(StaticCredentialsProvider.create(awsCreds))
+      .build();
   }
 
   /**
@@ -40,6 +58,15 @@ public class UserService {
     if (userRepository.existsById(username)) {
       throw new IllegalArgumentException("Username unavailable: " + username);
     }
+
+    // Add user to Cognito
+    SignUpRequest signUpRequest = SignUpRequest.builder()
+      .username(username)
+      .password("123456")
+      .clientId(clientId)
+      .build();
+
+    cognito.signUp(signUpRequest);
 
     User newUser = new User(username, name, email);
     return userRepository.save(newUser);
