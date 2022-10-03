@@ -3,11 +3,17 @@ package io.zetch.app.domain.restaurant;
 
 import io.zetch.app.domain.BaseEntity;
 import io.zetch.app.domain.user.UserEntity;
-import lombok.*;
-
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
-import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter

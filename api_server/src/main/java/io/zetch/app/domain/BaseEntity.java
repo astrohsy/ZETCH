@@ -1,11 +1,10 @@
 package io.zetch.app.domain;
 
-import lombok.Getter;
-
+import java.util.Objects;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
-import java.util.Objects;
+import lombok.Getter;
 
 @MappedSuperclass
 @Getter
