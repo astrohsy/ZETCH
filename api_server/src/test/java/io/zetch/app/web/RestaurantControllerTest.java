@@ -45,17 +45,11 @@ public class RestaurantControllerTest {
   private static final String CUISINE_2 = "French";
   private static final String ADDRESS_2 = "15 Amsterdam";
   @Autowired ObjectMapper mapper;
-  RestaurantEntity r1 = RestaurantEntity.builder()
-          .name(NAME_1)
-          .cuisine(CUISINE_1)
-          .address(ADDRESS_1)
-          .build();
+  RestaurantEntity r1 =
+      RestaurantEntity.builder().name(NAME_1).cuisine(CUISINE_1).address(ADDRESS_1).build();
 
-  RestaurantEntity r2 = RestaurantEntity.builder()
-          .name(NAME_2)
-          .cuisine(CUISINE_2)
-          .address(ADDRESS_2)
-          .build();
+  RestaurantEntity r2 =
+      RestaurantEntity.builder().name(NAME_2).cuisine(CUISINE_2).address(ADDRESS_2).build();
   private MockMvc mockMvc;
   @Autowired private WebApplicationContext context;
   @MockBean private RestaurantService restaurantServiceMock;
@@ -104,7 +98,8 @@ public class RestaurantControllerTest {
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
             .content(
-                mapper.writeValueAsString(RestaurantDto.builder()
+                mapper.writeValueAsString(
+                    RestaurantDto.builder()
                         .id(r1.getId())
                         .name(r1.getName())
                         .cuisine(r1.getCuisine())

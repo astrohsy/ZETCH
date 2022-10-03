@@ -42,7 +42,8 @@ public class UserService {
       throw new IllegalArgumentException("Username unavailable: " + username);
     }
 
-    UserEntity newUser =  UserEntity.builder()
+    UserEntity newUser =
+        UserEntity.builder()
             .username(username)
             .name(name)
             .email(email)

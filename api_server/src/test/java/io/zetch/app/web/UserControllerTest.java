@@ -47,16 +47,8 @@ public class UserControllerTest {
   private static final String NAME_2 = "Cat";
   private static final String EMAIL_2 = "cat@example.com";
   @Autowired ObjectMapper mapper;
-  UserEntity u1 = UserEntity.builder()
-          .username(USERNAME_1)
-          .name(NAME_1)
-          .email(EMAIL_1)
-          .build();
-  UserEntity u2 = UserEntity.builder()
-          .username(USERNAME_2)
-          .name(NAME_2)
-          .email(EMAIL_2)
-          .build();
+  UserEntity u1 = UserEntity.builder().username(USERNAME_1).name(NAME_1).email(EMAIL_1).build();
+  UserEntity u2 = UserEntity.builder().username(USERNAME_2).name(NAME_2).email(EMAIL_2).build();
   private MockMvc mockMvc;
   @Autowired private WebApplicationContext context;
   @MockBean private UserService userServiceMock;
@@ -128,11 +120,8 @@ public class UserControllerTest {
 
   @Test
   public void updateUserName() throws Exception {
-    UserEntity updated = UserEntity.builder()
-            .username(USERNAME_1)
-            .name("New Bob")
-            .email(EMAIL_1)
-            .build();
+    UserEntity updated =
+        UserEntity.builder().username(USERNAME_1).name("New Bob").email(EMAIL_1).build();
 
     when(userServiceMock.update(u1.getUsername(), updated.getName(), null)).thenReturn(updated);
 
@@ -153,18 +142,16 @@ public class UserControllerTest {
 
   @Test
   public void updateUserEmail() throws Exception {
-    UserEntity updated = UserEntity.builder()
-            .username(USERNAME_1)
-            .name(NAME_1)
-            .email("new_bob@me.com")
-            .build();
+    UserEntity updated =
+        UserEntity.builder().username(USERNAME_1).name(NAME_1).email("new_bob@me.com").build();
     when(userServiceMock.update(u1.getUsername(), null, updated.getEmail())).thenReturn(updated);
 
     MockHttpServletRequestBuilder mockRequest =
         put(USERS_ENDPOINT + USERNAME_1)
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
-            .content(mapper.writeValueAsString(new UserDto(ID_1, USERNAME_1, null, "new_bob@me.com")));
+            .content(
+                mapper.writeValueAsString(new UserDto(ID_1, USERNAME_1, null, "new_bob@me.com")));
 
     mockMvc
         .perform(mockRequest)
@@ -177,11 +164,8 @@ public class UserControllerTest {
 
   @Test
   public void updateUserNameAndEmail() throws Exception {
-    UserEntity updated = UserEntity.builder()
-            .username(USERNAME_1)
-            .name("Bob New")
-            .email("bob_new@me.com")
-            .build();
+    UserEntity updated =
+        UserEntity.builder().username(USERNAME_1).name("Bob New").email("bob_new@me.com").build();
     when(userServiceMock.update(u1.getUsername(), updated.getName(), updated.getEmail()))
         .thenReturn(updated);
 
@@ -190,7 +174,8 @@ public class UserControllerTest {
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
             .content(
-                mapper.writeValueAsString(new UserDto(ID_1, USERNAME_1, "Bob New", "bob_new@me.com")));
+                mapper.writeValueAsString(
+                    new UserDto(ID_1, USERNAME_1, "Bob New", "bob_new@me.com")));
 
     mockMvc
         .perform(mockRequest)
@@ -203,11 +188,8 @@ public class UserControllerTest {
 
   @Test
   public void updateUser_UserNotFound() throws Exception {
-    UserEntity updated = UserEntity.builder()
-            .username(USERNAME_1)
-            .name("Bob New")
-            .email("bob_new@me.com")
-            .build();
+    UserEntity updated =
+        UserEntity.builder().username(USERNAME_1).name("Bob New").email("bob_new@me.com").build();
     when(userServiceMock.update(u1.getUsername(), updated.getName(), updated.getEmail()))
         .thenThrow(NoSuchElementException.class);
 
@@ -216,7 +198,8 @@ public class UserControllerTest {
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
             .content(
-                mapper.writeValueAsString(new UserDto(ID_1, USERNAME_1, "Bob New", "bob_new@me.com")));
+                mapper.writeValueAsString(
+                    new UserDto(ID_1, USERNAME_1, "Bob New", "bob_new@me.com")));
 
     mockMvc.perform(mockRequest).andExpect(status().isNotFound());
   }

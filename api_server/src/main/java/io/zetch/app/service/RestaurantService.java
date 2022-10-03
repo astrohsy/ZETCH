@@ -46,7 +46,8 @@ public class RestaurantService {
    * @param address Restaurant address
    */
   public RestaurantEntity createNew(String name, String cuisine, String address) {
-    RestaurantEntity newRestaurant = RestaurantEntity.builder()
+    RestaurantEntity newRestaurant =
+        RestaurantEntity.builder()
             .name(name)
             .cuisine(cuisine)
             .address(address)

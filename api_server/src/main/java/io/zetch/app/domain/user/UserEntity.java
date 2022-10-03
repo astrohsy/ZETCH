@@ -28,11 +28,14 @@ import lombok.ToString;
 @Table(name = "zetch_user") // "User" is a reserved keyword in some DBs
 public class UserEntity extends BaseEntity {
   @NonNull
-  @Column(unique=true)
+  @Column(unique = true)
   private String username;
+
   private String name;
   private String email;
 
-  @ManyToMany(mappedBy = "owners") // A restaurant might have multiple owners; a User might own multiplerestaurants
+  @ManyToMany(
+      mappedBy =
+          "owners") // A restaurant might have multiple owners; a User might own multiplerestaurants
   private List<RestaurantEntity> ownedRestaurants;
-  }
+}

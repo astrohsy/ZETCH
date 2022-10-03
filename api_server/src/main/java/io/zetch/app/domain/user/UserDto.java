@@ -6,10 +6,8 @@ import lombok.Value;
 
 @Value
 public class UserDto implements Serializable {
-  @ToString.Exclude
-  Long id;
+  @ToString.Exclude Long id;
   String username;
   String name;
   String email;
-
 }

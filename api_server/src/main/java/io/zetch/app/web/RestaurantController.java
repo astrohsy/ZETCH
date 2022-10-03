@@ -28,7 +28,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class RestaurantController {
   private final RestaurantService restaurantService;
 
-
   @Autowired
   public RestaurantController(RestaurantService restaurantService) {
     this.restaurantService = restaurantService;
@@ -75,10 +74,7 @@ public class RestaurantController {
    */
   private RestaurantDto toDto(RestaurantEntity restaurant) {
     return new RestaurantDto(
-            restaurant.getId(),
-            restaurant.getName(),
-            restaurant.getCuisine(),
-            restaurant.getAddress());
+        restaurant.getId(), restaurant.getName(), restaurant.getCuisine(), restaurant.getAddress());
   }
 
   /**

@@ -28,10 +28,8 @@ public class RestaurantEntity extends BaseEntity {
   @ManyToMany // A restaurant might have multiple owners; a User might own multiple restaurants
   @ToString.Exclude
   private List<UserEntity> owners;
- // Every restaurant must have a name
-  @NonNull
-  private String name;
+  // Every restaurant must have a name
+  @NonNull private String name;
   private String cuisine;
   private String address;
-
 }

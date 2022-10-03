@@ -49,7 +49,8 @@ public class RestaurantServiceTest {
   @Test
   public void createNew() {
     // Prepare to capture a Restaurant object
-    ArgumentCaptor<RestaurantEntity> restaurantCaptor = ArgumentCaptor.forClass(RestaurantEntity.class);
+    ArgumentCaptor<RestaurantEntity> restaurantCaptor =
+        ArgumentCaptor.forClass(RestaurantEntity.class);
 
     restaurantService.createNew(NAME, CUISINE, ADDRESS);
 
