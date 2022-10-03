@@ -19,9 +19,8 @@ public class HelloController {
 
   @GetMapping("/private")
   public String index3(JwtAuthenticationToken principal) {
-    String username = principal.getToken().getClaimAsString("cognito:username");
-    String group = principal.getToken().getClaimAsString("custom:affiliation");
+    String username = principal.getToken().getClaimAsString("username");
 
-    return String.format("Greetings from Spring Boot, %s! You are in group %s", username, group);
+    return String.format("Greetings from Spring Boot, %s!", username);
   }
 }
