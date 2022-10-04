@@ -2,7 +2,9 @@ package io.zetch.app.service;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import io.zetch.app.domain.User;
 import io.zetch.app.repo.UserRepository;
@@ -23,8 +25,9 @@ public class UserServiceTest {
   private static final String EMAIL = "bob@example.com";
 
   @Mock private UserRepository userRepositoryMock;
-  @InjectMocks private UserService service;
   @Mock private User userMock;
+  @Mock private CognitoService cognitoServiceMock;
+  @InjectMocks UserService service;
 
   // VERIFY SERVICE RETURN VALUE
 
@@ -67,6 +70,7 @@ public class UserServiceTest {
 
     // Verify save() invoked
     verify(userRepositoryMock).save(userCaptor.capture());
+    verify(cognitoServiceMock).signUp(USERNAME);
 
     // Verify the attributes of the User object
     User value = userCaptor.getValue();

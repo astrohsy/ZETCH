@@ -5,35 +5,17 @@ import io.zetch.app.repo.UserRepository;
 import java.util.List;
 import java.util.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
-import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
-import software.amazon.awssdk.regions.Region;
-import software.amazon.awssdk.services.cognitoidentityprovider.CognitoIdentityProviderClient;
-import software.amazon.awssdk.services.cognitoidentityprovider.model.SignUpRequest;
 
 @Service
 public class UserService {
   private final UserRepository userRepository;
-  private String clientId;
-  private AwsBasicCredentials awsCreds;
-  private CognitoIdentityProviderClient cognito;
+  private final CognitoService cognitoService;
 
   @Autowired
-  public UserService(
-      UserRepository userRepository,
-      @Value("${cognito.access-key-id}") String accessKey,
-      @Value("${cognito.secret-key}") String secretKey,
-      @Value("${cognito.client-id}") String clientId) {
+  public UserService(UserRepository userRepository, CognitoService cognitoService) {
     this.userRepository = userRepository;
-    this.clientId = clientId;
-    this.awsCreds = AwsBasicCredentials.create(accessKey, secretKey);
-    this.cognito =
-        CognitoIdentityProviderClient.builder()
-            .region(Region.US_EAST_1)
-            .credentialsProvider(StaticCredentialsProvider.create(awsCreds))
-            .build();
+    this.cognitoService = cognitoService;
   }
 
   /**
@@ -55,17 +37,21 @@ public class UserService {
     return verifyUser(username);
   }
 
-  /** Create a new User in the database */
+  /**
+   * Create a new User in the database and Cognito
+   *
+   * @param username User's username
+   * @param name User's name
+   * @param email User's email
+   * @return User
+   */
   public User createNew(String username, String name, String email) {
     if (userRepository.existsById(username)) {
       throw new IllegalArgumentException("Username unavailable: " + username);
     }
 
     // Add user to Cognito
-    SignUpRequest signUpRequest =
-        SignUpRequest.builder().username(username).password("123456").clientId(clientId).build();
-
-    cognito.signUp(signUpRequest);
+    cognitoService.signUp(username);
 
     User newUser = new User(username, name, email);
     return userRepository.save(newUser);
