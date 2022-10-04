@@ -48,7 +48,7 @@ public class RestaurantService {
    * @throws NoSuchElementException If User not found
    */
   public Restaurant update(long restaurantId, String newName, String newCuisine, String newAddress)
-          throws NoSuchElementException {
+      throws NoSuchElementException {
     Restaurant currRestaurant = verifyRestaurant(restaurantId);
 
     // TODO: Maybe there is a better way to set

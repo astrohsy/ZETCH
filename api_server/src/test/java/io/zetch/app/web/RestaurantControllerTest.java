@@ -15,7 +15,6 @@ import io.zetch.app.domain.RestaurantDto;
 import io.zetch.app.service.RestaurantService;
 import java.util.List;
 import java.util.NoSuchElementException;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -93,7 +92,8 @@ public class RestaurantControllerTest {
 
   @Test
   public void getRestaurantByIdFails() throws Exception {
-    when(restaurantServiceMock.getOne(r1.getId())).thenThrow(new NoSuchElementException("Restaurant does not exist: " + r1.getId()));
+    when(restaurantServiceMock.getOne(r1.getId()))
+        .thenThrow(new NoSuchElementException("Restaurant does not exist: " + r1.getId()));
 
     mockMvc
         .perform(get(RESTAURANT_ENDPOINT + r1.getId()).contentType(MediaType.APPLICATION_JSON))
@@ -125,78 +125,89 @@ public class RestaurantControllerTest {
   @Test
   public void updateRestaurantName() throws Exception {
     Restaurant updated = new Restaurant(ID_1, "New Bob's", CUISINE_1, ADDRESS_1);
-    when(restaurantServiceMock.update(r1.getId(), updated.getName(), null, null)).thenReturn(updated);
+    when(restaurantServiceMock.update(r1.getId(), updated.getName(), null, null))
+        .thenReturn(updated);
 
     MockHttpServletRequestBuilder mockRequest =
-            put(RESTAURANT_ENDPOINT + r1.getId())
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .accept(MediaType.APPLICATION_JSON)
-                    .content(mapper.writeValueAsString(new RestaurantDto(r1.getId(), "New Bob's", null, null)));
+        put(RESTAURANT_ENDPOINT + r1.getId())
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON)
+            .content(
+                mapper.writeValueAsString(new RestaurantDto(r1.getId(), "New Bob's", null, null)));
 
     mockMvc
-            .perform(mockRequest)
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("*", notNullValue()))
-            .andExpect(jsonPath("$.id", is(updated.getId().intValue())))
-            .andExpect(jsonPath("$.name", is(updated.getName())))
-            .andExpect(jsonPath("$.cuisine", is(updated.getCuisine())))
-            .andExpect(jsonPath("$.address", is(updated.getAddress())));
+        .perform(mockRequest)
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("*", notNullValue()))
+        .andExpect(jsonPath("$.id", is(updated.getId().intValue())))
+        .andExpect(jsonPath("$.name", is(updated.getName())))
+        .andExpect(jsonPath("$.cuisine", is(updated.getCuisine())))
+        .andExpect(jsonPath("$.address", is(updated.getAddress())));
   }
 
   @Test
   public void updateRestaurantCuisine() throws Exception {
     Restaurant updated = new Restaurant(ID_1, NAME_1, "New Italian", ADDRESS_1);
-    when(restaurantServiceMock.update(r1.getId(), null, updated.getCuisine(), null)).thenReturn(updated);
+    when(restaurantServiceMock.update(r1.getId(), null, updated.getCuisine(), null))
+        .thenReturn(updated);
 
     MockHttpServletRequestBuilder mockRequest =
-            put(RESTAURANT_ENDPOINT + r1.getId())
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .accept(MediaType.APPLICATION_JSON)
-                    .content(mapper.writeValueAsString(new RestaurantDto(r1.getId(), null, updated.getCuisine(), null)));
+        put(RESTAURANT_ENDPOINT + r1.getId())
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON)
+            .content(
+                mapper.writeValueAsString(
+                    new RestaurantDto(r1.getId(), null, updated.getCuisine(), null)));
 
     mockMvc
-            .perform(mockRequest)
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("*", notNullValue()))
-            .andExpect(jsonPath("$.id", is(updated.getId().intValue())))
-            .andExpect(jsonPath("$.name", is(updated.getName())))
-            .andExpect(jsonPath("$.cuisine", is(updated.getCuisine())))
-            .andExpect(jsonPath("$.address", is(updated.getAddress())));
+        .perform(mockRequest)
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("*", notNullValue()))
+        .andExpect(jsonPath("$.id", is(updated.getId().intValue())))
+        .andExpect(jsonPath("$.name", is(updated.getName())))
+        .andExpect(jsonPath("$.cuisine", is(updated.getCuisine())))
+        .andExpect(jsonPath("$.address", is(updated.getAddress())));
   }
 
   @Test
   public void updateRestaurantAddress() throws Exception {
     Restaurant updated = new Restaurant(ID_1, NAME_1, CUISINE_1, "New 1234 Broadway");
-    when(restaurantServiceMock.update(r1.getId(), null, null, updated.getAddress())).thenReturn(updated);
+    when(restaurantServiceMock.update(r1.getId(), null, null, updated.getAddress()))
+        .thenReturn(updated);
 
     MockHttpServletRequestBuilder mockRequest =
-            put(RESTAURANT_ENDPOINT + r1.getId())
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .accept(MediaType.APPLICATION_JSON)
-                    .content(mapper.writeValueAsString(new RestaurantDto(r1.getId(), null, null, updated.getAddress())));
+        put(RESTAURANT_ENDPOINT + r1.getId())
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON)
+            .content(
+                mapper.writeValueAsString(
+                    new RestaurantDto(r1.getId(), null, null, updated.getAddress())));
 
     mockMvc
-            .perform(mockRequest)
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("*", notNullValue()))
-            .andExpect(jsonPath("$.id", is(updated.getId().intValue())))
-            .andExpect(jsonPath("$.name", is(updated.getName())))
-            .andExpect(jsonPath("$.cuisine", is(updated.getCuisine())))
-            .andExpect(jsonPath("$.address", is(updated.getAddress())));
+        .perform(mockRequest)
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("*", notNullValue()))
+        .andExpect(jsonPath("$.id", is(updated.getId().intValue())))
+        .andExpect(jsonPath("$.name", is(updated.getName())))
+        .andExpect(jsonPath("$.cuisine", is(updated.getCuisine())))
+        .andExpect(jsonPath("$.address", is(updated.getAddress())));
   }
 
   @Test
   public void updateUserNotFound() throws Exception {
     Restaurant updated = new Restaurant(ID_1, "New Bob's", "New Italian", "New 1234 Broadway");
-    when(restaurantServiceMock.update(r1.getId(), updated.getName(), updated.getCuisine(), updated.getAddress()))
-            .thenThrow(NoSuchElementException.class);
+    when(restaurantServiceMock.update(
+            r1.getId(), updated.getName(), updated.getCuisine(), updated.getAddress()))
+        .thenThrow(NoSuchElementException.class);
 
     MockHttpServletRequestBuilder mockRequest =
-            put(RESTAURANT_ENDPOINT + r1.getId())
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .accept(MediaType.APPLICATION_JSON)
-                    .content(mapper.writeValueAsString(new RestaurantDto(r1.getId(), "New Bob's",
-                            "New Italian", "New 1234 Broadway")));
+        put(RESTAURANT_ENDPOINT + r1.getId())
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON)
+            .content(
+                mapper.writeValueAsString(
+                    new RestaurantDto(
+                        r1.getId(), "New Bob's", "New Italian", "New 1234 Broadway")));
 
     mockMvc.perform(mockRequest).andExpect(status().isNotFound());
   }

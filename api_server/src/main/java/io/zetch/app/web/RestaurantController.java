@@ -50,9 +50,14 @@ public class RestaurantController {
    */
   @PutMapping("/{restaurantId}")
   @Operation(summary = "Modify a single restaurant")
-  RestaurantDto updateRestaurant(@RequestBody RestaurantDto newRestaurantDto, @PathVariable Long restaurantId) {
-    return toDto(restaurantService.update(restaurantId, newRestaurantDto.getName(),
-                  newRestaurantDto.getCuisine(), newRestaurantDto.getAddress()));
+  RestaurantDto updateRestaurant(
+      @RequestBody RestaurantDto newRestaurantDto, @PathVariable Long restaurantId) {
+    return toDto(
+        restaurantService.update(
+            restaurantId,
+            newRestaurantDto.getName(),
+            newRestaurantDto.getCuisine(),
+            newRestaurantDto.getAddress()));
   }
 
   /**
