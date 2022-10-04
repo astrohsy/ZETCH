@@ -2,9 +2,11 @@ package io.zetch.app.service;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-import io.zetch.app.domain.User;
+import io.zetch.app.domain.user.UserEntity;
 import io.zetch.app.repo.UserRepository;
 import java.util.List;
 import java.util.Optional;
@@ -24,7 +26,7 @@ public class UserServiceTest {
 
   @Mock private UserRepository userRepositoryMock;
   @InjectMocks private UserService service;
-  @Mock private User userMock;
+  @Mock private UserEntity userMock;
 
   // VERIFY SERVICE RETURN VALUE
 
@@ -49,7 +51,7 @@ public class UserServiceTest {
     service.update(USERNAME, NAME, EMAIL);
 
     // Verify save() invoked
-    verify(userRepositoryMock).save(any(User.class));
+    verify(userRepositoryMock).save(any(UserEntity.class));
 
     // Verify setter methods invoked
     verify(userMock).setName(NAME);
@@ -61,7 +63,7 @@ public class UserServiceTest {
   @Test
   public void createNew() {
     // Prepare to capture a User object
-    ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
+    ArgumentCaptor<UserEntity> userCaptor = ArgumentCaptor.forClass(UserEntity.class);
 
     service.createNew(USERNAME, NAME, EMAIL);
 
@@ -69,7 +71,7 @@ public class UserServiceTest {
     verify(userRepositoryMock).save(userCaptor.capture());
 
     // Verify the attributes of the User object
-    User value = userCaptor.getValue();
+    UserEntity value = userCaptor.getValue();
     assertThat(value.getUsername(), is(USERNAME));
     assertThat(value.getName(), is(NAME));
     assertThat(value.getEmail(), is(EMAIL));

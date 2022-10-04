@@ -2,14 +2,24 @@ package io.zetch.app.web;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import io.zetch.app.domain.User;
-import io.zetch.app.domain.UserDto;
+import io.zetch.app.domain.user.UserDto;
+import io.zetch.app.domain.user.UserEntity;
 import io.zetch.app.service.UserService;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(path = "/users")
@@ -57,8 +67,8 @@ public class UserController {
    * @param user User to convert
    * @return User DTO
    */
-  private UserDto toDto(User user) {
-    return new UserDto(user.getUsername(), user.getName(), user.getEmail());
+  private UserDto toDto(UserEntity user) {
+    return new UserDto(user.getId(), user.getUsername(), user.getName(), user.getEmail());
   }
 
   /**
