@@ -34,8 +34,8 @@ public class UserEntity extends BaseEntity {
   private String name;
   private String email;
 
-  @ManyToMany(
-      mappedBy =
-          "owners") // A restaurant might have multiple owners; a User might own multiplerestaurants
+  // A restaurant might have multiple owners; a User might own multiple restaurants
+  @ManyToMany(mappedBy = "owners")
+  @ToString.Exclude
   private List<RestaurantEntity> ownedRestaurants;
 }
