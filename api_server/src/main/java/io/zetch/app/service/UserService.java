@@ -11,10 +11,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
   private final UserRepository userRepository;
+  private final CognitoService cognitoService;
 
   @Autowired
-  public UserService(UserRepository userRepository) {
+  public UserService(UserRepository userRepository, CognitoService cognitoService) {
     this.userRepository = userRepository;
+    this.cognitoService = cognitoService;
   }
 
   /**
@@ -36,11 +38,21 @@ public class UserService {
     return verifyUser(username);
   }
 
-  /** Create a new User in the database */
+  /**
+   * Create a new User in the database and Cognito
+   *
+   * @param username User's username
+   * @param name User's name
+   * @param email User's email
+   * @return User
+   */
   public UserEntity createNew(String username, String name, String email) {
     if (userRepository.existsById(username)) {
       throw new IllegalArgumentException("Username unavailable: " + username);
     }
+
+    // Add user to Cognito
+    cognitoService.signUp(username);
 
     UserEntity newUser =
         UserEntity.builder()
@@ -49,6 +61,7 @@ public class UserService {
             .email(email)
             .ownedRestaurants(new ArrayList<>())
             .build();
+
     return userRepository.save(newUser);
   }
 

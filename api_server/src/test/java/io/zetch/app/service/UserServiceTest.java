@@ -25,8 +25,9 @@ public class UserServiceTest {
   private static final String EMAIL = "bob@example.com";
 
   @Mock private UserRepository userRepositoryMock;
-  @InjectMocks private UserService service;
   @Mock private UserEntity userMock;
+  @Mock private CognitoService cognitoServiceMock;
+  @InjectMocks private UserService service;
 
   // VERIFY SERVICE RETURN VALUE
 
@@ -69,6 +70,7 @@ public class UserServiceTest {
 
     // Verify save() invoked
     verify(userRepositoryMock).save(userCaptor.capture());
+    verify(cognitoServiceMock).signUp(USERNAME);
 
     // Verify the attributes of the User object
     UserEntity value = userCaptor.getValue();
