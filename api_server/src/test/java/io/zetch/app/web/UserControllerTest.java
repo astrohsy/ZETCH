@@ -39,7 +39,6 @@ public class UserControllerTest {
 
   private static final String USERS_ENDPOINT = "/users/";
 
-  private static final Long ID_1 = 1L;
   private static final String USERNAME_1 = "bob";
   private static final String NAME_1 = "Bob";
   private static final String EMAIL_1 = "bob@example.com";
@@ -94,7 +93,7 @@ public class UserControllerTest {
             .accept(MediaType.APPLICATION_JSON)
             .content(
                 mapper.writeValueAsString(
-                    new UserDto(u1.getId(), u1.getUsername(), u1.getName(), u1.getEmail())));
+                    new UserDto(u1.getUsername(), u1.getName(), u1.getEmail())));
 
     mockMvc
         .perform(mockRequest)
@@ -129,7 +128,7 @@ public class UserControllerTest {
         put(USERS_ENDPOINT + USERNAME_1)
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
-            .content(mapper.writeValueAsString(new UserDto(ID_1, USERNAME_1, "New Bob", null)));
+            .content(mapper.writeValueAsString(new UserDto(USERNAME_1, "New Bob", null)));
 
     mockMvc
         .perform(mockRequest)
@@ -150,8 +149,7 @@ public class UserControllerTest {
         put(USERS_ENDPOINT + USERNAME_1)
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
-            .content(
-                mapper.writeValueAsString(new UserDto(ID_1, USERNAME_1, null, "new_bob@me.com")));
+            .content(mapper.writeValueAsString(new UserDto(USERNAME_1, null, "new_bob@me.com")));
 
     mockMvc
         .perform(mockRequest)
@@ -174,8 +172,7 @@ public class UserControllerTest {
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
             .content(
-                mapper.writeValueAsString(
-                    new UserDto(ID_1, USERNAME_1, "Bob New", "bob_new@me.com")));
+                mapper.writeValueAsString(new UserDto(USERNAME_1, "Bob New", "bob_new@me.com")));
 
     mockMvc
         .perform(mockRequest)
@@ -198,8 +195,7 @@ public class UserControllerTest {
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
             .content(
-                mapper.writeValueAsString(
-                    new UserDto(ID_1, USERNAME_1, "Bob New", "bob_new@me.com")));
+                mapper.writeValueAsString(new UserDto(USERNAME_1, "Bob New", "bob_new@me.com")));
 
     mockMvc.perform(mockRequest).andExpect(status().isNotFound());
   }
