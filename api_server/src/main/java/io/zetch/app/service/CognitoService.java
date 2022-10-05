@@ -31,8 +31,7 @@ public class CognitoService {
   }
 
   /**
-   * Sign up a new user in Cognito
-   * Every user will share the same simple password for now.
+   * Sign up a new user in Cognito Every user will share the same simple password for now.
    *
    * @param username User's username
    */
