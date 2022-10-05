@@ -33,7 +33,7 @@ public class UserServiceTest {
 
   @Test
   public void getOne() {
-    when(userRepositoryMock.findById(USERNAME)).thenReturn(Optional.of(userMock));
+    when(userRepositoryMock.findByUsername(USERNAME)).thenReturn(Optional.of(userMock));
     assertThat(service.getOne(USERNAME), is(userMock));
   }
 
@@ -48,7 +48,7 @@ public class UserServiceTest {
 
   @Test
   public void update() {
-    when(userRepositoryMock.findById(USERNAME)).thenReturn(Optional.of(userMock));
+    when(userRepositoryMock.findByUsername(USERNAME)).thenReturn(Optional.of(userMock));
     service.update(USERNAME, NAME, EMAIL);
 
     // Verify save() invoked

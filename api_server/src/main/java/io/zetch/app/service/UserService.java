@@ -47,7 +47,7 @@ public class UserService {
    * @return User
    */
   public UserEntity createNew(String username, String name, String email) {
-    if (userRepository.existsById(username)) {
+    if (userRepository.existsByUsername(username)) {
       throw new IllegalArgumentException("Username unavailable: " + username);
     }
 
@@ -99,7 +99,7 @@ public class UserService {
    */
   public UserEntity verifyUser(String username) throws NoSuchElementException {
     return userRepository
-        .findById(username)
+        .findByUsername(username)
         .orElseThrow(() -> new NoSuchElementException("User does not exist: " + username));
   }
 }
