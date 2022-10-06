@@ -52,8 +52,10 @@ public class UserControllerTest {
   @Autowired private WebApplicationContext context;
   @MockBean private UserService userServiceMock;
 
-  UserEntity u1 = UserEntity.builder().username(USERNAME_1).name(NAME_1).email(EMAIL_1).build();
-  UserEntity u2 = UserEntity.builder().username(USERNAME_2).name(NAME_2).email(EMAIL_2).build();
+  UserEntity u1 =
+      UserEntity.builder().username(USERNAME_1).displayName(NAME_1).email(EMAIL_1).build();
+  UserEntity u2 =
+      UserEntity.builder().username(USERNAME_2).displayName(NAME_2).email(EMAIL_2).build();
 
   @BeforeEach
   public void setup() {
@@ -82,13 +84,14 @@ public class UserControllerTest {
         .andExpect(status().isOk())
         .andExpect(jsonPath("*", notNullValue()))
         .andExpect(jsonPath("$.username", is(u1.getUsername())))
-        .andExpect(jsonPath("$.name", is(u1.getName())))
+        .andExpect(jsonPath("$.name", is(u1.getDisplayName())))
         .andExpect(jsonPath("$.email", is(u1.getEmail())));
   }
 
   @Test
   public void createUser() throws Exception {
-    when(userServiceMock.createNew(u1.getUsername(), u1.getName(), u1.getEmail())).thenReturn(u1);
+    when(userServiceMock.createNew(u1.getUsername(), u1.getDisplayName(), u1.getEmail()))
+        .thenReturn(u1);
 
     MockHttpServletRequestBuilder mockRequest =
         post(USERS_ENDPOINT)
@@ -96,14 +99,14 @@ public class UserControllerTest {
             .accept(MediaType.APPLICATION_JSON)
             .content(
                 mapper.writeValueAsString(
-                    new UserDto(u1.getUsername(), u1.getName(), u1.getEmail())));
+                    new UserDto(u1.getUsername(), u1.getDisplayName(), u1.getEmail())));
 
     mockMvc
         .perform(mockRequest)
         .andExpect(status().isOk())
         .andExpect(jsonPath("*", notNullValue()))
         .andExpect(jsonPath("$.username", is(u1.getUsername())))
-        .andExpect(jsonPath("$.name", is(u1.getName())))
+        .andExpect(jsonPath("$.name", is(u1.getDisplayName())))
         .andExpect(jsonPath("$.email", is(u1.getEmail())));
   }
 
@@ -123,9 +126,10 @@ public class UserControllerTest {
   @Test
   public void updateUserName() throws Exception {
     UserEntity updated =
-        UserEntity.builder().username(USERNAME_1).name("New Bob").email(EMAIL_1).build();
+        UserEntity.builder().username(USERNAME_1).displayName("New Bob").email(EMAIL_1).build();
 
-    when(userServiceMock.update(u1.getUsername(), updated.getName(), null)).thenReturn(updated);
+    when(userServiceMock.update(u1.getUsername(), updated.getDisplayName(), null))
+        .thenReturn(updated);
 
     MockHttpServletRequestBuilder mockRequest =
         put(USERS_ENDPOINT + USERNAME_1)
@@ -138,14 +142,18 @@ public class UserControllerTest {
         .andExpect(status().isOk())
         .andExpect(jsonPath("*", notNullValue()))
         .andExpect(jsonPath("$.username", is(u1.getUsername())))
-        .andExpect(jsonPath("$.name", is(updated.getName())))
+        .andExpect(jsonPath("$.name", is(updated.getDisplayName())))
         .andExpect(jsonPath("$.email", is(u1.getEmail())));
   }
 
   @Test
   public void updateUserEmail() throws Exception {
     UserEntity updated =
-        UserEntity.builder().username(USERNAME_1).name(NAME_1).email("new_bob@me.com").build();
+        UserEntity.builder()
+            .username(USERNAME_1)
+            .displayName(NAME_1)
+            .email("new_bob@me.com")
+            .build();
     when(userServiceMock.update(u1.getUsername(), null, updated.getEmail())).thenReturn(updated);
 
     MockHttpServletRequestBuilder mockRequest =
@@ -159,15 +167,19 @@ public class UserControllerTest {
         .andExpect(status().isOk())
         .andExpect(jsonPath("*", notNullValue()))
         .andExpect(jsonPath("$.username", is(u1.getUsername())))
-        .andExpect(jsonPath("$.name", is(u1.getName())))
+        .andExpect(jsonPath("$.name", is(u1.getDisplayName())))
         .andExpect(jsonPath("$.email", is(updated.getEmail())));
   }
 
   @Test
   public void updateUserNameAndEmail() throws Exception {
     UserEntity updated =
-        UserEntity.builder().username(USERNAME_1).name("Bob New").email("bob_new@me.com").build();
-    when(userServiceMock.update(u1.getUsername(), updated.getName(), updated.getEmail()))
+        UserEntity.builder()
+            .username(USERNAME_1)
+            .displayName("Bob New")
+            .email("bob_new@me.com")
+            .build();
+    when(userServiceMock.update(u1.getUsername(), updated.getDisplayName(), updated.getEmail()))
         .thenReturn(updated);
 
     MockHttpServletRequestBuilder mockRequest =
@@ -182,15 +194,19 @@ public class UserControllerTest {
         .andExpect(status().isOk())
         .andExpect(jsonPath("*", notNullValue()))
         .andExpect(jsonPath("$.username", is(u1.getUsername())))
-        .andExpect(jsonPath("$.name", is(updated.getName())))
+        .andExpect(jsonPath("$.name", is(updated.getDisplayName())))
         .andExpect(jsonPath("$.email", is(updated.getEmail())));
   }
 
   @Test
   public void updateUser_UserNotFound() throws Exception {
     UserEntity updated =
-        UserEntity.builder().username(USERNAME_1).name("Bob New").email("bob_new@me.com").build();
-    when(userServiceMock.update(u1.getUsername(), updated.getName(), updated.getEmail()))
+        UserEntity.builder()
+            .username(USERNAME_1)
+            .displayName("Bob New")
+            .email("bob_new@me.com")
+            .build();
+    when(userServiceMock.update(u1.getUsername(), updated.getDisplayName(), updated.getEmail()))
         .thenThrow(NoSuchElementException.class);
 
     MockHttpServletRequestBuilder mockRequest =
@@ -217,7 +233,7 @@ public class UserControllerTest {
         .andExpect(status().isOk())
         .andExpect(jsonPath("*", notNullValue()))
         .andExpect(jsonPath("$.username", is(u1.getUsername())))
-        .andExpect(jsonPath("$.name", is(u1.getName())))
+        .andExpect(jsonPath("$.name", is(u1.getDisplayName())))
         .andExpect(jsonPath("$.email", is(u1.getEmail())));
   }
 

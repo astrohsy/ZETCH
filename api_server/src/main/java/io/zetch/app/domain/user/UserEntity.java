@@ -31,7 +31,7 @@ public class UserEntity extends BaseEntity {
   @Column(unique = true)
   private String username;
 
-  private String name;
+  private String displayName;
   private String email;
 
   // A restaurant might have multiple owners; a User might own multiple restaurants

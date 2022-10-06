@@ -57,7 +57,7 @@ public class UserService {
     UserEntity newUser =
         UserEntity.builder()
             .username(username)
-            .name(name)
+            .displayName(name)
             .email(email)
             .ownedRestaurants(new ArrayList<>())
             .build();
@@ -80,7 +80,7 @@ public class UserService {
 
     // TODO: Maybe there is a better way to set
     if (newName != null) {
-      currUser.setName(newName);
+      currUser.setDisplayName(newName);
     }
 
     if (newEmail != null) {

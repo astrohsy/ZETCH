@@ -55,7 +55,7 @@ public class UserServiceTest {
     verify(userRepositoryMock).save(any(UserEntity.class));
 
     // Verify setter methods invoked
-    verify(userMock).setName(NAME);
+    verify(userMock).setDisplayName(NAME);
     verify(userMock).setEmail(EMAIL);
   }
 
@@ -85,7 +85,7 @@ public class UserServiceTest {
     // Verify the attributes of the User object
     UserEntity value = userCaptor.getValue();
     assertThat(value.getUsername(), is(USERNAME));
-    assertThat(value.getName(), is(NAME));
+    assertThat(value.getDisplayName(), is(NAME));
     assertThat(value.getEmail(), is(EMAIL));
     assertThat(value.getOwnedRestaurants().isEmpty(), is(true));
   }

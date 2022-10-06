@@ -75,7 +75,7 @@ public class UserController {
    * @return User DTO
    */
   private UserDto toDto(UserEntity user) {
-    return new UserDto(user.getUsername(), user.getName(), user.getEmail());
+    return new UserDto(user.getUsername(), user.getDisplayName(), user.getEmail());
   }
 
   /**
