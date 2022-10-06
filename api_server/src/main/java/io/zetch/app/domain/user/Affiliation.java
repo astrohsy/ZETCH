@@ -8,6 +8,5 @@ public enum Affiliation {
   STUDENT("student"),
   FACULTY("faculty");
 
-  @Getter
-  private final String value;
+  @Getter private final String value;
 }
