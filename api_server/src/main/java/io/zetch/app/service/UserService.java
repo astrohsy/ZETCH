@@ -91,6 +91,22 @@ public class UserService {
   }
 
   /**
+   * Delete a User from the database and Cognito
+   *
+   * @param username Username of User to delete
+   * @return User that was just deleted
+   * @throws NoSuchElementException If User not found
+   */
+  public UserEntity delete(String username) throws NoSuchElementException {
+    UserEntity user = verifyUser(username);
+
+    cognitoService.delete(username);
+    userRepository.delete(user);
+
+    return user;
+  }
+
+  /**
    * Verify and return the User for a particular username
    *
    * @param username Username to find

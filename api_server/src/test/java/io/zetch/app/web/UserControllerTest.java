@@ -6,6 +6,7 @@ import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -45,12 +46,14 @@ public class UserControllerTest {
   private static final String USERNAME_2 = "cat";
   private static final String NAME_2 = "Cat";
   private static final String EMAIL_2 = "cat@example.com";
-  @Autowired ObjectMapper mapper;
-  UserEntity u1 = UserEntity.builder().username(USERNAME_1).name(NAME_1).email(EMAIL_1).build();
-  UserEntity u2 = UserEntity.builder().username(USERNAME_2).name(NAME_2).email(EMAIL_2).build();
+
   private MockMvc mockMvc;
+  @Autowired ObjectMapper mapper;
   @Autowired private WebApplicationContext context;
   @MockBean private UserService userServiceMock;
+
+  UserEntity u1 = UserEntity.builder().username(USERNAME_1).name(NAME_1).email(EMAIL_1).build();
+  UserEntity u2 = UserEntity.builder().username(USERNAME_2).name(NAME_2).email(EMAIL_2).build();
 
   @BeforeEach
   public void setup() {
@@ -196,6 +199,36 @@ public class UserControllerTest {
             .accept(MediaType.APPLICATION_JSON)
             .content(
                 mapper.writeValueAsString(new UserDto(USERNAME_1, "Bob New", "bob_new@me.com")));
+
+    mockMvc.perform(mockRequest).andExpect(status().isNotFound());
+  }
+
+  @Test
+  public void deleteUser() throws Exception {
+    when(userServiceMock.delete(u1.getUsername())).thenReturn(u1);
+
+    MockHttpServletRequestBuilder mockRequest =
+        delete(USERS_ENDPOINT + USERNAME_1)
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON);
+
+    mockMvc
+        .perform(mockRequest)
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("*", notNullValue()))
+        .andExpect(jsonPath("$.username", is(u1.getUsername())))
+        .andExpect(jsonPath("$.name", is(u1.getName())))
+        .andExpect(jsonPath("$.email", is(u1.getEmail())));
+  }
+
+  @Test
+  public void deleteUser_UserNotFound() throws Exception {
+    when(userServiceMock.delete(u1.getUsername())).thenThrow(NoSuchElementException.class);
+
+    MockHttpServletRequestBuilder mockRequest =
+        delete(USERS_ENDPOINT + USERNAME_1)
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON);
 
     mockMvc.perform(mockRequest).andExpect(status().isNotFound());
   }

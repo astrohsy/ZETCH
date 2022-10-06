@@ -1,5 +1,7 @@
 package io.zetch.app.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -7,6 +9,7 @@ import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.cognitoidentityprovider.CognitoIdentityProviderClient;
+import software.amazon.awssdk.services.cognitoidentityprovider.model.AdminDeleteUserRequest;
 import software.amazon.awssdk.services.cognitoidentityprovider.model.CognitoIdentityProviderException;
 import software.amazon.awssdk.services.cognitoidentityprovider.model.SignUpRequest;
 import software.amazon.awssdk.services.cognitoidentityprovider.model.UsernameExistsException;
@@ -15,6 +18,7 @@ import software.amazon.awssdk.services.cognitoidentityprovider.model.UsernameExi
 public class CognitoService {
   private final CognitoIdentityProviderClient cognito;
   private final String clientId;
+  private final Logger logger = LoggerFactory.getLogger(CognitoService.class);
 
   @Autowired
   public CognitoService(
@@ -31,7 +35,7 @@ public class CognitoService {
   }
 
   /**
-   * Sign up a new user in Cognito Every user will share the same simple password for now.
+   * Sign up a new user in Cognito. Every user will share the same simple password for now.
    *
    * @param username User's username
    */
@@ -44,9 +48,25 @@ public class CognitoService {
     } catch (UsernameExistsException e) {
       // Ignore this exception for now. Since we may not have data persistence during dev, we might
       // create multiple users with the same username.
-      System.err.println("Username already exists in Cognito. Ignoring.");
+      logger.warn("Username already exists in Cognito. Ignoring.");
     } catch (CognitoIdentityProviderException e) {
-      System.err.println("Cognito failed: " + e.getMessage());
+      logger.error("Cognito failed: " + e.getMessage());
+    }
+  }
+
+  /**
+   * Delete a user from Cognito.
+   *
+   * @param username User's username
+   */
+  public void delete(String username) {
+    AdminDeleteUserRequest deleteRequest =
+        AdminDeleteUserRequest.builder().username(username).build();
+
+    try {
+      cognito.adminDeleteUser(deleteRequest);
+    } catch (CognitoIdentityProviderException e) {
+      logger.error("Cognito failed: " + e.getMessage());
     }
   }
 }

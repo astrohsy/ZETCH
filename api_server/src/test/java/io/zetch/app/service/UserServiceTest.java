@@ -59,6 +59,16 @@ public class UserServiceTest {
     verify(userMock).setEmail(EMAIL);
   }
 
+  @Test
+  public void delete() {
+    when(userRepositoryMock.findByUsername(USERNAME)).thenReturn(Optional.of(userMock));
+    service.delete(USERNAME);
+
+    // Verify delete() invoked
+    verify(userRepositoryMock).delete(any(UserEntity.class));
+    verify(cognitoServiceMock).delete(USERNAME);
+  }
+
   // VERIFY INVOCATION OF DEPS + CAPTURE PARAMETER VALUES + VERIFY PARAMETERS
 
   @Test
