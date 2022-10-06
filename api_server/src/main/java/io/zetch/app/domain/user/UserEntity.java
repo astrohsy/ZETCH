@@ -3,6 +3,7 @@ package io.zetch.app.domain.user;
 
 import io.zetch.app.domain.BaseEntity;
 import io.zetch.app.domain.restaurant.RestaurantEntity;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -31,6 +32,8 @@ public class UserEntity extends BaseEntity {
   @Column(unique = true)
   private String username;
 
+  private Affiliation affiliation;
+  private Date createdAt;
   private String displayName;
   private String email;
 
@@ -38,4 +41,13 @@ public class UserEntity extends BaseEntity {
   @ManyToMany(mappedBy = "owners")
   @ToString.Exclude
   private List<RestaurantEntity> ownedRestaurants;
+
+  // TODO: List of posted reviews
+  // @OneToMany
+  // @ToString.Exclude
+  // private List<Review> postedReviews;
+  // TODO: List of posted replies (for restaurant owners)
+  // @OneToMany
+  // @ToString.Exclude
+  // private List<Reply> postedReplies;
 }
