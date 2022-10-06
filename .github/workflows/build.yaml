@@ -5,8 +5,6 @@ env:
 
 on:
   push:
-  pull_request:
-    types: [ opened, reopened ]
 
 jobs:
 
@@ -36,6 +34,12 @@ jobs:
       - name: Build with Maven
         working-directory: ./${{ env.API_SERVER_PROJECT }}
         run: ./mvnw clean install
+      - name: Run Integration Testing
+        uses: matt-ball/newman-action@master
+        with:
+          apiKey: ${{ secrets.POSTMAN_API_KEY }}
+          collection: 690884-49950774-f190-4558-9e60-111629402926
+          environment: 754fe4bb-655f-47b3-84b7-26f6bdc0e24f
 
   sonar-lint:
     name: SonarLint Check
