@@ -1,8 +1,8 @@
 package io.zetch.app.domain.review;
 
-import java.io.Serializable;
 import io.zetch.app.domain.restaurant.RestaurantDto;
 import io.zetch.app.domain.user.UserDto;
+import java.io.Serializable;
 import lombok.ToString;
 import lombok.Value;
 
