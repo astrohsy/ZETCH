@@ -3,13 +3,12 @@ package io.zetch.app.domain.review;
 
 import io.zetch.app.domain.BaseEntity;
 import io.zetch.app.domain.restaurant.RestaurantEntity;
-import lombok.*;
-
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import java.util.List;
+import lombok.*;
 
 @Getter
 @Setter
