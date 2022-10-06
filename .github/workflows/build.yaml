@@ -39,7 +39,7 @@ jobs:
         with:
           apiKey: ${{ secrets.POSTMAN_API_KEY }}
           collection: 690884-49950774-f190-4558-9e60-111629402926
-          environment: 754fe4bb-655f-47b3-84b7-26f6bdc0e24f
+          environment: Team-Workspace~754fe4bb-655f-47b3-84b7-26f6bdc0e24f
 
   sonar-lint:
     name: SonarLint Check
