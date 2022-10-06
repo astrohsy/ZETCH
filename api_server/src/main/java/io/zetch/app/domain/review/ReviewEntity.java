@@ -1,4 +1,4 @@
-/** User entity definition */
+/** Review entity definition */
 package io.zetch.app.domain.review;
 
 import io.zetch.app.domain.BaseEntity;
@@ -14,7 +14,6 @@ import javax.persistence.*;
 @Setter
 @ToString
 @RequiredArgsConstructor
-@NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Entity
