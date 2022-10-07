@@ -18,14 +18,19 @@ import software.amazon.awssdk.services.cognitoidentityprovider.model.UsernameExi
 public class CognitoService {
   private final CognitoIdentityProviderClient cognito;
   private final String clientId;
+  private final String userPoolId;
   private final Logger logger = LoggerFactory.getLogger(CognitoService.class);
 
   @Autowired
   public CognitoService(
       @Value("${cognito.access-key-id}") String accessKey,
       @Value("${cognito.secret-key}") String secretKey,
-      @Value("${cognito.client-id}") String clientId) {
+      @Value("${cognito.client-id}") String clientId,
+      @Value("${cognito.user-pool-id}") String userPoolId) {
+
     this.clientId = clientId;
+    this.userPoolId = userPoolId;
+
     AwsBasicCredentials awsCreds = AwsBasicCredentials.create(accessKey, secretKey);
     this.cognito =
         CognitoIdentityProviderClient.builder()
@@ -61,7 +66,7 @@ public class CognitoService {
    */
   public void delete(String username) {
     AdminDeleteUserRequest deleteRequest =
-        AdminDeleteUserRequest.builder().username(username).build();
+        AdminDeleteUserRequest.builder().username(username).userPoolId(userPoolId).build();
 
     try {
       cognito.adminDeleteUser(deleteRequest);
