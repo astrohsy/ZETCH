@@ -1,18 +1,12 @@
 package io.zetch.app.service;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import io.zetch.app.domain.restaurant.RestaurantDto;
 import io.zetch.app.domain.restaurant.RestaurantEntity;
 import io.zetch.app.repo.RestaurantRepository;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -22,8 +16,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 @ExtendWith(MockitoExtension.class)
 public class RestaurantServiceTest {
@@ -77,26 +69,26 @@ public class RestaurantServiceTest {
   @Test
   public void updateRestaurantName() throws Exception {
     RestaurantEntity old =
-            RestaurantEntity.builder()
-                    .owners(new ArrayList<>())
-                    .name(NAME)
-                    .cuisine(CUISINE)
-                    .address(ADDRESS)
-                    .build();
+        RestaurantEntity.builder()
+            .owners(new ArrayList<>())
+            .name(NAME)
+            .cuisine(CUISINE)
+            .address(ADDRESS)
+            .build();
 
     RestaurantEntity updated =
-            RestaurantEntity.builder()
-                    .owners(new ArrayList<>())
-                    .name("New Bob's")
-                    .cuisine(CUISINE)
-                    .address(ADDRESS)
-                    .build();
+        RestaurantEntity.builder()
+            .owners(new ArrayList<>())
+            .name("New Bob's")
+            .cuisine(CUISINE)
+            .address(ADDRESS)
+            .build();
 
     when(restaurantRepositoryMock.findById(ID)).thenReturn(Optional.of(old));
     restaurantService.update(ID, updated.getName(), updated.getCuisine(), updated.getAddress());
 
     ArgumentCaptor<RestaurantEntity> restaurantCaptor =
-            ArgumentCaptor.forClass(RestaurantEntity.class);
+        ArgumentCaptor.forClass(RestaurantEntity.class);
     verify(restaurantRepositoryMock).save(restaurantCaptor.capture());
 
     RestaurantEntity value = restaurantCaptor.getValue();
