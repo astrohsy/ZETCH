@@ -52,3 +52,24 @@ curl --location --request POST 'http://localhost:8080/users/' \
 # Check if the user added to the database
 curl --location --request GET 'http://localhost:8080/users/'
 ```
+
+### 3. Shut down the DB container
+```bash
+docker-compose down
+```
+### View swagger UI of apis: 
+```bash
+localhost:8080/swagger-ui.html
+```
+
+### Run Jacoco test coverage:
+```bash
+mvn test
+# Generated in target/site/jacoco/index.html
+```
+
+### Run PMD static analysis bug finder:
+```bash
+mvn pmd:pmd
+# Generated in target/site/pmd.html
+```
