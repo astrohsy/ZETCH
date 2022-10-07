@@ -14,6 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.zetch.app.domain.user.Affiliation;
 import io.zetch.app.domain.user.UserDto;
 import io.zetch.app.domain.user.UserEntity;
 import io.zetch.app.service.UserService;
@@ -53,9 +54,19 @@ public class UserControllerTest {
   @MockBean private UserService userServiceMock;
 
   UserEntity u1 =
-      UserEntity.builder().username(USERNAME_1).displayName(NAME_1).email(EMAIL_1).build();
+      UserEntity.builder()
+          .username(USERNAME_1)
+          .displayName(NAME_1)
+          .email(EMAIL_1)
+          .affiliation(Affiliation.STUDENT)
+          .build();
   UserEntity u2 =
-      UserEntity.builder().username(USERNAME_2).displayName(NAME_2).email(EMAIL_2).build();
+      UserEntity.builder()
+          .username(USERNAME_2)
+          .displayName(NAME_2)
+          .email(EMAIL_2)
+          .affiliation(Affiliation.STUDENT)
+          .build();
 
   @BeforeEach
   public void setup() {
@@ -90,16 +101,15 @@ public class UserControllerTest {
 
   @Test
   public void createUser() throws Exception {
-    when(userServiceMock.createNew(u1.getUsername(), u1.getDisplayName(), u1.getEmail()))
+    when(userServiceMock.createNew(
+            u1.getUsername(), u1.getDisplayName(), u1.getEmail(), u1.getAffiliation().toString()))
         .thenReturn(u1);
 
     MockHttpServletRequestBuilder mockRequest =
         post(USERS_ENDPOINT)
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
-            .content(
-                mapper.writeValueAsString(
-                    new UserDto(u1.getUsername(), u1.getDisplayName(), u1.getEmail())));
+            .content(mapper.writeValueAsString(u1.toDto()));
 
     mockMvc
         .perform(mockRequest)
@@ -112,7 +122,8 @@ public class UserControllerTest {
 
   @Test
   public void createUser_UnavailableUsername() throws Exception {
-    when(userServiceMock.createNew(any(), any(), any())).thenThrow(IllegalArgumentException.class);
+    when(userServiceMock.createNew(any(), any(), any(), any()))
+        .thenThrow(IllegalArgumentException.class);
 
     MockHttpServletRequestBuilder mockRequest =
         post(USERS_ENDPOINT)
@@ -124,70 +135,27 @@ public class UserControllerTest {
   }
 
   @Test
-  public void updateUserName() throws Exception {
-    UserEntity updated =
-        UserEntity.builder().username(USERNAME_1).displayName("New Bob").email(EMAIL_1).build();
-
-    when(userServiceMock.update(u1.getUsername(), updated.getDisplayName(), null))
-        .thenReturn(updated);
-
-    MockHttpServletRequestBuilder mockRequest =
-        put(USERS_ENDPOINT + USERNAME_1)
-            .contentType(MediaType.APPLICATION_JSON)
-            .accept(MediaType.APPLICATION_JSON)
-            .content(mapper.writeValueAsString(new UserDto(USERNAME_1, "New Bob", null)));
-
-    mockMvc
-        .perform(mockRequest)
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("*", notNullValue()))
-        .andExpect(jsonPath("$.username", is(u1.getUsername())))
-        .andExpect(jsonPath("$.name", is(updated.getDisplayName())))
-        .andExpect(jsonPath("$.email", is(u1.getEmail())));
-  }
-
-  @Test
-  public void updateUserEmail() throws Exception {
-    UserEntity updated =
-        UserEntity.builder()
-            .username(USERNAME_1)
-            .displayName(NAME_1)
-            .email("new_bob@me.com")
-            .build();
-    when(userServiceMock.update(u1.getUsername(), null, updated.getEmail())).thenReturn(updated);
-
-    MockHttpServletRequestBuilder mockRequest =
-        put(USERS_ENDPOINT + USERNAME_1)
-            .contentType(MediaType.APPLICATION_JSON)
-            .accept(MediaType.APPLICATION_JSON)
-            .content(mapper.writeValueAsString(new UserDto(USERNAME_1, null, "new_bob@me.com")));
-
-    mockMvc
-        .perform(mockRequest)
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("*", notNullValue()))
-        .andExpect(jsonPath("$.username", is(u1.getUsername())))
-        .andExpect(jsonPath("$.name", is(u1.getDisplayName())))
-        .andExpect(jsonPath("$.email", is(updated.getEmail())));
-  }
-
-  @Test
-  public void updateUserNameAndEmail() throws Exception {
+  public void updateUserAttrs() throws Exception {
     UserEntity updated =
         UserEntity.builder()
             .username(USERNAME_1)
             .displayName("Bob New")
             .email("bob_new@me.com")
+            .affiliation(Affiliation.FACULTY)
             .build();
-    when(userServiceMock.update(u1.getUsername(), updated.getDisplayName(), updated.getEmail()))
+
+    when(userServiceMock.update(
+            u1.getUsername(),
+            updated.getDisplayName(),
+            updated.getEmail(),
+            updated.getAffiliation().toString()))
         .thenReturn(updated);
 
     MockHttpServletRequestBuilder mockRequest =
         put(USERS_ENDPOINT + USERNAME_1)
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
-            .content(
-                mapper.writeValueAsString(new UserDto(USERNAME_1, "Bob New", "bob_new@me.com")));
+            .content(mapper.writeValueAsString(updated.toDto()));
 
     mockMvc
         .perform(mockRequest)
@@ -195,7 +163,8 @@ public class UserControllerTest {
         .andExpect(jsonPath("*", notNullValue()))
         .andExpect(jsonPath("$.username", is(u1.getUsername())))
         .andExpect(jsonPath("$.name", is(updated.getDisplayName())))
-        .andExpect(jsonPath("$.email", is(updated.getEmail())));
+        .andExpect(jsonPath("$.email", is(updated.getEmail())))
+        .andExpect(jsonPath("$.affiliation", is(updated.getAffiliation().toString())));
   }
 
   @Test
@@ -205,18 +174,39 @@ public class UserControllerTest {
             .username(USERNAME_1)
             .displayName("Bob New")
             .email("bob_new@me.com")
+            .affiliation(Affiliation.FACULTY)
             .build();
-    when(userServiceMock.update(u1.getUsername(), updated.getDisplayName(), updated.getEmail()))
+
+    when(userServiceMock.update(
+            u1.getUsername(),
+            updated.getDisplayName(),
+            updated.getEmail(),
+            updated.getAffiliation().toString()))
         .thenThrow(NoSuchElementException.class);
 
     MockHttpServletRequestBuilder mockRequest =
         put(USERS_ENDPOINT + USERNAME_1)
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
-            .content(
-                mapper.writeValueAsString(new UserDto(USERNAME_1, "Bob New", "bob_new@me.com")));
+            .content(mapper.writeValueAsString(updated.toDto()));
 
     mockMvc.perform(mockRequest).andExpect(status().isNotFound());
+  }
+
+  @Test
+  public void updateUser_InvalidAffiliation() throws Exception {
+    when(userServiceMock.update(USERNAME_1, NAME_1, EMAIL_1, "badAffiliation"))
+        .thenThrow(IllegalArgumentException.class);
+
+    MockHttpServletRequestBuilder mockRequest =
+        put(USERS_ENDPOINT + USERNAME_1)
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON)
+            .content(
+                mapper.writeValueAsString(
+                    new UserDto(USERNAME_1, NAME_1, EMAIL_1, "badAffiliation")));
+
+    mockMvc.perform(mockRequest).andExpect(status().isBadRequest());
   }
 
   @Test
@@ -234,7 +224,8 @@ public class UserControllerTest {
         .andExpect(jsonPath("*", notNullValue()))
         .andExpect(jsonPath("$.username", is(u1.getUsername())))
         .andExpect(jsonPath("$.name", is(u1.getDisplayName())))
-        .andExpect(jsonPath("$.email", is(u1.getEmail())));
+        .andExpect(jsonPath("$.email", is(u1.getEmail())))
+        .andExpect(jsonPath("$.affiliation", is(u1.getAffiliation().toString())));
   }
 
   @Test

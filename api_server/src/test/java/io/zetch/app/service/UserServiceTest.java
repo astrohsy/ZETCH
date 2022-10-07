@@ -6,6 +6,7 @@ import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import io.zetch.app.domain.user.Affiliation;
 import io.zetch.app.domain.user.UserEntity;
 import io.zetch.app.repo.UserRepository;
 import java.util.List;
@@ -23,6 +24,7 @@ public class UserServiceTest {
   private static final String USERNAME = "bob";
   private static final String NAME = "Bob";
   private static final String EMAIL = "bob@example.com";
+  private static final String AFFILIATION_STUDENT = "student";
 
   @Mock private UserRepository userRepositoryMock;
   @Mock private UserEntity userMock;
@@ -49,7 +51,7 @@ public class UserServiceTest {
   @Test
   public void update() {
     when(userRepositoryMock.findByUsername(USERNAME)).thenReturn(Optional.of(userMock));
-    service.update(USERNAME, NAME, EMAIL);
+    service.update(USERNAME, NAME, EMAIL, AFFILIATION_STUDENT);
 
     // Verify save() invoked
     verify(userRepositoryMock).save(any(UserEntity.class));
@@ -57,6 +59,7 @@ public class UserServiceTest {
     // Verify setter methods invoked
     verify(userMock).setDisplayName(NAME);
     verify(userMock).setEmail(EMAIL);
+    verify(userMock).setAffiliation(Affiliation.STUDENT);
   }
 
   @Test
@@ -76,7 +79,7 @@ public class UserServiceTest {
     // Prepare to capture a User object
     ArgumentCaptor<UserEntity> userCaptor = ArgumentCaptor.forClass(UserEntity.class);
 
-    service.createNew(USERNAME, NAME, EMAIL);
+    service.createNew(USERNAME, NAME, EMAIL, AFFILIATION_STUDENT);
 
     // Verify save() invoked
     verify(userRepositoryMock).save(userCaptor.capture());
@@ -87,6 +90,7 @@ public class UserServiceTest {
     assertThat(value.getUsername(), is(USERNAME));
     assertThat(value.getDisplayName(), is(NAME));
     assertThat(value.getEmail(), is(EMAIL));
+    assertThat(value.getAffiliation(), is(Affiliation.STUDENT));
     assertThat(value.getOwnedRestaurants().isEmpty(), is(true));
   }
 }

@@ -38,44 +38,40 @@ public class UserController {
   @Operation(summary = "Retrieve all users")
   @ResponseBody
   Iterable<UserDto> getAllUsers() {
-    return userService.getAll().stream().map(this::toDto).collect(Collectors.toList());
+    return userService.getAll().stream().map(UserEntity::toDto).collect(Collectors.toList());
   }
 
   @PostMapping(path = "/")
   @Operation(summary = "Create a new user")
   @ResponseBody
   UserDto addNewUser(@RequestBody UserDto newUserDto) {
-    return toDto(
-        userService.createNew(
-            newUserDto.getUsername(), newUserDto.getName(), newUserDto.getEmail()));
+    return userService
+        .createNew(
+            newUserDto.getUsername(),
+            newUserDto.getName(),
+            newUserDto.getEmail(),
+            newUserDto.getAffiliation())
+        .toDto();
   }
 
   @GetMapping("/{username}")
   @Operation(summary = "Retrieve a single user")
   UserDto getOneUser(@PathVariable String username) {
-    return toDto(userService.getOne(username));
+    return userService.getOne(username).toDto();
   }
 
   @PutMapping("/{username}")
   @Operation(summary = "Modify user attributes")
   UserDto updateUser(@RequestBody UserDto newUserDto, @PathVariable String username) {
-    return toDto(userService.update(username, newUserDto.getName(), newUserDto.getEmail()));
+    return userService
+        .update(username, newUserDto.getName(), newUserDto.getEmail(), newUserDto.getAffiliation())
+        .toDto();
   }
 
   @DeleteMapping("/{username}")
   @Operation(summary = "Delete a user")
   UserDto deleteUser(@PathVariable String username) {
-    return toDto(userService.delete(username));
-  }
-
-  /**
-   * Convert the User entity to a User data transfer object
-   *
-   * @param user User to convert
-   * @return User DTO
-   */
-  private UserDto toDto(UserEntity user) {
-    return new UserDto(user.getUsername(), user.getDisplayName(), user.getEmail());
+    return userService.delete(username).toDto();
   }
 
   /**

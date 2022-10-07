@@ -1,5 +1,6 @@
 package io.zetch.app.service;
 
+import io.zetch.app.domain.user.Affiliation;
 import io.zetch.app.domain.user.UserEntity;
 import io.zetch.app.repo.UserRepository;
 import java.util.ArrayList;
@@ -45,8 +46,10 @@ public class UserService {
    * @param name User's name
    * @param email User's email
    * @return User
+   * @throws IllegalArgumentException If username unavailable or invalid Affiliation passed
    */
-  public UserEntity createNew(String username, String name, String email) {
+  public UserEntity createNew(String username, String name, String email, String affiliation)
+      throws IllegalArgumentException {
     if (userRepository.existsByUsername(username)) {
       throw new IllegalArgumentException("Username unavailable: " + username);
     }
@@ -59,6 +62,7 @@ public class UserService {
             .username(username)
             .displayName(name)
             .email(email)
+            .affiliation(Affiliation.fromString(affiliation))
             .ownedRestaurants(new ArrayList<>())
             .build();
 
@@ -71,20 +75,25 @@ public class UserService {
    * @param currUsername Username of User to be updated
    * @param newName New name
    * @param newEmail New email
+   * @param affiliation User affiliation
    * @return Updated User object
    * @throws NoSuchElementException If User not found
+   * @throws IllegalArgumentException If invalid Affiliation passed
    */
-  public UserEntity update(String currUsername, String newName, String newEmail)
-      throws NoSuchElementException {
+  public UserEntity update(String currUsername, String newName, String newEmail, String affiliation)
+      throws NoSuchElementException, IllegalArgumentException {
     UserEntity currUser = verifyUser(currUsername);
 
-    // TODO: Maybe there is a better way to set
     if (newName != null) {
       currUser.setDisplayName(newName);
     }
 
     if (newEmail != null) {
       currUser.setEmail(newEmail);
+    }
+
+    if (affiliation != null) {
+      currUser.setAffiliation(Affiliation.fromString(affiliation));
     }
 
     return userRepository.save(currUser);
