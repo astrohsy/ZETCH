@@ -10,16 +10,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(path = "/restaurants")
@@ -51,6 +42,17 @@ public class RestaurantController {
   @Operation(summary = "Retrieve a single restaurant")
   RestaurantDto getOneRestaurant(@PathVariable Long restaurantId) {
     return toDto(restaurantService.getOne(restaurantId));
+  }
+
+  /**
+   * @param restaurantId Restaurant's id
+   * @return A restaurant by id
+   */
+  @PutMapping("/{restaurantId}")
+  @Operation(summary = "Modify a single restaurant")
+  RestaurantDto updateRestaurant(@RequestBody RestaurantDto newRestaurantDto, @PathVariable Long restaurantId) {
+    return toDto(restaurantService.update(restaurantId, newRestaurantDto.getName(),
+            newRestaurantDto.getCuisine(), newRestaurantDto.getAddress()));
   }
 
   /**

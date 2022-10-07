@@ -39,6 +39,34 @@ public class RestaurantService {
   }
 
   /**
+   * Update existing Restaurant with any non-null attributes. Changing username is not supported.
+   *
+   * @param restaurantId Username of User to be updated
+   * @param newName New name
+   * @param newCuisine New cuisine
+   * @param newAddress New address
+   * @return Updated User object
+   * @throws NoSuchElementException If User not found
+   */
+  public RestaurantEntity update(long restaurantId, String newName, String newCuisine, String newAddress)
+          throws NoSuchElementException {
+    RestaurantEntity currRestaurant = verifyRestaurant(restaurantId);
+
+    // TODO: Maybe there is a better way to set
+    if (newName != null) {
+      currRestaurant.setName(newName);
+    }
+    if (newCuisine != null) {
+      currRestaurant.setCuisine(newCuisine);
+    }
+    if (newAddress != null) {
+      currRestaurant.setAddress(newAddress);
+    }
+
+    return restaurantRepository.save(currRestaurant);
+  }
+
+  /**
    * Create a new Restaurant in the database
    *
    * @param name Restaurant name

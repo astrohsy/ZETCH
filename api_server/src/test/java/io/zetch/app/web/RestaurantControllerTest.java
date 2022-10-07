@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -14,7 +15,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.zetch.app.domain.restaurant.RestaurantDto;
 import io.zetch.app.domain.restaurant.RestaurantEntity;
 import io.zetch.app.service.RestaurantService;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -113,5 +118,129 @@ public class RestaurantControllerTest {
         .andExpect(jsonPath("$.name", is(r1.getName())))
         .andExpect(jsonPath("$.cuisine", is(r1.getCuisine())))
         .andExpect(jsonPath("$.address", is(r1.getAddress())));
+  }
+
+  @Test
+  public void updateRestaurantName() throws Exception {
+    RestaurantEntity updated =
+            RestaurantEntity.builder()
+                    .owners(new ArrayList<>())
+                    .name("New Bob's")
+                    .cuisine(CUISINE_1)
+                    .address(ADDRESS_1)
+                    .build();
+    when(restaurantServiceMock.update(ID_1, updated.getName(), null, null)).thenReturn(updated);
+
+    MockHttpServletRequestBuilder mockRequest =
+            put(RESTAURANT_ENDPOINT + ID_1)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .content(mapper.writeValueAsString(
+                            RestaurantDto.builder()
+                                    .id(ID_1)
+                                    .name("New Bob's")
+                                    .cuisine(null)
+                                    .address(null)
+                                    .build()));
+
+    mockMvc
+            .perform(mockRequest)
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("*", notNullValue()))
+            .andExpect(jsonPath("$.name", is(updated.getName())))
+            .andExpect(jsonPath("$.cuisine", is(updated.getCuisine())))
+            .andExpect(jsonPath("$.address", is(updated.getAddress())));
+  }
+
+  @Test
+  public void updateRestaurantCuisine() throws Exception {
+    RestaurantEntity updated =
+            RestaurantEntity.builder()
+                    .owners(new ArrayList<>())
+                    .name(NAME_1)
+                    .cuisine("New Italian")
+                    .address(ADDRESS_1)
+                    .build();
+    when(restaurantServiceMock.update(ID_1, null, updated.getCuisine(), null)).thenReturn(updated);
+
+    MockHttpServletRequestBuilder mockRequest =
+            put(RESTAURANT_ENDPOINT + ID_1)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .content(mapper.writeValueAsString(
+                            RestaurantDto.builder()
+                                    .id(ID_1)
+                                    .name(null)
+                                    .cuisine("New Italian")
+                                    .address(null)
+                                    .build()));
+
+    mockMvc
+            .perform(mockRequest)
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("*", notNullValue()))
+            .andExpect(jsonPath("$.name", is(updated.getName())))
+            .andExpect(jsonPath("$.cuisine", is(updated.getCuisine())))
+            .andExpect(jsonPath("$.address", is(updated.getAddress())));
+  }
+
+  @Test
+  public void updateRestaurantAddress() throws Exception {
+    RestaurantEntity updated =
+            RestaurantEntity.builder()
+                    .owners(new ArrayList<>())
+                    .name(NAME_1)
+                    .cuisine(CUISINE_1)
+                    .address("New 1234 Broadway")
+                    .build();
+    when(restaurantServiceMock.update(ID_1, null, null, "New 1234 Broadway")).thenReturn(updated);
+
+    MockHttpServletRequestBuilder mockRequest =
+            put(RESTAURANT_ENDPOINT + ID_1)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .content(mapper.writeValueAsString(
+                            RestaurantDto.builder()
+                                    .id(ID_1)
+                                    .name(null)
+                                    .cuisine(null)
+                                    .address("New 1234 Broadway")
+                                    .build()));
+
+    mockMvc
+            .perform(mockRequest)
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("*", notNullValue()))
+            .andExpect(jsonPath("$.name", is(updated.getName())))
+            .andExpect(jsonPath("$.cuisine", is(updated.getCuisine())))
+            .andExpect(jsonPath("$.address", is(updated.getAddress())));
+  }
+
+  @Test
+  public void updateUserNotFound() throws Exception {
+    RestaurantEntity updated =
+            RestaurantEntity.builder()
+                    .owners(new ArrayList<>())
+                    .name("New Bob's")
+                    .cuisine("New Italian")
+                    .address("New 1234 Broadway")
+                    .build();
+    when(restaurantServiceMock.update(ID_1, updated.getName(), updated.getCuisine(), updated.getAddress())).thenThrow(NoSuchElementException.class);
+
+    MockHttpServletRequestBuilder mockRequest =
+            put(RESTAURANT_ENDPOINT + ID_1)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .content(mapper.writeValueAsString(
+                            RestaurantDto.builder()
+                                    .id(ID_1)
+                                    .name("New Bob's")
+                                    .cuisine("New Italian")
+                                    .address("New 1234 Broadway")
+                                    .build()));
+
+    mockMvc
+            .perform(mockRequest)
+            .andExpect(status().isNotFound());
   }
 }
