@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 public enum Affiliation {
   STUDENT("student"),
   FACULTY("faculty"),
+  OTHER("other"),
   ADMIN("admin");
 
   private final String text;
