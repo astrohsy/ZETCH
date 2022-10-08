@@ -48,8 +48,9 @@ public class RestaurantService {
    * @return Updated User object
    * @throws NoSuchElementException If User not found
    */
-  public RestaurantEntity update(long restaurantId, String newName, String newCuisine, String newAddress)
-          throws NoSuchElementException {
+  public RestaurantEntity update(
+      long restaurantId, String newName, String newCuisine, String newAddress)
+      throws NoSuchElementException {
     RestaurantEntity currRestaurant = verifyRestaurant(restaurantId);
 
     // TODO: Maybe there is a better way to set
