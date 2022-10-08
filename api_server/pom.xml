@@ -83,6 +83,11 @@
       <groupId>org.springframework.security</groupId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>com.c4-soft.springaddons</groupId>
+      <artifactId>spring-addons-oauth2-test</artifactId>
+      <version>${springaddons.version}</version>
+    </dependency>
 
     <dependency>
       <artifactId>springdoc-openapi-ui</artifactId>
@@ -116,6 +121,9 @@
     <java.version>17</java.version>
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     <sonar.organization>astrohsy</sonar.organization>
+    <springaddons.version>6.0.0</springaddons.version>
+    <app-type>webmvc</app-type>
+    <token>jwt</token>
   </properties>
 
   <version>0.0.1-SNAPSHOT</version>

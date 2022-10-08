@@ -17,6 +17,7 @@ public class HelloController {
     return "Greetings from Spring Boot! This is public.";
   }
 
+  /** An example of a route getting a username from the token */
   @GetMapping("/private")
   public String index3(JwtAuthenticationToken principal) {
     String username = principal.getToken().getClaimAsString("username");
