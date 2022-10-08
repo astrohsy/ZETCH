@@ -21,7 +21,7 @@ public class SecurityConfig {
     This is where we configure the security required for our endpoints and set up our app to serve as
     an OAuth2 Resource Server, using JWT validation.
     */
-    http.cors().and().csrf().disable();
+    http.cors().and().csrf().disable(); // NOSONAR not used in secure contexts
 
     http.authorizeRequests(
             authReqCustomizer ->
