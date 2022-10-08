@@ -53,15 +53,9 @@ public class RestaurantService {
     RestaurantEntity currRestaurant = verifyRestaurant(restaurantId);
 
     // TODO: Maybe there is a better way to set
-    if (newName != null) {
-      currRestaurant.setName(newName);
-    }
-    if (newCuisine != null) {
-      currRestaurant.setCuisine(newCuisine);
-    }
-    if (newAddress != null) {
-      currRestaurant.setAddress(newAddress);
-    }
+    currRestaurant.setName(newName);
+    currRestaurant.setCuisine(newCuisine);
+    currRestaurant.setAddress(newAddress);
 
     return restaurantRepository.save(currRestaurant);
   }
