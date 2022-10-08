@@ -13,6 +13,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.c4_soft.springaddons.security.oauth2.test.annotations.Claims;
+import com.c4_soft.springaddons.security.oauth2.test.annotations.OpenIdClaims;
+import com.c4_soft.springaddons.security.oauth2.test.annotations.StringClaim;
+import com.c4_soft.springaddons.security.oauth2.test.annotations.WithMockJwtAuth;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.zetch.app.domain.user.Affiliation;
 import io.zetch.app.domain.user.UserDto;
@@ -135,6 +139,11 @@ public class UserControllerTest {
   }
 
   @Test
+  @WithMockJwtAuth(
+      claims =
+          @OpenIdClaims(
+              otherClaims =
+                  @Claims(stringClaims = @StringClaim(name = "username", value = USERNAME_1))))
   public void updateUserAttrs() throws Exception {
     UserEntity updated =
         UserEntity.builder()
@@ -168,6 +177,54 @@ public class UserControllerTest {
   }
 
   @Test
+  @WithMockJwtAuth(
+      claims =
+          @OpenIdClaims(
+              otherClaims =
+                  @Claims(stringClaims = @StringClaim(name = "username", value = USERNAME_2))))
+  public void updateUserAttrs_NotSelf() throws Exception {
+    UserEntity updated =
+        UserEntity.builder()
+            .username(USERNAME_1)
+            .displayName("Bob New")
+            .email("bob_new@me.com")
+            .affiliation(Affiliation.FACULTY)
+            .build();
+
+    MockHttpServletRequestBuilder mockRequest =
+        put(USERS_ENDPOINT + USERNAME_1)
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON)
+            .content(mapper.writeValueAsString(updated.toDto()));
+
+    mockMvc.perform(mockRequest).andExpect(status().isForbidden());
+  }
+
+  @Test
+  public void updateUserAttrs_NoAuth() throws Exception {
+    UserEntity updated =
+        UserEntity.builder()
+            .username(USERNAME_1)
+            .displayName("Bob New")
+            .email("bob_new@me.com")
+            .affiliation(Affiliation.FACULTY)
+            .build();
+
+    MockHttpServletRequestBuilder mockRequest =
+        put(USERS_ENDPOINT + USERNAME_1)
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON)
+            .content(mapper.writeValueAsString(updated.toDto()));
+
+    mockMvc.perform(mockRequest).andExpect(status().isUnauthorized());
+  }
+
+  @Test
+  @WithMockJwtAuth(
+      claims =
+          @OpenIdClaims(
+              otherClaims =
+                  @Claims(stringClaims = @StringClaim(name = "username", value = USERNAME_1))))
   public void updateUser_UserNotFound() throws Exception {
     UserEntity updated =
         UserEntity.builder()
@@ -194,6 +251,11 @@ public class UserControllerTest {
   }
 
   @Test
+  @WithMockJwtAuth(
+      claims =
+          @OpenIdClaims(
+              otherClaims =
+                  @Claims(stringClaims = @StringClaim(name = "username", value = USERNAME_1))))
   public void updateUser_InvalidAffiliation() throws Exception {
     when(userServiceMock.update(USERNAME_1, NAME_1, EMAIL_1, "badAffiliation"))
         .thenThrow(IllegalArgumentException.class);
@@ -210,6 +272,11 @@ public class UserControllerTest {
   }
 
   @Test
+  @WithMockJwtAuth(
+      claims =
+          @OpenIdClaims(
+              otherClaims =
+                  @Claims(stringClaims = @StringClaim(name = "username", value = USERNAME_1))))
   public void deleteUser() throws Exception {
     when(userServiceMock.delete(u1.getUsername())).thenReturn(u1);
 
@@ -229,6 +296,40 @@ public class UserControllerTest {
   }
 
   @Test
+  @WithMockJwtAuth(
+      claims =
+          @OpenIdClaims(
+              otherClaims =
+                  @Claims(stringClaims = @StringClaim(name = "username", value = USERNAME_2))))
+  public void deleteUser_NotSelf() throws Exception {
+    when(userServiceMock.delete(u1.getUsername())).thenReturn(u1);
+
+    MockHttpServletRequestBuilder mockRequest =
+        delete(USERS_ENDPOINT + USERNAME_1)
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON);
+
+    mockMvc.perform(mockRequest).andExpect(status().isForbidden());
+  }
+
+  @Test
+  public void deleteUser_NoAuth() throws Exception {
+    when(userServiceMock.delete(u1.getUsername())).thenReturn(u1);
+
+    MockHttpServletRequestBuilder mockRequest =
+        delete(USERS_ENDPOINT + USERNAME_1)
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON);
+
+    mockMvc.perform(mockRequest).andExpect(status().isUnauthorized());
+  }
+
+  @Test
+  @WithMockJwtAuth(
+      claims =
+          @OpenIdClaims(
+              otherClaims =
+                  @Claims(stringClaims = @StringClaim(name = "username", value = USERNAME_1))))
   public void deleteUser_UserNotFound() throws Exception {
     when(userServiceMock.delete(u1.getUsername())).thenThrow(NoSuchElementException.class);
 

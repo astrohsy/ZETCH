@@ -19,6 +19,7 @@ public class SecurityService {
 
   /** Return True if the user from the provided token is an admin */
   public boolean isAdmin(JwtAuthenticationToken token) {
+    if (token == null) return false;
     UserEntity user = getUserFromToken(token);
     return user.getAffiliation() == Affiliation.ADMIN;
   }
@@ -28,6 +29,7 @@ public class SecurityService {
    * variable
    */
   public boolean isSelf(JwtAuthenticationToken token, String pathUsername) {
+    if (token == null) return false;
     return Objects.equals(getUsernameFromToken(token), pathUsername);
   }
 
