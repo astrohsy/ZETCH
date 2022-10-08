@@ -1,21 +1,20 @@
 package io.zetch.app.service;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import io.zetch.app.domain.restaurant.RestaurantEntity;
 import io.zetch.app.repo.RestaurantRepository;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.List;
-import java.util.Optional;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class RestaurantServiceTest {
@@ -50,7 +49,8 @@ public class RestaurantServiceTest {
   @Test
   public void createNew() {
     // Prepare to capture a Restaurant object
-    ArgumentCaptor<RestaurantEntity> restaurantCaptor = ArgumentCaptor.forClass(RestaurantEntity.class);
+    ArgumentCaptor<RestaurantEntity> restaurantCaptor =
+        ArgumentCaptor.forClass(RestaurantEntity.class);
 
     restaurantService.createNew(NAME, CUISINE, ADDRESS);
 

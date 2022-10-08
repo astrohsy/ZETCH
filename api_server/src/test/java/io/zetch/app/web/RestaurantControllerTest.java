@@ -1,9 +1,20 @@
 package io.zetch.app.web;
 
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.core.Is.is;
+import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.zetch.app.domain.restaurant.RestaurantDto;
 import io.zetch.app.domain.restaurant.RestaurantEntity;
 import io.zetch.app.service.RestaurantService;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,18 +28,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-
-import java.util.List;
-
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.core.Is.is;
-import static org.mockito.Mockito.when;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
@@ -46,17 +45,11 @@ public class RestaurantControllerTest {
   private static final String CUISINE_2 = "French";
   private static final String ADDRESS_2 = "15 Amsterdam";
   @Autowired ObjectMapper mapper;
-  RestaurantEntity r1 = RestaurantEntity.builder()
-          .name(NAME_1)
-          .cuisine(CUISINE_1)
-          .address(ADDRESS_1)
-          .build();
+  RestaurantEntity r1 =
+      RestaurantEntity.builder().name(NAME_1).cuisine(CUISINE_1).address(ADDRESS_1).build();
 
-  RestaurantEntity r2 = RestaurantEntity.builder()
-          .name(NAME_2)
-          .cuisine(CUISINE_2)
-          .address(ADDRESS_2)
-          .build();
+  RestaurantEntity r2 =
+      RestaurantEntity.builder().name(NAME_2).cuisine(CUISINE_2).address(ADDRESS_2).build();
   private MockMvc mockMvc;
   @Autowired private WebApplicationContext context;
   @MockBean private RestaurantService restaurantServiceMock;
@@ -105,7 +98,8 @@ public class RestaurantControllerTest {
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
             .content(
-                mapper.writeValueAsString(RestaurantDto.builder()
+                mapper.writeValueAsString(
+                    RestaurantDto.builder()
                         .id(r1.getId())
                         .name(r1.getName())
                         .cuisine(r1.getCuisine())
