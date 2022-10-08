@@ -9,6 +9,8 @@ import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -62,15 +64,20 @@ public class UserController {
 
   @PutMapping("/{username}")
   @Operation(summary = "Modify user attributes")
-  UserDto updateUser(@RequestBody UserDto newUserDto, @PathVariable String username) {
+  @PreAuthorize("@securityService.isSelf(#token, #username)")
+  UserDto updateUser(
+      @RequestBody UserDto newUserDto,
+      @PathVariable String username,
+      JwtAuthenticationToken token) {
     return userService
         .update(username, newUserDto.getName(), newUserDto.getEmail(), newUserDto.getAffiliation())
         .toDto();
   }
 
   @DeleteMapping("/{username}")
+  @PreAuthorize("@securityService.isSelf(#token, #username)")
   @Operation(summary = "Delete a user")
-  UserDto deleteUser(@PathVariable String username) {
+  UserDto deleteUser(@PathVariable String username, JwtAuthenticationToken token) {
     return userService.delete(username).toDto();
   }
 

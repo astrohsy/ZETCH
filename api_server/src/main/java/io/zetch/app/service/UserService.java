@@ -3,6 +3,7 @@ package io.zetch.app.service;
 import io.zetch.app.domain.user.Affiliation;
 import io.zetch.app.domain.user.UserEntity;
 import io.zetch.app.repo.UserRepository;
+import io.zetch.app.security.CognitoService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -100,7 +101,7 @@ public class UserService {
   }
 
   /**
-   * Delete a User from the database and Cognito
+   * Delete a User from the database
    *
    * @param username Username of User to delete
    * @return User that was just deleted
@@ -109,7 +110,6 @@ public class UserService {
   public UserEntity delete(String username) throws NoSuchElementException {
     UserEntity user = verifyUser(username);
 
-    cognitoService.delete(username);
     userRepository.delete(user);
 
     return user;

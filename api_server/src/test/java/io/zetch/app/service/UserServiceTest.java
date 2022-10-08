@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 import io.zetch.app.domain.user.Affiliation;
 import io.zetch.app.domain.user.UserEntity;
 import io.zetch.app.repo.UserRepository;
+import io.zetch.app.security.CognitoService;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
@@ -69,7 +70,6 @@ public class UserServiceTest {
 
     // Verify delete() invoked
     verify(userRepositoryMock).delete(any(UserEntity.class));
-    verify(cognitoServiceMock).delete(USERNAME);
   }
 
   // VERIFY INVOCATION OF DEPS + CAPTURE PARAMETER VALUES + VERIFY PARAMETERS
