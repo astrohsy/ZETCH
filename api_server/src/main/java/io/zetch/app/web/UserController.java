@@ -1,6 +1,7 @@
 package io.zetch.app.web;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.zetch.app.domain.user.UserDto;
 import io.zetch.app.domain.user.UserEntity;
@@ -38,8 +39,10 @@ public class UserController {
 
   @GetMapping(path = "/")
   @Operation(summary = "Retrieve all users")
+  @SecurityRequirement(name = "OAuth2")
+  @PreAuthorize("@securityService.isAdmin(#token)")
   @ResponseBody
-  Iterable<UserDto> getAllUsers() {
+  Iterable<UserDto> getAllUsers(JwtAuthenticationToken token) {
     return userService.getAll().stream().map(UserEntity::toDto).collect(Collectors.toList());
   }
 
@@ -64,6 +67,7 @@ public class UserController {
 
   @PutMapping("/{username}")
   @Operation(summary = "Modify user attributes")
+  @SecurityRequirement(name = "OAuth2")
   @PreAuthorize("@securityService.isSelf(#token, #username)")
   UserDto updateUser(
       @RequestBody UserDto newUserDto,
@@ -76,6 +80,7 @@ public class UserController {
 
   @DeleteMapping("/{username}")
   @PreAuthorize("@securityService.isSelf(#token, #username)")
+  @SecurityRequirement(name = "OAuth2")
   @Operation(summary = "Delete a user")
   UserDto deleteUser(@PathVariable String username, JwtAuthenticationToken token) {
     return userService.delete(username).toDto();
