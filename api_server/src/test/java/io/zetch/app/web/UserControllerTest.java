@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.zetch.app.domain.user.Affiliation;
 import io.zetch.app.domain.user.UserDto;
 import io.zetch.app.domain.user.UserEntity;
+import io.zetch.app.security.SecurityService;
 import io.zetch.app.service.UserService;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -56,6 +57,7 @@ public class UserControllerTest {
   @Autowired ObjectMapper mapper;
   @Autowired private WebApplicationContext context;
   @MockBean private UserService userServiceMock;
+  @MockBean private SecurityService securityServiceMock;
 
   UserEntity u1 =
       UserEntity.builder()
@@ -78,7 +80,13 @@ public class UserControllerTest {
   }
 
   @Test
-  public void getAllUsers() throws Exception {
+  @WithMockJwtAuth(
+      claims =
+          @OpenIdClaims(
+              otherClaims =
+                  @Claims(stringClaims = @StringClaim(name = "username", value = "admin"))))
+  public void getAllUsers_ByAdmin() throws Exception {
+    when(securityServiceMock.isAdmin(any())).thenReturn(true);
     when(userServiceMock.getAll()).thenReturn(List.of(u1, u2));
 
     mockMvc
@@ -88,6 +96,21 @@ public class UserControllerTest {
         .andExpect(jsonPath("$", hasSize(2)))
         .andExpect(jsonPath("$[0].username", is(USERNAME_1)))
         .andExpect(jsonPath("$[1].username", is(USERNAME_2)));
+  }
+
+  @Test
+  @WithMockJwtAuth(
+      claims =
+          @OpenIdClaims(
+              otherClaims =
+                  @Claims(stringClaims = @StringClaim(name = "username", value = USERNAME_1))))
+  public void getAllUsers_NotByAdmin() throws Exception {
+    when(securityServiceMock.isAdmin(any())).thenReturn(false);
+    when(userServiceMock.getAll()).thenReturn(List.of(u1, u2));
+
+    mockMvc
+        .perform(get(USERS_ENDPOINT).contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isForbidden());
   }
 
   @Test
