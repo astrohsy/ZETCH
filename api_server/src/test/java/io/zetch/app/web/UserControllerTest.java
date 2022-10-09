@@ -3,6 +3,7 @@ package io.zetch.app.web;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.Is.is;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
@@ -168,6 +169,8 @@ public class UserControllerTest {
               otherClaims =
                   @Claims(stringClaims = @StringClaim(name = "username", value = USERNAME_1))))
   public void updateUserAttrs() throws Exception {
+    when(securityServiceMock.isSelf(any(), eq(USERNAME_1))).thenReturn(true);
+
     UserEntity updated =
         UserEntity.builder()
             .username(USERNAME_1)
@@ -249,6 +252,8 @@ public class UserControllerTest {
               otherClaims =
                   @Claims(stringClaims = @StringClaim(name = "username", value = USERNAME_1))))
   public void updateUser_UserNotFound() throws Exception {
+    when(securityServiceMock.isSelf(any(), eq(USERNAME_1))).thenReturn(true);
+
     UserEntity updated =
         UserEntity.builder()
             .username(USERNAME_1)
@@ -280,6 +285,7 @@ public class UserControllerTest {
               otherClaims =
                   @Claims(stringClaims = @StringClaim(name = "username", value = USERNAME_1))))
   public void updateUser_InvalidAffiliation() throws Exception {
+    when(securityServiceMock.isSelf(any(), eq(USERNAME_1))).thenReturn(true);
     when(userServiceMock.update(USERNAME_1, NAME_1, EMAIL_1, "badAffiliation"))
         .thenThrow(IllegalArgumentException.class);
 
@@ -301,6 +307,7 @@ public class UserControllerTest {
               otherClaims =
                   @Claims(stringClaims = @StringClaim(name = "username", value = USERNAME_1))))
   public void deleteUser() throws Exception {
+    when(securityServiceMock.isSelf(any(), eq(USERNAME_1))).thenReturn(true);
     when(userServiceMock.delete(u1.getUsername())).thenReturn(u1);
 
     MockHttpServletRequestBuilder mockRequest =
@@ -325,6 +332,7 @@ public class UserControllerTest {
               otherClaims =
                   @Claims(stringClaims = @StringClaim(name = "username", value = USERNAME_2))))
   public void deleteUser_NotSelf() throws Exception {
+    when(securityServiceMock.isSelf(any(), eq(USERNAME_2))).thenReturn(false);
     when(userServiceMock.delete(u1.getUsername())).thenReturn(u1);
 
     MockHttpServletRequestBuilder mockRequest =
@@ -354,7 +362,8 @@ public class UserControllerTest {
               otherClaims =
                   @Claims(stringClaims = @StringClaim(name = "username", value = USERNAME_1))))
   public void deleteUser_UserNotFound() throws Exception {
-    when(userServiceMock.delete(u1.getUsername())).thenThrow(NoSuchElementException.class);
+    when(securityServiceMock.isSelf(any(), eq(USERNAME_1))).thenReturn(true);
+    when(userServiceMock.delete(USERNAME_1)).thenThrow(NoSuchElementException.class);
 
     MockHttpServletRequestBuilder mockRequest =
         delete(USERS_ENDPOINT + USERNAME_1)
