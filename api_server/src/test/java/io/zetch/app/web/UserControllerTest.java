@@ -43,7 +43,7 @@ import org.springframework.web.context.WebApplicationContext;
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration
-public class UserControllerTest {
+class UserControllerTest {
 
   private static final String USERS_ENDPOINT = "/users/";
 
@@ -76,7 +76,7 @@ public class UserControllerTest {
           .build();
 
   @BeforeEach
-  public void setup() {
+  void setup() {
     mockMvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
   }
 
@@ -86,7 +86,7 @@ public class UserControllerTest {
           @OpenIdClaims(
               otherClaims =
                   @Claims(stringClaims = @StringClaim(name = "username", value = "admin"))))
-  public void getAllUsers_ByAdmin() throws Exception {
+  void getAllUsers_ByAdmin() throws Exception {
     when(securityServiceMock.isAdmin(any())).thenReturn(true);
     when(userServiceMock.getAll()).thenReturn(List.of(u1, u2));
 
@@ -105,7 +105,7 @@ public class UserControllerTest {
           @OpenIdClaims(
               otherClaims =
                   @Claims(stringClaims = @StringClaim(name = "username", value = USERNAME_1))))
-  public void getAllUsers_NotByAdmin() throws Exception {
+  void getAllUsers_NotByAdmin() throws Exception {
     when(securityServiceMock.isAdmin(any())).thenReturn(false);
     when(userServiceMock.getAll()).thenReturn(List.of(u1, u2));
 
@@ -115,7 +115,7 @@ public class UserControllerTest {
   }
 
   @Test
-  public void getUserById() throws Exception {
+  void getUserById() throws Exception {
     when(userServiceMock.getOne(u1.getUsername())).thenReturn(u1);
 
     mockMvc
@@ -128,7 +128,7 @@ public class UserControllerTest {
   }
 
   @Test
-  public void createUser() throws Exception {
+  void createUser() throws Exception {
     when(userServiceMock.createNew(
             u1.getUsername(), u1.getDisplayName(), u1.getEmail(), u1.getAffiliation().toString()))
         .thenReturn(u1);
@@ -149,7 +149,7 @@ public class UserControllerTest {
   }
 
   @Test
-  public void createUser_UnavailableUsername() throws Exception {
+  void createUser_UnavailableUsername() throws Exception {
     when(userServiceMock.createNew(any(), any(), any(), any()))
         .thenThrow(IllegalArgumentException.class);
 
@@ -168,7 +168,7 @@ public class UserControllerTest {
           @OpenIdClaims(
               otherClaims =
                   @Claims(stringClaims = @StringClaim(name = "username", value = USERNAME_1))))
-  public void updateUserAttrs() throws Exception {
+  void updateUserAttrs() throws Exception {
     when(securityServiceMock.isSelf(any(), eq(USERNAME_1))).thenReturn(true);
 
     UserEntity updated =
@@ -208,7 +208,7 @@ public class UserControllerTest {
           @OpenIdClaims(
               otherClaims =
                   @Claims(stringClaims = @StringClaim(name = "username", value = USERNAME_2))))
-  public void updateUserAttrs_NotSelf() throws Exception {
+  void updateUserAttrs_NotSelf() throws Exception {
     UserEntity updated =
         UserEntity.builder()
             .username(USERNAME_1)
@@ -227,7 +227,7 @@ public class UserControllerTest {
   }
 
   @Test
-  public void updateUserAttrs_NoAuth() throws Exception {
+  void updateUserAttrs_NoAuth() throws Exception {
     UserEntity updated =
         UserEntity.builder()
             .username(USERNAME_1)
@@ -251,7 +251,7 @@ public class UserControllerTest {
           @OpenIdClaims(
               otherClaims =
                   @Claims(stringClaims = @StringClaim(name = "username", value = USERNAME_1))))
-  public void updateUser_UserNotFound() throws Exception {
+  void updateUser_UserNotFound() throws Exception {
     when(securityServiceMock.isSelf(any(), eq(USERNAME_1))).thenReturn(true);
 
     UserEntity updated =
@@ -284,7 +284,7 @@ public class UserControllerTest {
           @OpenIdClaims(
               otherClaims =
                   @Claims(stringClaims = @StringClaim(name = "username", value = USERNAME_1))))
-  public void updateUser_InvalidAffiliation() throws Exception {
+  void updateUser_InvalidAffiliation() throws Exception {
     when(securityServiceMock.isSelf(any(), eq(USERNAME_1))).thenReturn(true);
     when(userServiceMock.update(USERNAME_1, NAME_1, EMAIL_1, "badAffiliation"))
         .thenThrow(IllegalArgumentException.class);
@@ -306,7 +306,7 @@ public class UserControllerTest {
           @OpenIdClaims(
               otherClaims =
                   @Claims(stringClaims = @StringClaim(name = "username", value = USERNAME_1))))
-  public void deleteUser() throws Exception {
+  void deleteUser() throws Exception {
     when(securityServiceMock.isSelf(any(), eq(USERNAME_1))).thenReturn(true);
     when(userServiceMock.delete(u1.getUsername())).thenReturn(u1);
 
@@ -331,7 +331,7 @@ public class UserControllerTest {
           @OpenIdClaims(
               otherClaims =
                   @Claims(stringClaims = @StringClaim(name = "username", value = USERNAME_2))))
-  public void deleteUser_NotSelf() throws Exception {
+  void deleteUser_NotSelf() throws Exception {
     when(securityServiceMock.isSelf(any(), eq(USERNAME_2))).thenReturn(false);
     when(userServiceMock.delete(u1.getUsername())).thenReturn(u1);
 
@@ -344,7 +344,7 @@ public class UserControllerTest {
   }
 
   @Test
-  public void deleteUser_NoAuth() throws Exception {
+  void deleteUser_NoAuth() throws Exception {
     when(userServiceMock.delete(u1.getUsername())).thenReturn(u1);
 
     MockHttpServletRequestBuilder mockRequest =
@@ -361,7 +361,7 @@ public class UserControllerTest {
           @OpenIdClaims(
               otherClaims =
                   @Claims(stringClaims = @StringClaim(name = "username", value = USERNAME_1))))
-  public void deleteUser_UserNotFound() throws Exception {
+  void deleteUser_UserNotFound() throws Exception {
     when(securityServiceMock.isSelf(any(), eq(USERNAME_1))).thenReturn(true);
     when(userServiceMock.delete(USERNAME_1)).thenThrow(NoSuchElementException.class);
 

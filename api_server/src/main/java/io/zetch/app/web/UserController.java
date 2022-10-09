@@ -7,7 +7,6 @@ import io.zetch.app.domain.user.UserDto;
 import io.zetch.app.domain.user.UserEntity;
 import io.zetch.app.service.UserService;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -43,7 +42,7 @@ public class UserController {
   @PreAuthorize("@securityService.isAdmin(#token)")
   @ResponseBody
   Iterable<UserDto> getAllUsers(JwtAuthenticationToken token) {
-    return userService.getAll().stream().map(UserEntity::toDto).collect(Collectors.toList());
+    return userService.getAll().stream().map(UserEntity::toDto).toList();
   }
 
   @PostMapping(path = "/")

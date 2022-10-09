@@ -55,7 +55,7 @@ public class CognitoService {
       // create multiple users with the same username.
       logger.warn("Username already exists in Cognito. Ignoring.");
     } catch (CognitoIdentityProviderException e) {
-      logger.error("Cognito failed: " + e.getMessage());
+      logger.error(String.format("Cognito failed: %s", e.getMessage()));
     }
   }
 
@@ -71,7 +71,7 @@ public class CognitoService {
     try {
       cognito.adminDeleteUser(deleteRequest);
     } catch (CognitoIdentityProviderException e) {
-      logger.error("Cognito failed: " + e.getMessage());
+      logger.error(String.format("Cognito failed: %s", e.getMessage()));
     }
   }
 }

@@ -20,7 +20,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 
 @ExtendWith(MockitoExtension.class)
-public class SecurityServiceTest {
+class SecurityServiceTest {
 
   private final String USERNAME_1 = "bob";
   private final String USERNAME_2 = "admin";
@@ -32,33 +32,33 @@ public class SecurityServiceTest {
   @InjectMocks private SecurityService securityService;
 
   @Test
-  public void isSelf_NullToken() {
+  void isSelf_NullToken() {
     assertThat(securityService.isSelf(null, USERNAME_1), is(false));
   }
 
   @Test
-  public void isAdmin_NullToken() {
+  void isAdmin_NullToken() {
     assertThat(securityService.isSelf(null, USERNAME_1), is(false));
   }
 
   @Test
-  public void isSelf() {
+  void isSelf() {
     assertThat(securityService.isSelf(getJwtForTest(USERNAME_1), USERNAME_1), is(true));
   }
 
   @Test
-  public void isSelf_Failure() {
+  void isSelf_Failure() {
     assertThat(securityService.isSelf(getJwtForTest(USERNAME_1), USERNAME_2), is(false));
   }
 
   @Test
-  public void isAdmin() {
+  void isAdmin() {
     when(userRepository.findByUsername(USERNAME_2)).thenReturn(Optional.ofNullable(admin));
     assertThat(securityService.isAdmin(getJwtForTest(USERNAME_2)), is(true));
   }
 
   @Test
-  public void isAdmin_Failure() {
+  void isAdmin_Failure() {
     when(userRepository.findByUsername(USERNAME_1)).thenReturn(Optional.ofNullable(bob));
     assertThat(securityService.isAdmin(getJwtForTest(USERNAME_1)), is(false));
   }

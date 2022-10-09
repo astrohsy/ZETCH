@@ -12,16 +12,16 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class AffiliationTest {
+class AffiliationTest {
 
   @ParameterizedTest
   @CsvSource({"student, STUDENT", "faculty, FACULTY", "other, OTHER", "admin, ADMIN"})
-  public void fromString(String text, Affiliation affiliation) {
+  void fromString(String text, Affiliation affiliation) {
     assertThat(Affiliation.fromString(text), is(affiliation));
   }
 
   @Test
-  public void fromString_Failure() {
+  void fromString_Failure() {
     assertThrows(IllegalArgumentException.class, () -> Affiliation.fromString("doesNotExist"));
   }
 }

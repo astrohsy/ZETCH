@@ -20,7 +20,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class UserServiceTest {
+class UserServiceTest {
 
   private static final String USERNAME = "bob";
   private static final String NAME = "Bob";
@@ -35,13 +35,13 @@ public class UserServiceTest {
   // VERIFY SERVICE RETURN VALUE
 
   @Test
-  public void getOne() {
+  void getOne() {
     when(userRepositoryMock.findByUsername(USERNAME)).thenReturn(Optional.of(userMock));
     assertThat(service.getOne(USERNAME), is(userMock));
   }
 
   @Test
-  public void getAll() {
+  void getAll() {
     when(userRepositoryMock.findAll()).thenReturn(List.of(userMock, userMock, userMock));
     assertThat(service.getAll().size(), is(3));
     assertThat(service.getAll().get(0), is(userMock));
@@ -50,7 +50,7 @@ public class UserServiceTest {
   // VERIFY INVOCATION OF DEPENDENCIES
 
   @Test
-  public void update() {
+  void update() {
     when(userRepositoryMock.findByUsername(USERNAME)).thenReturn(Optional.of(userMock));
     service.update(USERNAME, NAME, EMAIL, AFFILIATION_STUDENT);
 
@@ -64,7 +64,7 @@ public class UserServiceTest {
   }
 
   @Test
-  public void delete() {
+  void delete() {
     when(userRepositoryMock.findByUsername(USERNAME)).thenReturn(Optional.of(userMock));
     service.delete(USERNAME);
 
@@ -75,7 +75,7 @@ public class UserServiceTest {
   // VERIFY INVOCATION OF DEPS + CAPTURE PARAMETER VALUES + VERIFY PARAMETERS
 
   @Test
-  public void createNew() {
+  void createNew() {
     // Prepare to capture a User object
     ArgumentCaptor<UserEntity> userCaptor = ArgumentCaptor.forClass(UserEntity.class);
 
