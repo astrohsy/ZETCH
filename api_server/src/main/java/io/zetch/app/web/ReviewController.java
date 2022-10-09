@@ -5,11 +5,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import io.zetch.app.domain.review.ReviewDto;
 import io.zetch.app.domain.review.ReviewEntity;
 import io.zetch.app.service.ReviewService;
+import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "/reviews")
