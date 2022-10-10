@@ -3,7 +3,6 @@ package io.zetch.app.domain.review;
 import io.zetch.app.domain.restaurant.RestaurantDto;
 import io.zetch.app.domain.user.UserDto;
 import java.io.Serializable;
-
 import lombok.*;
 
 @Value
