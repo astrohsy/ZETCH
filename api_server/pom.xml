@@ -30,6 +30,17 @@
       </plugin>
     </plugins>
   </build>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>software.amazon.awssdk</groupId>
+        <artifactId>bom</artifactId>
+        <version>2.17.285</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
   <dependencies>
     <dependency>
       <artifactId>spring-boot-starter-web</artifactId>
@@ -46,6 +57,10 @@
     <dependency>
       <artifactId>spring-boot-starter-security</artifactId>
       <groupId>org.springframework.boot</groupId>
+    </dependency>
+    <dependency>
+      <groupId>software.amazon.awssdk</groupId>
+      <artifactId>cognitoidentityprovider</artifactId>
     </dependency>
     <dependency>
       <artifactId>postgresql</artifactId>
@@ -67,6 +82,11 @@
       <artifactId>spring-security-test</artifactId>
       <groupId>org.springframework.security</groupId>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.c4-soft.springaddons</groupId>
+      <artifactId>spring-addons-oauth2-test</artifactId>
+      <version>${springaddons.version}</version>
     </dependency>
 
     <dependency>
@@ -101,6 +121,9 @@
     <java.version>17</java.version>
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     <sonar.organization>astrohsy</sonar.organization>
+    <springaddons.version>6.0.0</springaddons.version>
+    <app-type>webmvc</app-type>
+    <token>jwt</token>
   </properties>
 
   <version>0.0.1-SNAPSHOT</version>

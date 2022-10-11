@@ -1,13 +1,13 @@
 package io.zetch.app.domain.user;
 
 import java.io.Serializable;
-import lombok.ToString;
-import lombok.Value;
+import lombok.Data;
 
-@Value
+/** A DTO for the {@link UserEntity} entity */
+@Data
 public class UserDto implements Serializable {
-  @ToString.Exclude Long id;
-  String username;
-  String name;
-  String email;
+  private final String username;
+  private final String name;
+  private final String email;
+  private final String affiliation;
 }

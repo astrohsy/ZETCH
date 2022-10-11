@@ -37,39 +37,31 @@ mvn test
 # Generated in target/site/jacoco/index.html
 ```
 
-### Sample API interaction
+### View swagger UI of apis:
 
-```bash
-# Add a user to database
-curl --location --request POST 'http://localhost:8080/users/' \
---header 'Content-Type: application/json' \
---data-raw '{
-    "username": "bob",
-    "name": "Bob",
-    "email": "bob@me.com"
-}'
-
-# Check if the user added to the database
-curl --location --request GET 'http://localhost:8080/users/'
-```
-
-### 3. Shut down the DB container
-```bash
-docker-compose down
-```
-### View swagger UI of apis: 
 ```bash
 localhost:8080/swagger-ui.html
 ```
 
-### Run Jacoco test coverage:
-```bash
-mvn test
-# Generated in target/site/jacoco/index.html
-```
-
 ### Run PMD static analysis bug finder:
+
 ```bash
 mvn pmd:pmd
 # Generated in target/site/pmd.html
 ```
+
+### Auth
+
+Some routes are protected by OAuth2 authentication using Cognito.
+Auth tokens can be generated either in Postman or Swagger UI.
+
+In Postman, utilizing [variables](https://learning.postman.com/docs/sending-requests/variables/):
+
+![postman_auth_config.png](docs/postman_auth_config.png)
+
+In Swagger UI, click on Authorize, then enter the client id.
+
+See Discord for `.env` specifying secret values.
+
+For a list of users which can log in with Cognito, see the `Application.commandLineRunner()` method.
+Every user has the same password -- `123456`.
