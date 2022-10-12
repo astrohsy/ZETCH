@@ -53,13 +53,7 @@ class UserControllerTest {
   private static final String USERNAME_2 = "cat";
   private static final String NAME_2 = "Cat";
   private static final String EMAIL_2 = "cat@example.com";
-
-  private MockMvc mockMvc;
   @Autowired ObjectMapper mapper;
-  @Autowired private WebApplicationContext context;
-  @MockBean private UserService userServiceMock;
-  @MockBean private SecurityService securityServiceMock;
-
   UserEntity u1 =
       UserEntity.builder()
           .username(USERNAME_1)
@@ -74,6 +68,10 @@ class UserControllerTest {
           .email(EMAIL_2)
           .affiliation(Affiliation.STUDENT)
           .build();
+  private MockMvc mockMvc;
+  @Autowired private WebApplicationContext context;
+  @MockBean private UserService userServiceMock;
+  @MockBean private SecurityService securityServiceMock;
 
   @BeforeEach
   void setup() {
