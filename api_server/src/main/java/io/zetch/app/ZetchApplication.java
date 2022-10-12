@@ -1,18 +1,34 @@
 package io.zetch.app;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.security.OAuthFlow;
+import io.swagger.v3.oas.annotations.security.OAuthFlows;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
+import io.zetch.app.domain.user.Affiliation;
+import io.zetch.app.domain.user.UserEntity;
+import io.zetch.app.repo.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-
-import java.util.Arrays;
 
 @SpringBootApplication
 @OpenAPIDefinition(
     info = @Info(title = "ZETCH API", description = "API Definitions of the ZETCH server"))
+@SecurityScheme(
+    name = "OAuth2",
+    type = SecuritySchemeType.OAUTH2,
+    in = SecuritySchemeIn.HEADER,
+    flows =
+        @OAuthFlows(
+            authorizationCode =
+                @OAuthFlow(
+                    authorizationUrl = "${cognito.auth-url}",
+                    tokenUrl = "${cognito.token-url}")))
 class Application {
 
   public static void main(String[] args) {
@@ -20,15 +36,13 @@ class Application {
   }
 
   @Bean
-  public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
+  public CommandLineRunner commandLineRunner(@Autowired UserRepository userRepository) {
     return args -> {
-      System.out.println("Let's inspect the beans provided by Spring Boot:");
-
-      String[] beanNames = ctx.getBeanDefinitionNames();
-      Arrays.sort(beanNames);
-      for (String beanName : beanNames) {
-        System.out.println(beanName);
-      }
+      userRepository.save(new UserEntity("admin", Affiliation.ADMIN, "Admin.", "admin@zetch.io"));
+      userRepository.save(new UserEntity("bob", Affiliation.STUDENT, "Bob R.", "bob@me.com"));
+      userRepository.save(new UserEntity("cat", Affiliation.STUDENT, "Kat", "kat@kat.com"));
+      userRepository.save(new UserEntity("amy", Affiliation.FACULTY, "Amy", "amy@com.com"));
+      userRepository.save(new UserEntity("sam", Affiliation.OTHER, "S.", "sam@goog.com"));
     };
   }
 }
