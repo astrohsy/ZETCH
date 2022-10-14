@@ -84,7 +84,7 @@ public class UserService {
   public UserEntity update(String currUsername, String newName, String newEmail, String affiliation)
       throws NoSuchElementException, IllegalArgumentException {
     UserEntity currUser = verifyUser(currUsername);
-    
+
     // TODO: Maybe there is a better way to set
     currUser.setName(newName);
 
