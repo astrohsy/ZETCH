@@ -3,18 +3,26 @@ package io.zetch.app.web;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.Is.is;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.c4_soft.springaddons.security.oauth2.test.annotations.Claims;
+import com.c4_soft.springaddons.security.oauth2.test.annotations.OpenIdClaims;
+import com.c4_soft.springaddons.security.oauth2.test.annotations.StringClaim;
+import com.c4_soft.springaddons.security.oauth2.test.annotations.WithMockJwtAuth;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.zetch.app.domain.user.Affiliation;
 import io.zetch.app.domain.user.UserDto;
 import io.zetch.app.domain.user.UserEntity;
+import io.zetch.app.security.SecurityService;
 import io.zetch.app.service.UserService;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -35,31 +43,51 @@ import org.springframework.web.context.WebApplicationContext;
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration
-public class UserControllerTest {
+class UserControllerTest {
 
   private static final String USERS_ENDPOINT = "/users/";
 
-  private static final Long ID_1 = 1L;
   private static final String USERNAME_1 = "bob";
   private static final String NAME_1 = "Bob";
   private static final String EMAIL_1 = "bob@example.com";
   private static final String USERNAME_2 = "cat";
   private static final String NAME_2 = "Cat";
   private static final String EMAIL_2 = "cat@example.com";
-  @Autowired ObjectMapper mapper;
-  UserEntity u1 = UserEntity.builder().username(USERNAME_1).name(NAME_1).email(EMAIL_1).build();
-  UserEntity u2 = UserEntity.builder().username(USERNAME_2).name(NAME_2).email(EMAIL_2).build();
+
   private MockMvc mockMvc;
+  @Autowired ObjectMapper mapper;
   @Autowired private WebApplicationContext context;
   @MockBean private UserService userServiceMock;
+  @MockBean private SecurityService securityServiceMock;
+
+  UserEntity u1 =
+      UserEntity.builder()
+          .username(USERNAME_1)
+          .displayName(NAME_1)
+          .email(EMAIL_1)
+          .affiliation(Affiliation.STUDENT)
+          .build();
+  UserEntity u2 =
+      UserEntity.builder()
+          .username(USERNAME_2)
+          .displayName(NAME_2)
+          .email(EMAIL_2)
+          .affiliation(Affiliation.STUDENT)
+          .build();
 
   @BeforeEach
-  public void setup() {
+  void setup() {
     mockMvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
   }
 
   @Test
-  public void getAllUsers() throws Exception {
+  @WithMockJwtAuth(
+      claims =
+          @OpenIdClaims(
+              otherClaims =
+                  @Claims(stringClaims = @StringClaim(name = "username", value = "admin"))))
+  void getAllUsers_ByAdmin() throws Exception {
+    when(securityServiceMock.isAdmin(any())).thenReturn(true);
     when(userServiceMock.getAll()).thenReturn(List.of(u1, u2));
 
     mockMvc
@@ -72,7 +100,22 @@ public class UserControllerTest {
   }
 
   @Test
-  public void getUserById() throws Exception {
+  @WithMockJwtAuth(
+      claims =
+          @OpenIdClaims(
+              otherClaims =
+                  @Claims(stringClaims = @StringClaim(name = "username", value = USERNAME_1))))
+  void getAllUsers_NotByAdmin() throws Exception {
+    when(securityServiceMock.isAdmin(any())).thenReturn(false);
+    when(userServiceMock.getAll()).thenReturn(List.of(u1, u2));
+
+    mockMvc
+        .perform(get(USERS_ENDPOINT).contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isForbidden());
+  }
+
+  @Test
+  void getUserById() throws Exception {
     when(userServiceMock.getOne(u1.getUsername())).thenReturn(u1);
 
     mockMvc
@@ -80,34 +123,35 @@ public class UserControllerTest {
         .andExpect(status().isOk())
         .andExpect(jsonPath("*", notNullValue()))
         .andExpect(jsonPath("$.username", is(u1.getUsername())))
-        .andExpect(jsonPath("$.name", is(u1.getName())))
+        .andExpect(jsonPath("$.name", is(u1.getDisplayName())))
         .andExpect(jsonPath("$.email", is(u1.getEmail())));
   }
 
   @Test
-  public void createUser() throws Exception {
-    when(userServiceMock.createNew(u1.getUsername(), u1.getName(), u1.getEmail())).thenReturn(u1);
+  void createUser() throws Exception {
+    when(userServiceMock.createNew(
+            u1.getUsername(), u1.getDisplayName(), u1.getEmail(), u1.getAffiliation().toString()))
+        .thenReturn(u1);
 
     MockHttpServletRequestBuilder mockRequest =
         post(USERS_ENDPOINT)
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
-            .content(
-                mapper.writeValueAsString(
-                    new UserDto(u1.getId(), u1.getUsername(), u1.getName(), u1.getEmail())));
+            .content(mapper.writeValueAsString(u1.toDto()));
 
     mockMvc
         .perform(mockRequest)
         .andExpect(status().isOk())
         .andExpect(jsonPath("*", notNullValue()))
         .andExpect(jsonPath("$.username", is(u1.getUsername())))
-        .andExpect(jsonPath("$.name", is(u1.getName())))
+        .andExpect(jsonPath("$.name", is(u1.getDisplayName())))
         .andExpect(jsonPath("$.email", is(u1.getEmail())));
   }
 
   @Test
-  public void createUser_UnavailableUsername() throws Exception {
-    when(userServiceMock.createNew(any(), any(), any())).thenThrow(IllegalArgumentException.class);
+  void createUser_UnavailableUsername() throws Exception {
+    when(userServiceMock.createNew(any(), any(), any(), any()))
+        .thenThrow(IllegalArgumentException.class);
 
     MockHttpServletRequestBuilder mockRequest =
         post(USERS_ENDPOINT)
@@ -119,79 +163,131 @@ public class UserControllerTest {
   }
 
   @Test
-  public void updateUserName() throws Exception {
+  @WithMockJwtAuth(
+      claims =
+          @OpenIdClaims(
+              otherClaims =
+                  @Claims(stringClaims = @StringClaim(name = "username", value = USERNAME_1))))
+  void updateUserAttrs() throws Exception {
+    when(securityServiceMock.isSelf(any(), eq(USERNAME_1))).thenReturn(true);
+
     UserEntity updated =
-        UserEntity.builder().username(USERNAME_1).name("New Bob").email(EMAIL_1).build();
+        UserEntity.builder()
+            .username(USERNAME_1)
+            .displayName("Bob New")
+            .email("bob_new@me.com")
+            .affiliation(Affiliation.FACULTY)
+            .build();
 
-    when(userServiceMock.update(u1.getUsername(), updated.getName(), null)).thenReturn(updated);
-
-    MockHttpServletRequestBuilder mockRequest =
-        put(USERS_ENDPOINT + USERNAME_1)
-            .contentType(MediaType.APPLICATION_JSON)
-            .accept(MediaType.APPLICATION_JSON)
-            .content(mapper.writeValueAsString(new UserDto(ID_1, USERNAME_1, "New Bob", null)));
-
-    mockMvc
-        .perform(mockRequest)
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("*", notNullValue()))
-        .andExpect(jsonPath("$.username", is(u1.getUsername())))
-        .andExpect(jsonPath("$.name", is(updated.getName())))
-        .andExpect(jsonPath("$.email", is(u1.getEmail())));
-  }
-
-  @Test
-  public void updateUserEmail() throws Exception {
-    UserEntity updated =
-        UserEntity.builder().username(USERNAME_1).name(NAME_1).email("new_bob@me.com").build();
-    when(userServiceMock.update(u1.getUsername(), null, updated.getEmail())).thenReturn(updated);
-
-    MockHttpServletRequestBuilder mockRequest =
-        put(USERS_ENDPOINT + USERNAME_1)
-            .contentType(MediaType.APPLICATION_JSON)
-            .accept(MediaType.APPLICATION_JSON)
-            .content(
-                mapper.writeValueAsString(new UserDto(ID_1, USERNAME_1, null, "new_bob@me.com")));
-
-    mockMvc
-        .perform(mockRequest)
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("*", notNullValue()))
-        .andExpect(jsonPath("$.username", is(u1.getUsername())))
-        .andExpect(jsonPath("$.name", is(u1.getName())))
-        .andExpect(jsonPath("$.email", is(updated.getEmail())));
-  }
-
-  @Test
-  public void updateUserNameAndEmail() throws Exception {
-    UserEntity updated =
-        UserEntity.builder().username(USERNAME_1).name("Bob New").email("bob_new@me.com").build();
-    when(userServiceMock.update(u1.getUsername(), updated.getName(), updated.getEmail()))
+    when(userServiceMock.update(
+            u1.getUsername(),
+            updated.getDisplayName(),
+            updated.getEmail(),
+            updated.getAffiliation().toString()))
         .thenReturn(updated);
 
     MockHttpServletRequestBuilder mockRequest =
         put(USERS_ENDPOINT + USERNAME_1)
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
-            .content(
-                mapper.writeValueAsString(
-                    new UserDto(ID_1, USERNAME_1, "Bob New", "bob_new@me.com")));
+            .content(mapper.writeValueAsString(updated.toDto()));
 
     mockMvc
         .perform(mockRequest)
         .andExpect(status().isOk())
         .andExpect(jsonPath("*", notNullValue()))
         .andExpect(jsonPath("$.username", is(u1.getUsername())))
-        .andExpect(jsonPath("$.name", is(updated.getName())))
-        .andExpect(jsonPath("$.email", is(updated.getEmail())));
+        .andExpect(jsonPath("$.name", is(updated.getDisplayName())))
+        .andExpect(jsonPath("$.email", is(updated.getEmail())))
+        .andExpect(jsonPath("$.affiliation", is(updated.getAffiliation().toString())));
   }
 
   @Test
-  public void updateUser_UserNotFound() throws Exception {
+  @WithMockJwtAuth(
+      claims =
+          @OpenIdClaims(
+              otherClaims =
+                  @Claims(stringClaims = @StringClaim(name = "username", value = USERNAME_2))))
+  void updateUserAttrs_NotSelf() throws Exception {
     UserEntity updated =
-        UserEntity.builder().username(USERNAME_1).name("Bob New").email("bob_new@me.com").build();
-    when(userServiceMock.update(u1.getUsername(), updated.getName(), updated.getEmail()))
+        UserEntity.builder()
+            .username(USERNAME_1)
+            .displayName("Bob New")
+            .email("bob_new@me.com")
+            .affiliation(Affiliation.FACULTY)
+            .build();
+
+    MockHttpServletRequestBuilder mockRequest =
+        put(USERS_ENDPOINT + USERNAME_1)
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON)
+            .content(mapper.writeValueAsString(updated.toDto()));
+
+    mockMvc.perform(mockRequest).andExpect(status().isForbidden());
+  }
+
+  @Test
+  void updateUserAttrs_NoAuth() throws Exception {
+    UserEntity updated =
+        UserEntity.builder()
+            .username(USERNAME_1)
+            .displayName("Bob New")
+            .email("bob_new@me.com")
+            .affiliation(Affiliation.FACULTY)
+            .build();
+
+    MockHttpServletRequestBuilder mockRequest =
+        put(USERS_ENDPOINT + USERNAME_1)
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON)
+            .content(mapper.writeValueAsString(updated.toDto()));
+
+    mockMvc.perform(mockRequest).andExpect(status().isUnauthorized());
+  }
+
+  @Test
+  @WithMockJwtAuth(
+      claims =
+          @OpenIdClaims(
+              otherClaims =
+                  @Claims(stringClaims = @StringClaim(name = "username", value = USERNAME_1))))
+  void updateUser_UserNotFound() throws Exception {
+    when(securityServiceMock.isSelf(any(), eq(USERNAME_1))).thenReturn(true);
+
+    UserEntity updated =
+        UserEntity.builder()
+            .username(USERNAME_1)
+            .displayName("Bob New")
+            .email("bob_new@me.com")
+            .affiliation(Affiliation.FACULTY)
+            .build();
+
+    when(userServiceMock.update(
+            u1.getUsername(),
+            updated.getDisplayName(),
+            updated.getEmail(),
+            updated.getAffiliation().toString()))
         .thenThrow(NoSuchElementException.class);
+
+    MockHttpServletRequestBuilder mockRequest =
+        put(USERS_ENDPOINT + USERNAME_1)
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON)
+            .content(mapper.writeValueAsString(updated.toDto()));
+
+    mockMvc.perform(mockRequest).andExpect(status().isNotFound());
+  }
+
+  @Test
+  @WithMockJwtAuth(
+      claims =
+          @OpenIdClaims(
+              otherClaims =
+                  @Claims(stringClaims = @StringClaim(name = "username", value = USERNAME_1))))
+  void updateUser_InvalidAffiliation() throws Exception {
+    when(securityServiceMock.isSelf(any(), eq(USERNAME_1))).thenReturn(true);
+    when(userServiceMock.update(USERNAME_1, NAME_1, EMAIL_1, "badAffiliation"))
+        .thenThrow(IllegalArgumentException.class);
 
     MockHttpServletRequestBuilder mockRequest =
         put(USERS_ENDPOINT + USERNAME_1)
@@ -199,7 +295,80 @@ public class UserControllerTest {
             .accept(MediaType.APPLICATION_JSON)
             .content(
                 mapper.writeValueAsString(
-                    new UserDto(ID_1, USERNAME_1, "Bob New", "bob_new@me.com")));
+                    new UserDto(USERNAME_1, NAME_1, EMAIL_1, "badAffiliation")));
+
+    mockMvc.perform(mockRequest).andExpect(status().isBadRequest());
+  }
+
+  @Test
+  @WithMockJwtAuth(
+      claims =
+          @OpenIdClaims(
+              otherClaims =
+                  @Claims(stringClaims = @StringClaim(name = "username", value = USERNAME_1))))
+  void deleteUser() throws Exception {
+    when(securityServiceMock.isSelf(any(), eq(USERNAME_1))).thenReturn(true);
+    when(userServiceMock.delete(u1.getUsername())).thenReturn(u1);
+
+    MockHttpServletRequestBuilder mockRequest =
+        delete(USERS_ENDPOINT + USERNAME_1)
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON);
+
+    mockMvc
+        .perform(mockRequest)
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("*", notNullValue()))
+        .andExpect(jsonPath("$.username", is(u1.getUsername())))
+        .andExpect(jsonPath("$.name", is(u1.getDisplayName())))
+        .andExpect(jsonPath("$.email", is(u1.getEmail())))
+        .andExpect(jsonPath("$.affiliation", is(u1.getAffiliation().toString())));
+  }
+
+  @Test
+  @WithMockJwtAuth(
+      claims =
+          @OpenIdClaims(
+              otherClaims =
+                  @Claims(stringClaims = @StringClaim(name = "username", value = USERNAME_2))))
+  void deleteUser_NotSelf() throws Exception {
+    when(securityServiceMock.isSelf(any(), eq(USERNAME_2))).thenReturn(false);
+    when(userServiceMock.delete(u1.getUsername())).thenReturn(u1);
+
+    MockHttpServletRequestBuilder mockRequest =
+        delete(USERS_ENDPOINT + USERNAME_1)
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON);
+
+    mockMvc.perform(mockRequest).andExpect(status().isForbidden());
+  }
+
+  @Test
+  void deleteUser_NoAuth() throws Exception {
+    when(userServiceMock.delete(u1.getUsername())).thenReturn(u1);
+
+    MockHttpServletRequestBuilder mockRequest =
+        delete(USERS_ENDPOINT + USERNAME_1)
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON);
+
+    mockMvc.perform(mockRequest).andExpect(status().isUnauthorized());
+  }
+
+  @Test
+  @WithMockJwtAuth(
+      claims =
+          @OpenIdClaims(
+              otherClaims =
+                  @Claims(stringClaims = @StringClaim(name = "username", value = USERNAME_1))))
+  void deleteUser_UserNotFound() throws Exception {
+    when(securityServiceMock.isSelf(any(), eq(USERNAME_1))).thenReturn(true);
+    when(userServiceMock.delete(USERNAME_1)).thenThrow(NoSuchElementException.class);
+
+    MockHttpServletRequestBuilder mockRequest =
+        delete(USERS_ENDPOINT + USERNAME_1)
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON);
 
     mockMvc.perform(mockRequest).andExpect(status().isNotFound());
   }

@@ -1,15 +1,18 @@
 package io.zetch.app.web;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.zetch.app.domain.user.UserDto;
 import io.zetch.app.domain.user.UserEntity;
 import io.zetch.app.service.UserService;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,40 +38,51 @@ public class UserController {
 
   @GetMapping(path = "/")
   @Operation(summary = "Retrieve all users")
+  @SecurityRequirement(name = "OAuth2")
+  @PreAuthorize("@securityService.isAdmin(#token)")
   @ResponseBody
-  Iterable<UserDto> getAllUsers() {
-    return userService.getAll().stream().map(this::toDto).collect(Collectors.toList());
+  Iterable<UserDto> getAllUsers(JwtAuthenticationToken token) {
+    return userService.getAll().stream().map(UserEntity::toDto).toList();
   }
 
   @PostMapping(path = "/")
   @Operation(summary = "Create a new user")
   @ResponseBody
   UserDto addNewUser(@RequestBody UserDto newUserDto) {
-    return toDto(
-        userService.createNew(
-            newUserDto.getUsername(), newUserDto.getName(), newUserDto.getEmail()));
+    return userService
+        .createNew(
+            newUserDto.getUsername(),
+            newUserDto.getName(),
+            newUserDto.getEmail(),
+            newUserDto.getAffiliation())
+        .toDto();
   }
 
   @GetMapping("/{username}")
   @Operation(summary = "Retrieve a single user")
   UserDto getOneUser(@PathVariable String username) {
-    return toDto(userService.getOne(username));
+    return userService.getOne(username).toDto();
   }
 
   @PutMapping("/{username}")
   @Operation(summary = "Modify user attributes")
-  UserDto updateUser(@RequestBody UserDto newUserDto, @PathVariable String username) {
-    return toDto(userService.update(username, newUserDto.getName(), newUserDto.getEmail()));
+  @SecurityRequirement(name = "OAuth2")
+  @PreAuthorize("@securityService.isSelf(#token, #username)")
+  UserDto updateUser(
+      @RequestBody UserDto newUserDto,
+      @PathVariable String username,
+      JwtAuthenticationToken token) {
+    return userService
+        .update(username, newUserDto.getName(), newUserDto.getEmail(), newUserDto.getAffiliation())
+        .toDto();
   }
 
-  /**
-   * Convert the User entity to a User data transfer object
-   *
-   * @param user User to convert
-   * @return User DTO
-   */
-  private UserDto toDto(UserEntity user) {
-    return new UserDto(user.getId(), user.getUsername(), user.getName(), user.getEmail());
+  @DeleteMapping("/{username}")
+  @PreAuthorize("@securityService.isSelf(#token, #username)")
+  @SecurityRequirement(name = "OAuth2")
+  @Operation(summary = "Delete a user")
+  UserDto deleteUser(@PathVariable String username, JwtAuthenticationToken token) {
+    return userService.delete(username).toDto();
   }
 
   /**
