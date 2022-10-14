@@ -58,7 +58,7 @@ class UserServiceTest {
     verify(userRepositoryMock).save(any(UserEntity.class));
 
     // Verify setter methods invoked
-    verify(userMock).setDisplayName(NAME);
+    verify(userMock).setUsername(NAME);
     verify(userMock).setEmail(EMAIL);
     verify(userMock).setAffiliation(Affiliation.STUDENT);
   }
