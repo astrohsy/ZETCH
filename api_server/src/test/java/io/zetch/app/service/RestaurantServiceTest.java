@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 
 import io.zetch.app.domain.restaurant.RestaurantEntity;
 import io.zetch.app.repo.RestaurantRepository;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
@@ -62,6 +63,38 @@ public class RestaurantServiceTest {
     assertThat(value.getName(), is(NAME));
     assertThat(value.getCuisine(), is(CUISINE));
     assertThat(value.getAddress(), is(ADDRESS));
+    assertThat(value.getOwners().isEmpty(), is(true));
+  }
+
+  @Test
+  public void updateRestaurantName() throws Exception {
+    RestaurantEntity old =
+        RestaurantEntity.builder()
+            .owners(new ArrayList<>())
+            .name(NAME)
+            .cuisine(CUISINE)
+            .address(ADDRESS)
+            .build();
+
+    RestaurantEntity updated =
+        RestaurantEntity.builder()
+            .owners(new ArrayList<>())
+            .name("New Bob's")
+            .cuisine(CUISINE)
+            .address(ADDRESS)
+            .build();
+
+    when(restaurantRepositoryMock.findById(ID)).thenReturn(Optional.of(old));
+    restaurantService.update(ID, updated.getName(), updated.getCuisine(), updated.getAddress());
+
+    ArgumentCaptor<RestaurantEntity> restaurantCaptor =
+        ArgumentCaptor.forClass(RestaurantEntity.class);
+    verify(restaurantRepositoryMock).save(restaurantCaptor.capture());
+
+    RestaurantEntity value = restaurantCaptor.getValue();
+    assertThat(value.getName(), is(updated.getName()));
+    assertThat(value.getCuisine(), is(updated.getCuisine()));
+    assertThat(value.getAddress(), is(updated.getAddress()));
     assertThat(value.getOwners().isEmpty(), is(true));
   }
 }
