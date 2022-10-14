@@ -86,7 +86,7 @@ public class UserService {
     UserEntity currUser = verifyUser(currUsername);
 
     // TODO: Maybe there is a better way to set
-    currUser.setName(newName);
+    currUser.setUsername(newName);
 
     if (newEmail != null) {
       currUser.setEmail(newEmail);
