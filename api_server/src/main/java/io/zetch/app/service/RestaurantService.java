@@ -56,7 +56,7 @@ public class RestaurantService {
   public RestaurantEntity update(String name, String newName, String newCuisine, String newAddress)
       throws IllegalArgumentException, NoSuchElementException {
     RestaurantEntity currRestaurant = verifyRestaurant(name);
-    if (name != newName && restaurantRepository.existsByName(newName)) {
+    if (!name.equals(newName) && restaurantRepository.existsByName(newName)) {
       throw new IllegalArgumentException("Name unavailable: " + newName);
     }
 
