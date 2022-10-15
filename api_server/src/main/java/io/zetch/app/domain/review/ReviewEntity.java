@@ -21,6 +21,11 @@ public class ReviewEntity extends BaseEntity {
   private String comment;
   private Integer rating;
 
-  @ManyToOne private UserEntity user;
-  @ManyToOne private RestaurantEntity restaurant;
+  @ManyToOne
+  @JoinColumn(name = "user_id")
+  private UserEntity user;
+
+  @ManyToOne
+  @JoinColumn(name = "restaurant_id")
+  private RestaurantEntity restaurant;
 }
