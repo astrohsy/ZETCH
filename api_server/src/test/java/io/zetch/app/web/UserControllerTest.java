@@ -43,6 +43,11 @@ import org.springframework.web.context.WebApplicationContext;
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration
+@WithMockJwtAuth(
+    claims =
+        @OpenIdClaims(
+            otherClaims =
+                @Claims(stringClaims = @StringClaim(name = "username", value = "some_user"))))
 class UserControllerTest {
 
   private static final String USERS_ENDPOINT = "/users/";
@@ -227,25 +232,6 @@ class UserControllerTest {
   }
 
   @Test
-  void updateUserAttrs_NoAuth() throws Exception {
-    UserEntity updated =
-        UserEntity.builder()
-            .username(USERNAME_1)
-            .displayName("Bob New")
-            .email("bob_new@me.com")
-            .affiliation(Affiliation.FACULTY)
-            .build();
-
-    MockHttpServletRequestBuilder mockRequest =
-        put(USERS_ENDPOINT + USERNAME_1)
-            .contentType(MediaType.APPLICATION_JSON)
-            .accept(MediaType.APPLICATION_JSON)
-            .content(mapper.writeValueAsString(updated.toDto()));
-
-    mockMvc.perform(mockRequest).andExpect(status().isUnauthorized());
-  }
-
-  @Test
   @WithMockJwtAuth(
       claims =
           @OpenIdClaims(
@@ -341,18 +327,6 @@ class UserControllerTest {
             .accept(MediaType.APPLICATION_JSON);
 
     mockMvc.perform(mockRequest).andExpect(status().isForbidden());
-  }
-
-  @Test
-  void deleteUser_NoAuth() throws Exception {
-    when(userServiceMock.delete(u1.getUsername())).thenReturn(u1);
-
-    MockHttpServletRequestBuilder mockRequest =
-        delete(USERS_ENDPOINT + USERNAME_1)
-            .contentType(MediaType.APPLICATION_JSON)
-            .accept(MediaType.APPLICATION_JSON);
-
-    mockMvc.perform(mockRequest).andExpect(status().isUnauthorized());
   }
 
   @Test

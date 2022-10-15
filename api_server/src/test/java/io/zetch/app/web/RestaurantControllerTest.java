@@ -11,6 +11,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.c4_soft.springaddons.security.oauth2.test.annotations.Claims;
+import com.c4_soft.springaddons.security.oauth2.test.annotations.OpenIdClaims;
+import com.c4_soft.springaddons.security.oauth2.test.annotations.StringClaim;
+import com.c4_soft.springaddons.security.oauth2.test.annotations.WithMockJwtAuth;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.zetch.app.domain.restaurant.RestaurantDto;
 import io.zetch.app.domain.restaurant.RestaurantEntity;
@@ -35,6 +39,11 @@ import org.springframework.web.context.WebApplicationContext;
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration
+@WithMockJwtAuth(
+    claims =
+        @OpenIdClaims(
+            otherClaims =
+                @Claims(stringClaims = @StringClaim(name = "username", value = "some_user"))))
 public class RestaurantControllerTest {
 
   private static final String RESTAURANT_ENDPOINT = "/restaurants/";

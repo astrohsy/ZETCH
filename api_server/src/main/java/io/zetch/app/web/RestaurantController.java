@@ -1,6 +1,7 @@
 package io.zetch.app.web;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.zetch.app.domain.restaurant.RestaurantDto;
 import io.zetch.app.domain.restaurant.RestaurantEntity;
@@ -29,6 +30,7 @@ public class RestaurantController {
    */
   @GetMapping(path = "/")
   @Operation(summary = "Retrieve all restaurants")
+  @SecurityRequirement(name = "OAuth2")
   @ResponseBody
   Iterable<RestaurantDto> getAllRestaurants() {
     return restaurantService.getAll().stream()
@@ -42,6 +44,7 @@ public class RestaurantController {
    */
   @GetMapping("/{name}")
   @Operation(summary = "Retrieve a single restaurant")
+  @SecurityRequirement(name = "OAuth2")
   RestaurantDto getOneRestaurant(@PathVariable String name) {
     return restaurantService.getOne(name).toDto();
   }
@@ -52,6 +55,7 @@ public class RestaurantController {
    */
   @PutMapping("/{name}")
   @Operation(summary = "Modify a single restaurant")
+  @SecurityRequirement(name = "OAuth2")
   RestaurantDto updateRestaurant(
       @RequestBody RestaurantDto newRestaurantDto, @PathVariable String name) {
     return restaurantService
@@ -69,6 +73,7 @@ public class RestaurantController {
    */
   @PutMapping("/{name}/{owner}")
   @Operation(summary = "Assign owner to a restaurant")
+  @SecurityRequirement(name = "OAuth2")
   RestaurantDto assignRestaurantOwner(@PathVariable String name, @PathVariable String owner) {
     return restaurantService.assignOwner(name, owner).toDto();
   }
@@ -79,6 +84,7 @@ public class RestaurantController {
    */
   @PostMapping(path = "/")
   @Operation(summary = "Create a new restaurant")
+  @SecurityRequirement(name = "OAuth2")
   @ResponseBody
   RestaurantDto addNewRestaurant(@RequestBody @Validated RestaurantDto restaurantDto) {
     return restaurantService

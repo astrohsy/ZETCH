@@ -33,14 +33,6 @@ class HelloControllerTest {
     mockMvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
   }
 
-  @Test
-  void index1() throws Exception {
-    mockMvc
-        .perform(get("/"))
-        .andExpect(status().isOk())
-        .andExpect(content().string("Greetings from Spring Boot!"));
-  }
-
   /** An example of how a private route can be tested */
   @Test
   @WithMockJwtAuth(

@@ -47,6 +47,7 @@ public class UserController {
 
   @PostMapping(path = "/")
   @Operation(summary = "Create a new user")
+  @SecurityRequirement(name = "OAuth2")
   @ResponseBody
   UserDto addNewUser(@RequestBody UserDto newUserDto) {
     return userService
@@ -60,6 +61,7 @@ public class UserController {
 
   @GetMapping("/{username}")
   @Operation(summary = "Retrieve a single user")
+  @SecurityRequirement(name = "OAuth2")
   UserDto getOneUser(@PathVariable String username) {
     return userService.getOne(username).toDto();
   }
