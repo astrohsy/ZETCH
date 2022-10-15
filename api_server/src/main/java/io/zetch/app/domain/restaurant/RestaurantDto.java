@@ -3,7 +3,6 @@ package io.zetch.app.domain.restaurant;
 import java.io.Serializable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.ToString;
 import lombok.Value;
 
 /** A Data Transfer Object for the {@link RestaurantEntity} entity */
@@ -11,7 +10,6 @@ import lombok.Value;
 @Builder
 @AllArgsConstructor
 public class RestaurantDto implements Serializable {
-  @ToString.Exclude Long id;
   String name;
   String cuisine;
   String address;
