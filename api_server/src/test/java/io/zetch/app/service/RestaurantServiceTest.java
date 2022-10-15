@@ -118,7 +118,7 @@ public class RestaurantServiceTest {
     assertThat(value.getAddress(), is(updated.getAddress()));
     assertThat(value.getOwners().isEmpty(), is(true));
   }
-
+  
   @Test
   public void updateRestaurantUnavailable() {
     when(restaurantRepositoryMock.findByName(NAME)).thenReturn(Optional.of(restaurantMock));
