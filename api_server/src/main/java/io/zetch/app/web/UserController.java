@@ -49,7 +49,7 @@ public class UserController {
   @Operation(summary = "Create a new user")
   @SecurityRequirement(name = "OAuth2")
   @ResponseBody
-  UserDto addNewUser(@RequestBody UserDto newUserDto) {
+  UserDto addNewUser(@RequestBody UserDto newUserDto, JwtAuthenticationToken token) {
     return userService
         .createNew(
             newUserDto.getUsername(),
@@ -62,7 +62,7 @@ public class UserController {
   @GetMapping("/{username}")
   @Operation(summary = "Retrieve a single user")
   @SecurityRequirement(name = "OAuth2")
-  UserDto getOneUser(@PathVariable String username) {
+  UserDto getOneUser(@PathVariable String username, JwtAuthenticationToken token) {
     return userService.getOne(username).toDto();
   }
 
