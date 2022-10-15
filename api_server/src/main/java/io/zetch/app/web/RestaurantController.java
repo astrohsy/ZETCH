@@ -1,6 +1,7 @@
 package io.zetch.app.web;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.zetch.app.domain.restaurant.RestaurantDto;
 import io.zetch.app.domain.restaurant.RestaurantEntity;
@@ -9,6 +10,7 @@ import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,8 +31,9 @@ public class RestaurantController {
    */
   @GetMapping(path = "/")
   @Operation(summary = "Retrieve all restaurants")
+  @SecurityRequirement(name = "OAuth2")
   @ResponseBody
-  Iterable<RestaurantDto> getAllRestaurants() {
+  Iterable<RestaurantDto> getAllRestaurants(JwtAuthenticationToken token) {
     return restaurantService.getAll().stream()
         .map(RestaurantEntity::toDto)
         .collect(Collectors.toList());
@@ -42,7 +45,8 @@ public class RestaurantController {
    */
   @GetMapping("/{name}")
   @Operation(summary = "Retrieve a single restaurant")
-  RestaurantDto getOneRestaurant(@PathVariable String name) {
+  @SecurityRequirement(name = "OAuth2")
+  RestaurantDto getOneRestaurant(@PathVariable String name, JwtAuthenticationToken token) {
     return restaurantService.getOne(name).toDto();
   }
 
@@ -52,8 +56,11 @@ public class RestaurantController {
    */
   @PutMapping("/{name}")
   @Operation(summary = "Modify a single restaurant")
+  @SecurityRequirement(name = "OAuth2")
   RestaurantDto updateRestaurant(
-      @RequestBody RestaurantDto newRestaurantDto, @PathVariable String name) {
+      @RequestBody RestaurantDto newRestaurantDto,
+      @PathVariable String name,
+      JwtAuthenticationToken token) {
     return restaurantService
         .update(
             name,
@@ -69,7 +76,9 @@ public class RestaurantController {
    */
   @PutMapping("/{name}/{owner}")
   @Operation(summary = "Assign owner to a restaurant")
-  RestaurantDto assignRestaurantOwner(@PathVariable String name, @PathVariable String owner) {
+  @SecurityRequirement(name = "OAuth2")
+  RestaurantDto assignRestaurantOwner(
+      @PathVariable String name, @PathVariable String owner, JwtAuthenticationToken token) {
     return restaurantService.assignOwner(name, owner).toDto();
   }
 
@@ -79,8 +88,10 @@ public class RestaurantController {
    */
   @PostMapping(path = "/")
   @Operation(summary = "Create a new restaurant")
+  @SecurityRequirement(name = "OAuth2")
   @ResponseBody
-  RestaurantDto addNewRestaurant(@RequestBody @Validated RestaurantDto restaurantDto) {
+  RestaurantDto addNewRestaurant(
+      @RequestBody @Validated RestaurantDto restaurantDto, JwtAuthenticationToken token) {
     return restaurantService
         .createNew(restaurantDto.getName(), restaurantDto.getCuisine(), restaurantDto.getAddress())
         .toDto();
