@@ -5,10 +5,9 @@ import io.zetch.app.domain.review.ReviewEntity;
 import io.zetch.app.domain.user.UserEntity;
 import io.zetch.app.repo.RestaurantRepository;
 import io.zetch.app.repo.ReviewRepository;
+import io.zetch.app.repo.UserRepository;
 import java.util.List;
 import java.util.NoSuchElementException;
-
-import io.zetch.app.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
