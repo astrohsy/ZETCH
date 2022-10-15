@@ -32,4 +32,13 @@ public class RestaurantEntity extends BaseEntity {
   @NonNull private String name;
   private String cuisine;
   private String address;
+
+  /**
+   * Convert the Restaurant entity to a Restaurant data transfer object
+   *
+   * @return Restaurant DTO
+   */
+  public RestaurantDto toDto() {
+    return new RestaurantDto(name, cuisine, address);
+  }
 }
