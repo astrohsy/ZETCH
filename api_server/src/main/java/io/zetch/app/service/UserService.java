@@ -85,8 +85,9 @@ public class UserService {
       throws NoSuchElementException, IllegalArgumentException {
     UserEntity currUser = verifyUser(currUsername);
 
-    // TODO: Maybe there is a better way to set
-    currUser.setUsername(newName);
+    if (newName != null) {
+      currUser.setDisplayName(newName);
+    }
 
     if (newEmail != null) {
       currUser.setEmail(newEmail);
