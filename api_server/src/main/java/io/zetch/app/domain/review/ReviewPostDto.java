@@ -2,18 +2,20 @@ package io.zetch.app.domain.review;
 
 import io.zetch.app.domain.restaurant.RestaurantDto;
 import io.zetch.app.domain.user.UserDto;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.ToString;
+import lombok.Value;
+
 import java.io.Serializable;
-import lombok.*;
 
 @Value
 @Builder
 @AllArgsConstructor
-public class ReviewDto implements Serializable {
+public class ReviewPostDto implements Serializable {
   @ToString.Exclude Long id;
   String comment;
   Integer rating;
-  UserDto user;
-  RestaurantDto restaurant;
+  String user_id;
+  Long restaurant_id;
 }
-
-
