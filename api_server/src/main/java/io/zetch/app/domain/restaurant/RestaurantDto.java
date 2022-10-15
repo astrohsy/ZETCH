@@ -11,7 +11,6 @@ import lombok.Value;
 @Builder
 @AllArgsConstructor
 public class RestaurantDto implements Serializable {
-  @ToString.Exclude Long id;
   String name;
   String cuisine;
   String address;

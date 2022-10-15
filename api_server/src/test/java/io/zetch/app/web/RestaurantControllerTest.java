@@ -38,12 +38,9 @@ import org.springframework.web.context.WebApplicationContext;
 public class RestaurantControllerTest {
 
   private static final String RESTAURANT_ENDPOINT = "/restaurants/";
-
-  private static final Long ID_1 = 1L;
   private static final String NAME_1 = "Bob's";
   private static final String CUISINE_1 = "Italian";
   private static final String ADDRESS_1 = "1234 Broadway";
-  private static final Long ID_2 = 2L;
   private static final String NAME_2 = "Cat's";
   private static final String CUISINE_2 = "French";
   private static final String ADDRESS_2 = "15 Amsterdam";
@@ -71,21 +68,20 @@ public class RestaurantControllerTest {
         .andExpect(status().isOk())
         .andExpect(jsonPath("*", notNullValue()))
         .andExpect(jsonPath("$", hasSize(2)))
-        .andExpect(jsonPath("$[0].*", hasSize(4)))
+        .andExpect(jsonPath("$[0].*", hasSize(3)))
         .andExpect(jsonPath("$[0].name", is(NAME_1)))
         .andExpect(jsonPath("$[1].name", is(NAME_2)));
   }
 
   @Test
-  public void getRestaurantById() throws Exception {
-    when(restaurantServiceMock.getOne(ID_1)).thenReturn(r1);
+  public void getRestaurantByName() throws Exception {
+    when(restaurantServiceMock.getOne(NAME_1)).thenReturn(r1);
 
     mockMvc
-        .perform(get(RESTAURANT_ENDPOINT + ID_1).contentType(MediaType.APPLICATION_JSON))
+        .perform(get(RESTAURANT_ENDPOINT + NAME_1).contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(jsonPath("*", notNullValue()))
-        .andExpect(jsonPath("$.*", hasSize(4)))
-        .andExpect(jsonPath("$.id", is(r1.getId())))
+        .andExpect(jsonPath("$.*", hasSize(3)))
         .andExpect(jsonPath("$.name", is(r1.getName())))
         .andExpect(jsonPath("$.cuisine", is(r1.getCuisine())))
         .andExpect(jsonPath("$.address", is(r1.getAddress())));
@@ -103,7 +99,6 @@ public class RestaurantControllerTest {
             .content(
                 mapper.writeValueAsString(
                     RestaurantDto.builder()
-                        .id(r1.getId())
                         .name(r1.getName())
                         .cuisine(r1.getCuisine())
                         .address(r1.getAddress())
@@ -127,16 +122,15 @@ public class RestaurantControllerTest {
             .cuisine(CUISINE_1)
             .address(ADDRESS_1)
             .build();
-    when(restaurantServiceMock.update(ID_1, updated.getName(), null, null)).thenReturn(updated);
+    when(restaurantServiceMock.update(NAME_1, updated.getName(), null, null)).thenReturn(updated);
 
     MockHttpServletRequestBuilder mockRequest =
-        put(RESTAURANT_ENDPOINT + ID_1)
+        put(RESTAURANT_ENDPOINT + NAME_1)
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
             .content(
                 mapper.writeValueAsString(
                     RestaurantDto.builder()
-                        .id(ID_1)
                         .name("New Bob's")
                         .cuisine(null)
                         .address(null)
@@ -160,16 +154,15 @@ public class RestaurantControllerTest {
             .cuisine("New Italian")
             .address(ADDRESS_1)
             .build();
-    when(restaurantServiceMock.update(ID_1, null, updated.getCuisine(), null)).thenReturn(updated);
+    when(restaurantServiceMock.update(NAME_1, null, updated.getCuisine(), null)).thenReturn(updated);
 
     MockHttpServletRequestBuilder mockRequest =
-        put(RESTAURANT_ENDPOINT + ID_1)
+        put(RESTAURANT_ENDPOINT + NAME_1)
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
             .content(
                 mapper.writeValueAsString(
                     RestaurantDto.builder()
-                        .id(ID_1)
                         .name(null)
                         .cuisine("New Italian")
                         .address(null)
@@ -193,16 +186,15 @@ public class RestaurantControllerTest {
             .cuisine(CUISINE_1)
             .address("New 1234 Broadway")
             .build();
-    when(restaurantServiceMock.update(ID_1, null, null, "New 1234 Broadway")).thenReturn(updated);
+    when(restaurantServiceMock.update(NAME_1, null, null, "New 1234 Broadway")).thenReturn(updated);
 
     MockHttpServletRequestBuilder mockRequest =
-        put(RESTAURANT_ENDPOINT + ID_1)
+        put(RESTAURANT_ENDPOINT + NAME_1)
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
             .content(
                 mapper.writeValueAsString(
                     RestaurantDto.builder()
-                        .id(ID_1)
                         .name(null)
                         .cuisine(null)
                         .address("New 1234 Broadway")
@@ -227,17 +219,16 @@ public class RestaurantControllerTest {
             .address("New 1234 Broadway")
             .build();
     when(restaurantServiceMock.update(
-            ID_1, updated.getName(), updated.getCuisine(), updated.getAddress()))
+            NAME_1, updated.getName(), updated.getCuisine(), updated.getAddress()))
         .thenThrow(NoSuchElementException.class);
 
     MockHttpServletRequestBuilder mockRequest =
-        put(RESTAURANT_ENDPOINT + ID_1)
+        put(RESTAURANT_ENDPOINT + NAME_1)
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
             .content(
                 mapper.writeValueAsString(
                     RestaurantDto.builder()
-                        .id(ID_1)
                         .name("New Bob's")
                         .cuisine("New Italian")
                         .address("New 1234 Broadway")

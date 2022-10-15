@@ -31,33 +31,44 @@ public class RestaurantController {
   @Operation(summary = "Retrieve all restaurants")
   @ResponseBody
   Iterable<RestaurantDto> getAllRestaurants() {
-    return restaurantService.getAll().stream().map(this::toDto).collect(Collectors.toList());
+    return restaurantService.getAll().stream().map(RestaurantEntity::toDto).collect(Collectors.toList());
   }
 
   /**
-   * @param restaurantId Restaurant's id
-   * @return A restaurant by id
+   * @param name Restaurant's name
+   * @return A restaurant by name
    */
-  @GetMapping("/{restaurantId}")
+  @GetMapping("/{name}")
   @Operation(summary = "Retrieve a single restaurant")
-  RestaurantDto getOneRestaurant(@PathVariable Long restaurantId) {
-    return toDto(restaurantService.getOne(restaurantId));
+  RestaurantDto getOneRestaurant(@PathVariable String name) {
+    return restaurantService.getOne(name).toDto();
   }
 
   /**
-   * @param restaurantId Restaurant's id
-   * @return A restaurant by id
+   * @param name Restaurant's name
+   * @return A restaurant by name
    */
-  @PutMapping("/{restaurantId}")
+  @PutMapping("/{name}")
   @Operation(summary = "Modify a single restaurant")
   RestaurantDto updateRestaurant(
-      @RequestBody RestaurantDto newRestaurantDto, @PathVariable Long restaurantId) {
-    return toDto(
-        restaurantService.update(
-            restaurantId,
+      @RequestBody RestaurantDto newRestaurantDto, @PathVariable String name) {
+    return restaurantService.update(
+            name,
             newRestaurantDto.getName(),
             newRestaurantDto.getCuisine(),
-            newRestaurantDto.getAddress()));
+            newRestaurantDto.getAddress())
+            .toDto();
+  }
+
+  /**
+   * @param name Restaurant's name
+   * @param name Owner's name
+   * return Confirmation message if successful
+   */
+  @PutMapping("/{name}/{owner}")
+  @Operation(summary = "Assign owner to a restaurant")
+  RestaurantDto assignRestaurantOwner(@PathVariable String name, @PathVariable String owner) {
+    return restaurantService.assignOwner(name, owner).toDto();
   }
 
   /**
@@ -68,20 +79,8 @@ public class RestaurantController {
   @Operation(summary = "Create a new restaurant")
   @ResponseBody
   RestaurantDto addNewRestaurant(@RequestBody @Validated RestaurantDto restaurantDto) {
-    return toDto(
-        restaurantService.createNew(
-            restaurantDto.getName(), restaurantDto.getCuisine(), restaurantDto.getAddress()));
-  }
-
-  /**
-   * Convert the Restaurant entity to a Restaurant data transfer object
-   *
-   * @param restaurant Restaurant to convert
-   * @return Restaurant DTO
-   */
-  private RestaurantDto toDto(RestaurantEntity restaurant) {
-    return new RestaurantDto(
-        restaurant.getId(), restaurant.getName(), restaurant.getCuisine(), restaurant.getAddress());
+    return restaurantService.createNew(
+            restaurantDto.getName(), restaurantDto.getCuisine(), restaurantDto.getAddress()).toDto();
   }
 
   /**
@@ -93,6 +92,18 @@ public class RestaurantController {
   @ResponseStatus(HttpStatus.NOT_FOUND)
   @ExceptionHandler(NoSuchElementException.class)
   String return404(NoSuchElementException ex) {
+    return ex.getMessage();
+  }
+
+  /**
+   * Return 400 Bad Request if IllegalArgumentException is thrown in this Controller
+   *
+   * @param ex Exception
+   * @return Error message string
+   */
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  @ExceptionHandler(IllegalArgumentException.class)
+  String return404(IllegalArgumentException ex) {
     return ex.getMessage();
   }
 }
