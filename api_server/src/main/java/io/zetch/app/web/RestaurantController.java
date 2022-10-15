@@ -74,22 +74,6 @@ public class RestaurantController {
   }
 
   /**
-   * @param restaurantId Restaurant's id
-   * @return A restaurant by id
-   */
-  @PutMapping("/{restaurantId}")
-  @Operation(summary = "Modify a single restaurant")
-  RestaurantDto updateRestaurant(
-      @RequestBody RestaurantDto newRestaurantDto, @PathVariable Long restaurantId) {
-    return toDto(
-        restaurantService.update(
-            restaurantId,
-            newRestaurantDto.getName(),
-            newRestaurantDto.getCuisine(),
-            newRestaurantDto.getAddress()));
-  }
-
-  /**
    * @param restaurantDto Restaurant data transfer object
    * @return Confirmation message if successful
    */
