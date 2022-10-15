@@ -130,11 +130,7 @@ public class RestaurantControllerTest {
             .accept(MediaType.APPLICATION_JSON)
             .content(
                 mapper.writeValueAsString(
-                    RestaurantDto.builder()
-                        .name("New Bob's")
-                        .cuisine(null)
-                        .address(null)
-                        .build()));
+                    RestaurantDto.builder().name("New Bob's").cuisine(null).address(null).build()));
 
     mockMvc
         .perform(mockRequest)
@@ -154,7 +150,8 @@ public class RestaurantControllerTest {
             .cuisine("New Italian")
             .address(ADDRESS_1)
             .build();
-    when(restaurantServiceMock.update(NAME_1, null, updated.getCuisine(), null)).thenReturn(updated);
+    when(restaurantServiceMock.update(NAME_1, null, updated.getCuisine(), null))
+        .thenReturn(updated);
 
     MockHttpServletRequestBuilder mockRequest =
         put(RESTAURANT_ENDPOINT + NAME_1)

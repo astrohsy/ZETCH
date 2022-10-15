@@ -9,12 +9,11 @@ import static org.mockito.Mockito.when;
 import io.zetch.app.domain.restaurant.RestaurantEntity;
 import io.zetch.app.domain.user.UserEntity;
 import io.zetch.app.repo.RestaurantRepository;
+import io.zetch.app.repo.UserRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-
-import io.zetch.app.repo.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -84,7 +83,8 @@ public class RestaurantServiceTest {
   @Test
   public void createNewUnavailable() {
     when(restaurantRepositoryMock.existsByName(NAME)).thenReturn(true);
-    assertThrows(IllegalArgumentException.class, () -> restaurantService.createNew(NAME, CUISINE, ADDRESS));
+    assertThrows(
+        IllegalArgumentException.class, () -> restaurantService.createNew(NAME, CUISINE, ADDRESS));
   }
 
   @Test
@@ -123,7 +123,9 @@ public class RestaurantServiceTest {
   public void updateRestaurantUnavailable() {
     when(restaurantRepositoryMock.findByName(NAME)).thenReturn(Optional.of(restaurantMock));
     when(restaurantRepositoryMock.existsByName(NAME_2)).thenReturn(true);
-    assertThrows(IllegalArgumentException.class, () -> restaurantService.update(NAME, NAME_2, CUISINE, ADDRESS));
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> restaurantService.update(NAME, NAME_2, CUISINE, ADDRESS));
   }
 
   @Test

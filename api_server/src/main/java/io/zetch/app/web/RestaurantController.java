@@ -31,7 +31,9 @@ public class RestaurantController {
   @Operation(summary = "Retrieve all restaurants")
   @ResponseBody
   Iterable<RestaurantDto> getAllRestaurants() {
-    return restaurantService.getAll().stream().map(RestaurantEntity::toDto).collect(Collectors.toList());
+    return restaurantService.getAll().stream()
+        .map(RestaurantEntity::toDto)
+        .collect(Collectors.toList());
   }
 
   /**
@@ -52,18 +54,18 @@ public class RestaurantController {
   @Operation(summary = "Modify a single restaurant")
   RestaurantDto updateRestaurant(
       @RequestBody RestaurantDto newRestaurantDto, @PathVariable String name) {
-    return restaurantService.update(
+    return restaurantService
+        .update(
             name,
             newRestaurantDto.getName(),
             newRestaurantDto.getCuisine(),
             newRestaurantDto.getAddress())
-            .toDto();
+        .toDto();
   }
 
   /**
    * @param name Restaurant's name
-   * @param name Owner's name
-   * return Confirmation message if successful
+   * @param name Owner's name return Confirmation message if successful
    */
   @PutMapping("/{name}/{owner}")
   @Operation(summary = "Assign owner to a restaurant")
@@ -79,8 +81,9 @@ public class RestaurantController {
   @Operation(summary = "Create a new restaurant")
   @ResponseBody
   RestaurantDto addNewRestaurant(@RequestBody @Validated RestaurantDto restaurantDto) {
-    return restaurantService.createNew(
-            restaurantDto.getName(), restaurantDto.getCuisine(), restaurantDto.getAddress()).toDto();
+    return restaurantService
+        .createNew(restaurantDto.getName(), restaurantDto.getCuisine(), restaurantDto.getAddress())
+        .toDto();
   }
 
   /**

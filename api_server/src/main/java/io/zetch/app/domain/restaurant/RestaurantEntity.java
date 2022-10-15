@@ -2,7 +2,6 @@
 package io.zetch.app.domain.restaurant;
 
 import io.zetch.app.domain.BaseEntity;
-import io.zetch.app.domain.user.UserDto;
 import io.zetch.app.domain.user.UserEntity;
 import java.util.List;
 import javax.persistence.Entity;

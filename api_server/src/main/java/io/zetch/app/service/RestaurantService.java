@@ -3,11 +3,10 @@ package io.zetch.app.service;
 import io.zetch.app.domain.restaurant.RestaurantEntity;
 import io.zetch.app.domain.user.UserEntity;
 import io.zetch.app.repo.RestaurantRepository;
+import io.zetch.app.repo.UserRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-
-import io.zetch.app.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +17,8 @@ public class RestaurantService {
   private final UserRepository userRepository;
 
   @Autowired
-  public RestaurantService(RestaurantRepository restaurantRepository, UserRepository userRepository) {
+  public RestaurantService(
+      RestaurantRepository restaurantRepository, UserRepository userRepository) {
     this.restaurantRepository = restaurantRepository;
     this.userRepository = userRepository;
   }
@@ -53,9 +53,8 @@ public class RestaurantService {
    * @return Updated User object
    * @throws NoSuchElementException If User not found
    */
-  public RestaurantEntity update(
-      String name, String newName, String newCuisine, String newAddress)
-          throws IllegalArgumentException, NoSuchElementException {
+  public RestaurantEntity update(String name, String newName, String newCuisine, String newAddress)
+      throws IllegalArgumentException, NoSuchElementException {
     RestaurantEntity currRestaurant = verifyRestaurant(name);
     if (name != newName && restaurantRepository.existsByName(newName)) {
       throw new IllegalArgumentException("Name unavailable: " + newName);
@@ -76,7 +75,8 @@ public class RestaurantService {
    */
   public RestaurantEntity assignOwner(String name, String owner) throws NoSuchElementException {
     RestaurantEntity restaurant = verifyRestaurant(name);
-    UserEntity user = userRepository
+    UserEntity user =
+        userRepository
             .findByUsername(owner)
             .orElseThrow(() -> new NoSuchElementException("User does not exist: " + owner));
 
@@ -100,7 +100,8 @@ public class RestaurantService {
    * @param address Restaurant address
    * @throws IllegalArgumentException If username unavailable or invalid Affiliation passed
    */
-  public RestaurantEntity createNew(String name, String cuisine, String address) throws IllegalArgumentException {
+  public RestaurantEntity createNew(String name, String cuisine, String address)
+      throws IllegalArgumentException {
     if (restaurantRepository.existsByName(name)) {
       throw new IllegalArgumentException("Name unavailable: " + name);
     }
