@@ -26,16 +26,16 @@ public class SecurityConfig {
     http.cors().and().csrf().disable(); // NOSONAR not used in secure contexts
 
     http.authorizeRequests(
-                    authReqCustomizer ->
-                            authReqCustomizer
-                                    .antMatchers("/swagger-ui/**")
-                                    .permitAll()
-                                    .antMatchers("/v3/**")
-                                    .permitAll()
-                                    .anyRequest()
-                                    .authenticated())
-            .oauth2ResourceServer()
-            .jwt();
+            authReqCustomizer ->
+                authReqCustomizer
+                    .antMatchers("/swagger-ui/**")
+                    .permitAll()
+                    .antMatchers("/v3/**")
+                    .permitAll()
+                    .anyRequest()
+                    .authenticated())
+        .oauth2ResourceServer()
+        .jwt();
 
     return http.build();
   }

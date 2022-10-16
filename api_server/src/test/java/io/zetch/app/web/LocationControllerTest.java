@@ -159,8 +159,7 @@ public class LocationControllerTest {
             .cuisine("New Italian")
             .address(ADDRESS_1)
             .build();
-    when(locationServiceMock.update(NAME_1, null, updated.getCuisine(), null))
-        .thenReturn(updated);
+    when(locationServiceMock.update(NAME_1, null, updated.getCuisine(), null)).thenReturn(updated);
 
     MockHttpServletRequestBuilder mockRequest =
         put(LOCATION_ENDPOINT + NAME_1)
@@ -168,11 +167,7 @@ public class LocationControllerTest {
             .accept(MediaType.APPLICATION_JSON)
             .content(
                 mapper.writeValueAsString(
-                    LocationDto.builder()
-                        .name(null)
-                        .cuisine("New Italian")
-                        .address(null)
-                        .build()));
+                    LocationDto.builder().name(null).cuisine("New Italian").address(null).build()));
 
     mockMvc
         .perform(mockRequest)

@@ -17,8 +17,7 @@ public class LocationService {
   private final UserRepository userRepository;
 
   @Autowired
-  public LocationService(
-      LocationRepository locationRepository, UserRepository userRepository) {
+  public LocationService(LocationRepository locationRepository, UserRepository userRepository) {
     this.locationRepository = locationRepository;
     this.userRepository = userRepository;
   }
@@ -106,7 +105,7 @@ public class LocationService {
       throw new IllegalArgumentException("Name unavailable: " + name);
     }
     LocationEntity newLocation =
-            LocationEntity.builder()
+        LocationEntity.builder()
             .name(name)
             .cuisine(cuisine)
             .address(address)

@@ -10,8 +10,7 @@ import org.springframework.stereotype.Component;
 public class DataLoader implements CommandLineRunner {
 
   @Autowired UserRepository userRepository;
-  @Autowired
-  LocationRepository locationRepository;
+  @Autowired LocationRepository locationRepository;
 
   @Override
   public void run(String... args) throws Exception {

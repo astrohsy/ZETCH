@@ -64,8 +64,7 @@ public class LocationServiceTest {
   @Test
   public void createNew() {
     // Prepare to capture a Location object
-    ArgumentCaptor<LocationEntity> locationCaptor =
-        ArgumentCaptor.forClass(LocationEntity.class);
+    ArgumentCaptor<LocationEntity> locationCaptor = ArgumentCaptor.forClass(LocationEntity.class);
 
     locationService.createNew(NAME, CUISINE, ADDRESS);
 
@@ -108,8 +107,7 @@ public class LocationServiceTest {
     when(locationRepositoryMock.findByName(NAME)).thenReturn(Optional.of(old));
     locationService.update(NAME, updated.getName(), updated.getCuisine(), updated.getAddress());
 
-    ArgumentCaptor<LocationEntity> locationCaptor =
-        ArgumentCaptor.forClass(LocationEntity.class);
+    ArgumentCaptor<LocationEntity> locationCaptor = ArgumentCaptor.forClass(LocationEntity.class);
     verify(locationRepositoryMock).save(locationCaptor.capture());
 
     LocationEntity value = locationCaptor.getValue();
