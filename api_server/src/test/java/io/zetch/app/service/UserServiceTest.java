@@ -91,6 +91,6 @@ class UserServiceTest {
     assertThat(value.getDisplayName(), is(NAME));
     assertThat(value.getEmail(), is(EMAIL));
     assertThat(value.getAffiliation(), is(Affiliation.STUDENT));
-    assertThat(value.getOwnedRestaurants().isEmpty(), is(true));
+    assertThat(value.getOwnedLocations().isEmpty(), is(true));
   }
 }

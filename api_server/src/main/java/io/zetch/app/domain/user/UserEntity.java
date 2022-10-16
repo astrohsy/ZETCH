@@ -2,7 +2,7 @@
 package io.zetch.app.domain.user;
 
 import io.zetch.app.domain.BaseEntity;
-import io.zetch.app.domain.restaurant.RestaurantEntity;
+import io.zetch.app.domain.location.LocationEntity;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
@@ -34,16 +34,16 @@ public class UserEntity extends BaseEntity {
   private String displayName;
   private String email;
 
-  // A restaurant might have multiple owners; a User might own multiple restaurants
+  // A location might have multiple owners; a User might own multiple locations
   @ManyToMany(mappedBy = "owners")
   @ToString.Exclude
-  private List<RestaurantEntity> ownedRestaurants;
+  private List<LocationEntity> ownedLocations;
 
   // TODO: List of posted reviews
   // @OneToMany
   // @ToString.Exclude
   // private List<Review> postedReviews;
-  // TODO: List of posted replies (for restaurant owners)
+  // TODO: List of posted replies (for location owners)
   // @OneToMany
   // @ToString.Exclude
   // private List<Reply> postedReplies;
@@ -55,7 +55,7 @@ public class UserEntity extends BaseEntity {
     this.affiliation = affiliation;
     this.displayName = displayName;
     this.email = email;
-    this.ownedRestaurants = new ArrayList<>();
+    this.ownedLocations = new ArrayList<>();
   }
 
   /**

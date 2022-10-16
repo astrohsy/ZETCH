@@ -64,7 +64,7 @@ public class UserService {
             .displayName(name)
             .email(email)
             .affiliation(Affiliation.fromString(affiliation))
-            .ownedRestaurants(new ArrayList<>())
+            .ownedLocations(new ArrayList<>())
             .build();
 
     return userRepository.save(newUser);
