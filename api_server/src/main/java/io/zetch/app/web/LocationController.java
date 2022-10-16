@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(path = "/locations")
 @Tag(name = "Locations")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*") // NOSONAR
 public class LocationController {
   private final LocationService locationService;
 
