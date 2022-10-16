@@ -6,7 +6,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import io.zetch.app.domain.review.ReviewDto;
 import io.zetch.app.domain.review.ReviewEntity;
 import io.zetch.app.domain.review.ReviewPostDto;
-import io.zetch.app.domain.user.UserDto;
 import io.zetch.app.service.ReviewService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

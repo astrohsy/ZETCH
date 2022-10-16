@@ -15,5 +15,3 @@ public class ReviewDto implements Serializable {
   UserDto user;
   RestaurantDto restaurant;
 }
-
-
