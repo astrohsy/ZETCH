@@ -3,9 +3,9 @@ package io.zetch.app.web;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import io.zetch.app.domain.restaurant.RestaurantDto;
-import io.zetch.app.domain.restaurant.RestaurantEntity;
-import io.zetch.app.service.RestaurantService;
+import io.zetch.app.domain.location.LocationDto;
+import io.zetch.app.domain.location.LocationEntity;
+import io.zetch.app.service.LocationService;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,85 +15,85 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(path = "/restaurants")
-@Tag(name = "Restaurants")
+@RequestMapping(path = "/locations")
+@Tag(name = "Locations")
 @CrossOrigin(origins = "*")
-public class RestaurantController {
-  private final RestaurantService restaurantService;
+public class LocationController {
+  private final LocationService locationService;
 
   @Autowired
-  public RestaurantController(RestaurantService restaurantService) {
-    this.restaurantService = restaurantService;
+  public LocationController(LocationService locationService) {
+    this.locationService = locationService;
   }
 
   /**
    * @return A list of all restraurants
    */
   @GetMapping(path = "/")
-  @Operation(summary = "Retrieve all restaurants")
+  @Operation(summary = "Retrieve all locations")
   @SecurityRequirement(name = "OAuth2")
   @ResponseBody
-  Iterable<RestaurantDto> getAllRestaurants(JwtAuthenticationToken token) {
-    return restaurantService.getAll().stream()
-        .map(RestaurantEntity::toDto)
+  Iterable<LocationDto> getAllLocations(JwtAuthenticationToken token) {
+    return locationService.getAll().stream()
+        .map(LocationEntity::toDto)
         .collect(Collectors.toList());
   }
 
   /**
-   * @param name Restaurant's name
-   * @return A restaurant by name
+   * @param name Location's name
+   * @return A location by name
    */
   @GetMapping("/{name}")
-  @Operation(summary = "Retrieve a single restaurant")
+  @Operation(summary = "Retrieve a single location")
   @SecurityRequirement(name = "OAuth2")
-  RestaurantDto getOneRestaurant(@PathVariable String name, JwtAuthenticationToken token) {
-    return restaurantService.getOne(name).toDto();
+  LocationDto getOneLocation(@PathVariable String name, JwtAuthenticationToken token) {
+    return locationService.getOne(name).toDto();
   }
 
   /**
-   * @param name Restaurant's name
-   * @return A restaurant by name
+   * @param name Location's name
+   * @return A location by name
    */
   @PutMapping("/{name}")
-  @Operation(summary = "Modify a single restaurant")
+  @Operation(summary = "Modify a single location")
   @SecurityRequirement(name = "OAuth2")
-  RestaurantDto updateRestaurant(
-      @RequestBody RestaurantDto newRestaurantDto,
+  LocationDto updateLocation(
+      @RequestBody LocationDto newLocationDto,
       @PathVariable String name,
       JwtAuthenticationToken token) {
-    return restaurantService
+    return locationService
         .update(
             name,
-            newRestaurantDto.getName(),
-            newRestaurantDto.getCuisine(),
-            newRestaurantDto.getAddress())
+            newLocationDto.getName(),
+            newLocationDto.getCuisine(),
+            newLocationDto.getAddress())
         .toDto();
   }
 
   /**
-   * @param name Restaurant's name
+   * @param name Location's name
    * @param name Owner's name return Confirmation message if successful
    */
   @PutMapping("/{name}/{owner}")
-  @Operation(summary = "Assign owner to a restaurant")
+  @Operation(summary = "Assign owner to a location")
   @SecurityRequirement(name = "OAuth2")
-  RestaurantDto assignRestaurantOwner(
+  LocationDto assignLocationOwner(
       @PathVariable String name, @PathVariable String owner, JwtAuthenticationToken token) {
-    return restaurantService.assignOwner(name, owner).toDto();
+    return locationService.assignOwner(name, owner).toDto();
   }
 
   /**
-   * @param restaurantDto Restaurant data transfer object
+   * @param locationDto Location data transfer object
    * @return Confirmation message if successful
    */
   @PostMapping(path = "/")
-  @Operation(summary = "Create a new restaurant")
+  @Operation(summary = "Create a new location")
   @SecurityRequirement(name = "OAuth2")
   @ResponseBody
-  RestaurantDto addNewRestaurant(
-      @RequestBody @Validated RestaurantDto restaurantDto, JwtAuthenticationToken token) {
-    return restaurantService
-        .createNew(restaurantDto.getName(), restaurantDto.getCuisine(), restaurantDto.getAddress())
+  LocationDto addNewLocation(
+      @RequestBody @Validated LocationDto locationDto, JwtAuthenticationToken token) {
+    return locationService
+        .createNew(locationDto.getName(), locationDto.getCuisine(), locationDto.getAddress())
         .toDto();
   }
 

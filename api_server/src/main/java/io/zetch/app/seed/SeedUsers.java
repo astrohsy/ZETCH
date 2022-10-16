@@ -10,7 +10,7 @@ public class SeedUsers {
           .username("admin")
           .affiliation(Affiliation.ADMIN)
           .displayName("Admin.")
-          .displayName("admin@zetch.io")
+          .displayName(null)
           .build();
   private static final UserEntity USER_2 =
       UserEntity.builder()

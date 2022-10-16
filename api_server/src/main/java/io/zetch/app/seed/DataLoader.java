@@ -1,6 +1,6 @@
 package io.zetch.app.seed;
 
-import io.zetch.app.repo.RestaurantRepository;
+import io.zetch.app.repo.LocationRepository;
 import io.zetch.app.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -10,12 +10,13 @@ import org.springframework.stereotype.Component;
 public class DataLoader implements CommandLineRunner {
 
   @Autowired UserRepository userRepository;
-  @Autowired RestaurantRepository restaurantRepository;
+  @Autowired
+  LocationRepository locationRepository;
 
   @Override
   public void run(String... args) throws Exception {
     seedUserData();
-    seedRestaurantData();
+    seedLocationData();
   }
 
   private void seedUserData() {
@@ -24,9 +25,9 @@ public class DataLoader implements CommandLineRunner {
     }
   }
 
-  private void seedRestaurantData() {
-    if (restaurantRepository.count() == 0) {
-      restaurantRepository.saveAll(SeedRestaurants.RESTAURANTS);
+  private void seedLocationData() {
+    if (locationRepository.count() == 0) {
+      locationRepository.saveAll(SeedLocations.LOCATIONS);
     }
   }
 }
