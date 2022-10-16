@@ -1,9 +1,9 @@
 package io.zetch.app.service;
 
-import io.zetch.app.domain.restaurant.RestaurantEntity;
+import io.zetch.app.domain.location.LocationEntity;
 import io.zetch.app.domain.review.ReviewEntity;
 import io.zetch.app.domain.user.UserEntity;
-import io.zetch.app.repo.RestaurantRepository;
+import io.zetch.app.repo.LocationRepository;
 import io.zetch.app.repo.ReviewRepository;
 import io.zetch.app.repo.UserRepository;
 import java.util.List;
@@ -16,16 +16,16 @@ import org.springframework.stereotype.Service;
 public class ReviewService {
   private final ReviewRepository reviewRepository;
   private final UserRepository userRepository;
-  private final RestaurantRepository restaurantRepository;
+  private final LocationRepository locationRepository;
 
   @Autowired
   public ReviewService(
       ReviewRepository reviewRepository,
       UserRepository userRepository,
-      RestaurantRepository restaurantRepository) {
+      LocationRepository locationRepository) {
     this.reviewRepository = reviewRepository;
     this.userRepository = userRepository;
-    this.restaurantRepository = restaurantRepository;
+    this.locationRepository = locationRepository;
   }
 
   /**
@@ -55,17 +55,16 @@ public class ReviewService {
    *
    * @param comment Review comment
    */
-  public ReviewEntity createNew(
-      String comment, Integer rating, String username, Long restaurantId) {
-    UserEntity u = userRepository.findById(username).orElse(null);
-    RestaurantEntity r = restaurantRepository.findById(restaurantId).orElse(null);
+  public ReviewEntity createNew(String comment, Integer rating, Long userId, Long restaurantId) {
+    UserEntity u = userRepository.findById(userId).orElse(null);
+    LocationEntity l = locationRepository.findById(restaurantId).orElse(null);
 
-    if (u == null || r == null) {
+    if (u == null || l == null) {
       throw new NoSuchElementException("User or Restaurant is not exist");
     }
 
     ReviewEntity newReview =
-        ReviewEntity.builder().comment(comment).rating(rating).user(u).restaurant(r).build();
+        ReviewEntity.builder().comment(comment).rating(rating).user(u).location(l).build();
     return reviewRepository.save(newReview);
   }
 }

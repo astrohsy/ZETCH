@@ -5,10 +5,10 @@ import static org.hamcrest.core.Is.is;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
-import io.zetch.app.domain.restaurant.RestaurantEntity;
+import io.zetch.app.domain.location.LocationEntity;
 import io.zetch.app.domain.review.ReviewEntity;
 import io.zetch.app.domain.user.UserEntity;
-import io.zetch.app.repo.RestaurantRepository;
+import io.zetch.app.repo.LocationRepository;
 import io.zetch.app.repo.ReviewRepository;
 import io.zetch.app.repo.UserRepository;
 import java.util.List;
@@ -24,7 +24,7 @@ public class ReviewServiceTest {
 
   @Mock private UserRepository userRepositoryMock;
   @Mock private ReviewRepository reviewRepositoryMock;
-  @Mock private RestaurantRepository restaurantRepositoryMock;
+  @Mock private LocationRepository restaurantRepositoryMock;
   @InjectMocks private ReviewService reviewService;
   @Mock private ReviewEntity reviewMock;
 
@@ -48,24 +48,20 @@ public class ReviewServiceTest {
   @Test
   public void createNew() {
     UserEntity testUser = UserEntity.builder().username("test").email("helo@hello.com").build();
-    RestaurantEntity testRestaurant =
-        RestaurantEntity.builder()
-            .name("test")
-            .cuisine("Italian")
-            .address("155 Claremont NY")
-            .build();
+    LocationEntity testLocation =
+        LocationEntity.builder().name("test").address("155 Claremont NY").build();
     ReviewEntity testReview =
         ReviewEntity.builder()
             .comment("test")
             .rating(3)
             .user(testUser)
-            .restaurant(testRestaurant)
+            .location(testLocation)
             .build();
-    when(userRepositoryMock.findById(anyString())).thenReturn(Optional.of(testUser));
-    when(restaurantRepositoryMock.findById(anyLong())).thenReturn(Optional.of(testRestaurant));
+    when(userRepositoryMock.findById(anyLong())).thenReturn(Optional.of(testUser));
+    when(restaurantRepositoryMock.findById(anyLong())).thenReturn(Optional.of(testLocation));
     when(reviewRepositoryMock.save(any(ReviewEntity.class))).thenReturn(testReview);
 
-    ReviewEntity r = reviewService.createNew("test review", 3, "hl3605", 1L);
+    ReviewEntity r = reviewService.createNew("test review", 3, 1L, 1L);
     assertThat(testReview.toString(), is(r.toString()));
   }
 }

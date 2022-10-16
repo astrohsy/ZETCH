@@ -13,6 +13,6 @@ public class ReviewPostDto implements Serializable {
   @ToString.Exclude Long id;
   String comment;
   Integer rating;
-  String user_id;
+  Long user_id;
   Long restaurant_id;
 }

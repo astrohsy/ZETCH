@@ -2,7 +2,7 @@
 package io.zetch.app.domain.review;
 
 import io.zetch.app.domain.BaseEntity;
-import io.zetch.app.domain.restaurant.RestaurantEntity;
+import io.zetch.app.domain.location.LocationEntity;
 import io.zetch.app.domain.user.UserEntity;
 import javax.persistence.*;
 import javax.persistence.Entity;
@@ -26,6 +26,6 @@ public class ReviewEntity extends BaseEntity {
   private UserEntity user;
 
   @ManyToOne
-  @JoinColumn(name = "restaurant_id")
-  private RestaurantEntity restaurant;
+  @JoinColumn(name = "location_id")
+  private LocationEntity location;
 }
