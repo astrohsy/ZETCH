@@ -53,6 +53,10 @@
       <version>2.7.4</version>
     </dependency>
     <dependency>
+      <artifactId>cognitoidentityprovider</artifactId>
+      <groupId>software.amazon.awssdk</groupId>
+    </dependency>
+    <dependency>
       <artifactId>postgresql</artifactId>
       <groupId>org.postgresql</groupId>
       <scope>runtime</scope>
@@ -72,6 +76,11 @@
       <artifactId>spring-security-test</artifactId>
       <groupId>org.springframework.security</groupId>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <artifactId>spring-addons-oauth2-test</artifactId>
+      <groupId>com.c4-soft.springaddons</groupId>
+      <version>${springaddons.version}</version>
     </dependency>
 
     <dependency>
@@ -97,6 +106,17 @@
       <scope>compile</scope>
     </dependency>
   </dependencies>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <artifactId>bom</artifactId>
+        <groupId>software.amazon.awssdk</groupId>
+        <scope>import</scope>
+        <type>pom</type>
+        <version>2.17.285</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
   <description>Zetch project for Spring Boot</description>
   <groupId>io.zetch</groupId>
   <modelVersion>4.0.0</modelVersion>
@@ -109,9 +129,12 @@
   </parent>
 
   <properties>
+    <app-type>webmvc</app-type>
     <java.version>17</java.version>
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     <sonar.organization>astrohsy</sonar.organization>
+    <springaddons.version>6.0.0</springaddons.version>
+    <token>jwt</token>
   </properties>
 
   <version>0.0.1-SNAPSHOT</version>

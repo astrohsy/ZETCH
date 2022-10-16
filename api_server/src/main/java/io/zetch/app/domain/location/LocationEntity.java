@@ -1,5 +1,5 @@
-/** Restaurant entity definition */
-package io.zetch.app.domain.restaurant;
+/** Location entity definition */
+package io.zetch.app.domain.location;
 
 import io.zetch.app.domain.BaseEntity;
 import io.zetch.app.domain.user.UserEntity;
@@ -23,13 +23,22 @@ import lombok.ToString;
 @AllArgsConstructor
 @Builder
 @Entity
-public class RestaurantEntity extends BaseEntity {
+public class LocationEntity extends BaseEntity {
 
-  @ManyToMany // A restaurant might have multiple owners; a User might own multiple restaurants
+  @ManyToMany // A location might have multiple owners; a User might own multiple locations
   @ToString.Exclude
   private List<UserEntity> owners;
-  // Every restaurant must have a name
+  // Every location must have a name
   @NonNull private String name;
   private String cuisine;
   private String address;
+
+  /**
+   * Convert the Location entity to a Location data transfer object
+   *
+   * @return Location DTO
+   */
+  public LocationDto toDto() {
+    return new LocationDto(name, cuisine, address);
+  }
 }

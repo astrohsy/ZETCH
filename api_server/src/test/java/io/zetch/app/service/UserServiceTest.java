@@ -6,8 +6,10 @@ import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import io.zetch.app.domain.user.Affiliation;
 import io.zetch.app.domain.user.UserEntity;
 import io.zetch.app.repo.UserRepository;
+import io.zetch.app.security.CognitoService;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
@@ -18,26 +20,28 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class UserServiceTest {
+class UserServiceTest {
 
   private static final String USERNAME = "bob";
   private static final String NAME = "Bob";
   private static final String EMAIL = "bob@example.com";
+  private static final String AFFILIATION_STUDENT = "student";
 
   @Mock private UserRepository userRepositoryMock;
-  @InjectMocks private UserService service;
   @Mock private UserEntity userMock;
+  @Mock private CognitoService cognitoServiceMock;
+  @InjectMocks private UserService service;
 
   // VERIFY SERVICE RETURN VALUE
 
   @Test
-  public void getOne() {
-    when(userRepositoryMock.findById(USERNAME)).thenReturn(Optional.of(userMock));
+  void getOne() {
+    when(userRepositoryMock.findByUsername(USERNAME)).thenReturn(Optional.of(userMock));
     assertThat(service.getOne(USERNAME), is(userMock));
   }
 
   @Test
-  public void getAll() {
+  void getAll() {
     when(userRepositoryMock.findAll()).thenReturn(List.of(userMock, userMock, userMock));
     assertThat(service.getAll().size(), is(3));
     assertThat(service.getAll().get(0), is(userMock));
@@ -46,35 +50,47 @@ public class UserServiceTest {
   // VERIFY INVOCATION OF DEPENDENCIES
 
   @Test
-  public void update() {
-    when(userRepositoryMock.findById(USERNAME)).thenReturn(Optional.of(userMock));
-    service.update(USERNAME, NAME, EMAIL);
+  void update() {
+    when(userRepositoryMock.findByUsername(USERNAME)).thenReturn(Optional.of(userMock));
+    service.update(USERNAME, NAME, EMAIL, AFFILIATION_STUDENT);
 
     // Verify save() invoked
     verify(userRepositoryMock).save(any(UserEntity.class));
 
     // Verify setter methods invoked
-    verify(userMock).setName(NAME);
+    verify(userMock).setDisplayName(NAME);
     verify(userMock).setEmail(EMAIL);
+    verify(userMock).setAffiliation(Affiliation.STUDENT);
+  }
+
+  @Test
+  void delete() {
+    when(userRepositoryMock.findByUsername(USERNAME)).thenReturn(Optional.of(userMock));
+    service.delete(USERNAME);
+
+    // Verify delete() invoked
+    verify(userRepositoryMock).delete(any(UserEntity.class));
   }
 
   // VERIFY INVOCATION OF DEPS + CAPTURE PARAMETER VALUES + VERIFY PARAMETERS
 
   @Test
-  public void createNew() {
+  void createNew() {
     // Prepare to capture a User object
     ArgumentCaptor<UserEntity> userCaptor = ArgumentCaptor.forClass(UserEntity.class);
 
-    service.createNew(USERNAME, NAME, EMAIL);
+    service.createNew(USERNAME, NAME, EMAIL, AFFILIATION_STUDENT);
 
     // Verify save() invoked
     verify(userRepositoryMock).save(userCaptor.capture());
+    verify(cognitoServiceMock).signUp(USERNAME);
 
     // Verify the attributes of the User object
     UserEntity value = userCaptor.getValue();
     assertThat(value.getUsername(), is(USERNAME));
-    assertThat(value.getName(), is(NAME));
+    assertThat(value.getDisplayName(), is(NAME));
     assertThat(value.getEmail(), is(EMAIL));
-    assertThat(value.getOwnedRestaurants().isEmpty(), is(true));
+    assertThat(value.getAffiliation(), is(Affiliation.STUDENT));
+    assertThat(value.getOwnedLocations().isEmpty(), is(true));
   }
 }
