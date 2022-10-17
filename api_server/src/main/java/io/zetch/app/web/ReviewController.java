@@ -34,7 +34,7 @@ public class ReviewController {
             newReviewDto.getComment(),
             newReviewDto.getRating(),
             newReviewDto.getUser_id(),
-            newReviewDto.getRestaurant_id());
+            newReviewDto.getLocation_id());
 
     return g.fromJson(g.toJson(r), ReviewDto.class);
   }

@@ -55,12 +55,12 @@ public class ReviewService {
    *
    * @param comment Review comment
    */
-  public ReviewEntity createNew(String comment, Integer rating, Long userId, Long restaurantId) {
+  public ReviewEntity createNew(String comment, Integer rating, Long userId, Long locationId) {
     UserEntity u = userRepository.findById(userId).orElse(null);
-    LocationEntity l = locationRepository.findById(restaurantId).orElse(null);
+    LocationEntity l = locationRepository.findById(locationId).orElse(null);
 
     if (u == null || l == null) {
-      throw new NoSuchElementException("User or Restaurant is not exist");
+      throw new NoSuchElementException("User or Location is not exist");
     }
 
     ReviewEntity newReview =

@@ -14,5 +14,5 @@ public class ReviewPostDto implements Serializable {
   String comment;
   Integer rating;
   Long user_id;
-  Long restaurant_id;
+  Long location_id;
 }
