@@ -59,6 +59,6 @@ public class ReviewController {
   @Operation(summary = "Retrieve a single restaurant")
   ReviewDto getOneReview(@PathVariable Long reviewId) {
     ReviewEntity review = reviewService.getOne(reviewId);
-    return modelMapper.map(review, ReviewDto.class);
+    return g.fromJson(g.toJson(review), ReviewDto.class);
   }
 }

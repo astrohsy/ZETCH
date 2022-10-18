@@ -2,6 +2,7 @@ package io.zetch.app.web;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -53,6 +54,22 @@ class ReviewControllerTest {
     mockMvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
   }
 
+  //  @Test
+  //  void addNewUser() throws Exception {
+  //    ReviewEntity r =
+  //        reviewService.createNew(
+  //            newReviewDto.getComment(),
+  //            newReviewDto.getRating(),
+  //            newReviewDto.getUser_id(),
+  //            newReviewDto.getLocation_id());
+  //    return g.fromJson(g.toJson(r), ReviewDto.class);
+  //    mockMvc
+  //        .perform(get(REVIEWS_ENDPOINT).contentType(MediaType.APPLICATION_JSON))
+  //        .andExpect(status().isOk())
+  //        .andExpect(jsonPath("*", notNullValue()))
+  //        .andExpect(jsonPath("$", hasSize(2)));
+  //  }
+
   @Test
   void getAllReviews() throws Exception {
     List<String> jsonReviews = new ArrayList<>();
@@ -60,7 +77,7 @@ class ReviewControllerTest {
         """
            {
               "id": 0, "rating": 4, "comment": "Very tasty!",
-              restaurant: { id: 0, "name": "Bob's", "cuisine": "Italian", "address": "1234 Broadway" },
+              location: { id: 0, "name": "Bob's", "cuisine": "Italian", "address": "1234 Broadway" },
               user: { id: 0, "username": "bob", "name": "Bob", "email": "bob@example.com" }
            }
         """);
@@ -68,7 +85,7 @@ class ReviewControllerTest {
         """
               {
                 "id": 1, "rating": 1, "comment": "Terrible service.",
-                restaurant: { id: 0, "name": "Bob's", "cuisine": "Italian", "address": "1234 Broadway" },
+                location: { id: 0, "name": "Bob's", "cuisine": "Italian", "address": "1234 Broadway" },
                 user: { id: 1, "username": "joe", "name": "Job", "email": "joe@example.com" }
                }
             """);
@@ -82,5 +99,35 @@ class ReviewControllerTest {
         .andExpect(status().isOk())
         .andExpect(jsonPath("*", notNullValue()))
         .andExpect(jsonPath("$", hasSize(2)));
+  }
+
+  @Test
+  void getOneReview() throws Exception {
+    List<String> jsonReviews = new ArrayList<>();
+    jsonReviews.add(
+        """
+               {
+                  "id": 0, "rating": 4, "comment": "Very tasty!",
+                  location: { id: 0, "name": "Bob's", "cuisine": "Italian", "address": "1234 Broadway" },
+                  user: { id: 0, "username": "bob", "name": "Bob", "email": "bob@example.com" }
+               }
+            """);
+    jsonReviews.add(
+        """
+                  {
+                    "id": 1, "rating": 1, "comment": "Terrible service.",
+                    location: { id: 0, "name": "Bob's", "cuisine": "Italian", "address": "1234 Broadway" },
+                    user: { id: 1, "username": "joe", "name": "Job", "email": "joe@example.com" }
+                   }
+                """);
+    List<ReviewEntity> reviews =
+        jsonReviews.stream().map(x -> gson.fromJson(x, ReviewEntity.class)).toList();
+    when(reviewServiceMock.getOne(anyLong())).thenReturn(reviews.get(0));
+
+    Long testReviewId = reviews.get(0).getId();
+    mockMvc
+        .perform(get(REVIEWS_ENDPOINT + testReviewId).contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("*", notNullValue()));
   }
 }
