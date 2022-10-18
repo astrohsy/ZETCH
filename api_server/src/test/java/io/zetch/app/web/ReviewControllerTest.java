@@ -20,6 +20,8 @@ import io.zetch.app.domain.location.LocationDto;
 import io.zetch.app.domain.review.ReviewEntity;
 import io.zetch.app.domain.review.ReviewPostDto;
 import io.zetch.app.service.ReviewService;
+
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -51,34 +53,35 @@ class ReviewControllerTest {
   private MockMvc mockMvc;
   @Autowired private WebApplicationContext context;
   @MockBean private ReviewService reviewServiceMock;
+  private List<String> jsonReviews;
+  private List<ReviewEntity> reviews;
   static Gson gson = new Gson();
 
   @BeforeEach
   void setup() {
     mockMvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
+    jsonReviews = new ArrayList<>();
+    jsonReviews.add(
+        """
+                   {
+                      "id": 0, "rating": 4, "comment": "Very tasty!",
+                      location: { id: 0, "name": "Bob's", "cuisine": "Italian", "address": "1234 Broadway" },
+                      user: { id: 0, "username": "bob", "name": "Bob", "email": "bob@example.com" }
+                   }
+                """);
+    jsonReviews.add(
+        """
+                      {
+                        "id": 1, "rating": 1, "comment": "Terrible service.",
+                        location: { id: 0, "name": "Bob's", "cuisine": "Italian", "address": "1234 Broadway" },
+                        user: { id: 1, "username": "joe", "name": "Job", "email": "joe@example.com" }
+                       }
+                    """);
+    reviews = jsonReviews.stream().map(x -> gson.fromJson(x, ReviewEntity.class)).toList();
   }
 
   @Test
   public void createReview() throws Exception {
-    List<String> jsonReviews = new ArrayList<>();
-    jsonReviews.add(
-        """
-               {
-                  "id": 0, "rating": 4, "comment": "Very tasty!",
-                  location: { id: 0, "name": "Bob's", "cuisine": "Italian", "address": "1234 Broadway" },
-                  user: { id: 0, "username": "bob", "name": "Bob", "email": "bob@example.com" }
-               }
-            """);
-    jsonReviews.add(
-        """
-                  {
-                    "id": 1, "rating": 1, "comment": "Terrible service.",
-                    location: { id: 0, "name": "Bob's", "cuisine": "Italian", "address": "1234 Broadway" },
-                    user: { id: 1, "username": "joe", "name": "Job", "email": "joe@example.com" }
-                   }
-                """);
-    List<ReviewEntity> reviews =
-        jsonReviews.stream().map(x -> gson.fromJson(x, ReviewEntity.class)).toList();
     ReviewEntity r1 = reviews.get(0);
 
     when(reviewServiceMock.createNew(
@@ -111,28 +114,7 @@ class ReviewControllerTest {
 
   @Test
   void getAllReviews() throws Exception {
-    List<String> jsonReviews = new ArrayList<>();
-    jsonReviews.add(
-        """
-           {
-              "id": 0, "rating": 4, "comment": "Very tasty!",
-              location: { id: 0, "name": "Bob's", "cuisine": "Italian", "address": "1234 Broadway" },
-              user: { id: 0, "username": "bob", "name": "Bob", "email": "bob@example.com" }
-           }
-        """);
-    jsonReviews.add(
-        """
-              {
-                "id": 1, "rating": 1, "comment": "Terrible service.",
-                location: { id: 0, "name": "Bob's", "cuisine": "Italian", "address": "1234 Broadway" },
-                user: { id: 1, "username": "joe", "name": "Job", "email": "joe@example.com" }
-               }
-            """);
-
-    List<ReviewEntity> reviews =
-        jsonReviews.stream().map(x -> gson.fromJson(x, ReviewEntity.class)).toList();
     when(reviewServiceMock.getAll()).thenReturn(reviews);
-
     mockMvc
         .perform(get(REVIEWS_ENDPOINT).contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
@@ -142,25 +124,6 @@ class ReviewControllerTest {
 
   @Test
   void getOneReview() throws Exception {
-    List<String> jsonReviews = new ArrayList<>();
-    jsonReviews.add(
-        """
-               {
-                  "id": 0, "rating": 4, "comment": "Very tasty!",
-                  location: { id: 0, "name": "Bob's", "cuisine": "Italian", "address": "1234 Broadway" },
-                  user: { id: 0, "username": "bob", "name": "Bob", "email": "bob@example.com" }
-               }
-            """);
-    jsonReviews.add(
-        """
-                  {
-                    "id": 1, "rating": 1, "comment": "Terrible service.",
-                    location: { id: 0, "name": "Bob's", "cuisine": "Italian", "address": "1234 Broadway" },
-                    user: { id: 1, "username": "joe", "name": "Job", "email": "joe@example.com" }
-                   }
-                """);
-    List<ReviewEntity> reviews =
-        jsonReviews.stream().map(x -> gson.fromJson(x, ReviewEntity.class)).toList();
     when(reviewServiceMock.getOne(anyLong())).thenReturn(reviews.get(0));
 
     Long testReviewId = reviews.get(0).getId();
