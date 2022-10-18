@@ -73,16 +73,22 @@ public class ReviewServiceTest {
     ReviewEntity r = reviewService.createNew("test review", 3, validUserId, validLocationId);
     assertThat(testReview.toString(), is(r.toString()));
 
-    Exception exception =
+    Exception exceptionWhenNoUser =
         assertThrows(
             NoSuchElementException.class,
             () -> {
-              reviewService.createNew("test review", 3, 3L, 1L);
+              reviewService.createNew("test review", 3, 123L, validLocationId);
             });
 
+    Exception exceptionWhenNoLocation =
+            assertThrows(
+                    NoSuchElementException.class,
+                    () -> {
+                      reviewService.createNew("test review", 3, validUserId, 123L );
+                    });
     String expectedMessage = "User or Location is not exist";
-    String actualMessage = exception.getMessage();
 
-    assertTrue(actualMessage.equals(expectedMessage));
+    assertTrue(exceptionWhenNoUser.getMessage().equals(expectedMessage));
+    assertTrue(exceptionWhenNoLocation.getMessage().equals(expectedMessage));
   }
 }
