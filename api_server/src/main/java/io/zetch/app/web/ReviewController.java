@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(path = "/reviews")
 @Tag(name = "Reviews")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*") // NOSONAR
 public class ReviewController {
   ModelMapper modelMapper = new ModelMapper();
   private final ReviewService reviewService;
