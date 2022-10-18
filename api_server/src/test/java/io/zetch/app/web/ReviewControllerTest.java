@@ -20,7 +20,6 @@ import io.zetch.app.domain.review.ReviewEntity;
 import io.zetch.app.domain.review.ReviewPostDto;
 import io.zetch.app.service.ReviewService;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
