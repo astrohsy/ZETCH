@@ -16,7 +16,6 @@ import com.c4_soft.springaddons.security.oauth2.test.annotations.StringClaim;
 import com.c4_soft.springaddons.security.oauth2.test.annotations.WithMockJwtAuth;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
-import io.zetch.app.domain.location.LocationDto;
 import io.zetch.app.domain.review.ReviewEntity;
 import io.zetch.app.domain.review.ReviewPostDto;
 import io.zetch.app.service.ReviewService;
