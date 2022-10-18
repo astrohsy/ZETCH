@@ -22,7 +22,7 @@ jobs:
       - uses: axel-op/googlejavaformat-action@v3
         with:
           commitMessage: "style: formatted by GoogleJavaFormat 🤖!"
-          args: "--replace"
+          args: "--skip-sorting-imports --replace"
 
   build:
     runs-on: ubuntu-latest

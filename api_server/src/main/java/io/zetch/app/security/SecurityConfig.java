@@ -6,7 +6,6 @@ package io.zetch.app.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -29,14 +28,12 @@ public class SecurityConfig {
     http.authorizeRequests(
             authReqCustomizer ->
                 authReqCustomizer
-                    .antMatchers("/private")
-                    .authenticated()
-                    .antMatchers(HttpMethod.PUT, "/users/")
-                    .authenticated()
-                    .antMatchers(HttpMethod.DELETE, "/users/")
-                    .authenticated()
+                    .antMatchers("/swagger-ui/**")
+                    .permitAll()
+                    .antMatchers("/v3/**")
+                    .permitAll()
                     .anyRequest()
-                    .permitAll())
+                    .authenticated())
         .oauth2ResourceServer()
         .jwt();
 
