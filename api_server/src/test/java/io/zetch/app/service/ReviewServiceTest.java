@@ -81,11 +81,11 @@ public class ReviewServiceTest {
             });
 
     Exception exceptionWhenNoLocation =
-            assertThrows(
-                    NoSuchElementException.class,
-                    () -> {
-                      reviewService.createNew("test review", 3, validUserId, 123L );
-                    });
+        assertThrows(
+            NoSuchElementException.class,
+            () -> {
+              reviewService.createNew("test review", 3, validUserId, 123L);
+            });
     String expectedMessage = "User or Location is not exist";
 
     assertTrue(exceptionWhenNoUser.getMessage().equals(expectedMessage));
