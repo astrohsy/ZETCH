@@ -2,6 +2,8 @@ package io.zetch.app.service;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
@@ -12,6 +14,7 @@ import io.zetch.app.repo.LocationRepository;
 import io.zetch.app.repo.ReviewRepository;
 import io.zetch.app.repo.UserRepository;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,7 +27,7 @@ public class ReviewServiceTest {
 
   @Mock private UserRepository userRepositoryMock;
   @Mock private ReviewRepository reviewRepositoryMock;
-  @Mock private LocationRepository restaurantRepositoryMock;
+  @Mock private LocationRepository locationRepositoryMock;
   @InjectMocks private ReviewService reviewService;
   @Mock private ReviewEntity reviewMock;
 
@@ -47,6 +50,9 @@ public class ReviewServiceTest {
 
   @Test
   public void createNew() {
+    Long validUserId = 1L;
+    Long validLocationId = 1L;
+
     UserEntity testUser = UserEntity.builder().username("test").email("helo@hello.com").build();
     LocationEntity testLocation =
         LocationEntity.builder().name("test").address("155 Claremont NY").build();
@@ -57,11 +63,26 @@ public class ReviewServiceTest {
             .user(testUser)
             .location(testLocation)
             .build();
-    when(userRepositoryMock.findById(anyLong())).thenReturn(Optional.of(testUser));
-    when(restaurantRepositoryMock.findById(anyLong())).thenReturn(Optional.of(testLocation));
+    when(userRepositoryMock.findById(anyLong())).thenReturn(Optional.empty());
+    when(userRepositoryMock.findById(eq(validUserId))).thenReturn(Optional.of(testUser));
+    when(locationRepositoryMock.findById(anyLong())).thenReturn(Optional.empty());
+    when(locationRepositoryMock.findById(eq(validLocationId)))
+        .thenReturn(Optional.of(testLocation));
     when(reviewRepositoryMock.save(any(ReviewEntity.class))).thenReturn(testReview);
 
-    ReviewEntity r = reviewService.createNew("test review", 3, 1L, 1L);
+    ReviewEntity r = reviewService.createNew("test review", 3, validUserId, validLocationId);
     assertThat(testReview.toString(), is(r.toString()));
+
+    Exception exception =
+        assertThrows(
+            NoSuchElementException.class,
+            () -> {
+              reviewService.createNew("test review", 3, 3L, 1L);
+            });
+
+    String expectedMessage = "User or Location is not exist";
+    String actualMessage = exception.getMessage();
+
+    assertTrue(actualMessage.equals(expectedMessage));
   }
 }
