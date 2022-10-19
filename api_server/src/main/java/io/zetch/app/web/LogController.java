@@ -23,19 +23,20 @@ import io.zetch.app.repo.LogRepository;
 @CrossOrigin(origins = "*")
 public class LogController {
 
-    private final LogRepository logRepository;
+  private final LogRepository logRepository;
 
-    @Autowired
-    LogController(LogRepository logRepository) {
-      this.logRepository = logRepository;
-    }
+  @Autowired
+  LogController(LogRepository logRepository) {
+    this.logRepository = logRepository;
+  }
 
   /** An example of a route getting a username from the token */
   @GetMapping("/{clientId}")
   @Operation(summary = "Retrieve all logs for a client")
   @SecurityRequirement(name = "OAuth2")
   @PreAuthorize("@securityService.isSelfClient(#token, #clientId)")
-  public List<LogEntity> getAllClientLogs(JwtAuthenticationToken token, @PathVariable String clientId) {
+  public List<LogEntity> getAllClientLogs(
+      JwtAuthenticationToken token, @PathVariable String clientId) {
     return logRepository.findAll();
   }
 }
