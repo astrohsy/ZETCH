@@ -2,6 +2,7 @@
 package io.zetch.app.domain.log;
 
 import io.zetch.app.domain.BaseEntity;
+import java.time.Instant;
 import javax.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,4 +22,6 @@ public class LogEntity extends BaseEntity {
   private String clientId;
   private String username;
   private String request;
+  private String method;
+  private Instant timestamp;
 }

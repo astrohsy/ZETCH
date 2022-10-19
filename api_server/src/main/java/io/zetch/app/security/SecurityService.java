@@ -36,7 +36,7 @@ public class SecurityService {
   /**
    * Return True if the client ID from the provided token is the same client ID that was passed in
    */
-  public boolean isSelfCleint(JwtAuthenticationToken token, String clientId) {
+  public boolean isSelfClient(JwtAuthenticationToken token, String clientId) {
     if (token == null) return false;
     return Objects.equals(getClientIdFromToken(token), clientId);
   }

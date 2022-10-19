@@ -1,7 +1,11 @@
 package io.zetch.app.web;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.zetch.app.domain.log.LogEntity;
+import io.zetch.app.repo.LogRepository;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
@@ -10,12 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import io.zetch.app.domain.log.LogEntity;
-import io.zetch.app.repo.LogRepository;
 
 @RestController
 @RequestMapping(path = "/logs")
@@ -30,13 +28,12 @@ public class LogController {
     this.logRepository = logRepository;
   }
 
-  /** An example of a route getting a username from the token */
   @GetMapping("/{clientId}")
-  @Operation(summary = "Retrieve all logs for a client")
+  @Operation(summary = "Retrieve all logs for the user's client")
   @SecurityRequirement(name = "OAuth2")
   @PreAuthorize("@securityService.isSelfClient(#token, #clientId)")
   public List<LogEntity> getAllClientLogs(
       JwtAuthenticationToken token, @PathVariable String clientId) {
-    return logRepository.findAll();
+    return logRepository.findByClientId(clientId);
   }
 }
