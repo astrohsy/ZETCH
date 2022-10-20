@@ -1,7 +1,6 @@
 package io.zetch.app.interceptor;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.zetch.app.domain.log.LogEntity;
 import io.zetch.app.repo.LogRepository;
