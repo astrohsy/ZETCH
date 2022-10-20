@@ -5,6 +5,10 @@ import java.util.List;
 
 public class SeedLocations {
 
+  private SeedLocations() {
+    throw new IllegalStateException("Utility class");
+  }
+
   private static final LocationEntity LOCATION_1 =
       LocationEntity.builder()
           .name("Maggiano's Pizza")
