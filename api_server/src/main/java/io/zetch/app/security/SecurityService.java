@@ -33,6 +33,14 @@ public class SecurityService {
     return Objects.equals(getUsernameFromToken(token), pathUsername);
   }
 
+  /**
+   * Return True if the client ID from the provided token is the same client ID that was passed in
+   */
+  public boolean isSelfClient(JwtAuthenticationToken token, String clientId) {
+    if (token == null) return false;
+    return Objects.equals(getClientIdFromToken(token), clientId);
+  }
+
   /** Return the UserEntity corresponding to the provided token */
   private UserEntity getUserFromToken(JwtAuthenticationToken token) {
     String username = token.getToken().getClaimAsString("username");
@@ -42,5 +50,10 @@ public class SecurityService {
   /** Return the username from the provided token */
   private String getUsernameFromToken(JwtAuthenticationToken token) {
     return token.getToken().getClaimAsString("username");
+  }
+
+  /** Return the username from the provided token */
+  private String getClientIdFromToken(JwtAuthenticationToken token) {
+    return token.getToken().getClaimAsString("client_id");
   }
 }
