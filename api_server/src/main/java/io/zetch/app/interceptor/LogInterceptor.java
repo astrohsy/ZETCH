@@ -51,7 +51,7 @@ public class LogInterceptor implements HandlerInterceptor {
   }
 
   private Map<String, String> getJWTClaimsFromAuthHeaders(String header)
-      throws JsonProcessingException, JsonMappingException {
+      throws JsonProcessingException {
     // Get auth details from the header
     String[] chunks = header.split("\\.");
     String payload = new String(decoder.decode(chunks[1]));
