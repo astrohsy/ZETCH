@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(path = "/logs")
 @Tag(name = "Logs")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*") // NOSONAR
 public class LogController {
 
   private final LogRepository logRepository;
