@@ -5,6 +5,11 @@ import io.zetch.app.domain.user.UserEntity;
 import java.util.List;
 
 public class SeedUsers {
+
+  private SeedUsers() {
+    throw new IllegalStateException("Utility class");
+  }
+
   private static final UserEntity USER_1 =
       UserEntity.builder()
           .username("admin")
