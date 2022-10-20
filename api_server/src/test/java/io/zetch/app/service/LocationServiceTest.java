@@ -3,6 +3,7 @@ package io.zetch.app.service;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -24,7 +25,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class LocationServiceTest {
 
-  private static final Long ID = 1L;
   private static final String NAME = "Bob's";
   private static final String NAME_2 = "Sally's";
   private static final String USER_NAME = "Bob";
@@ -128,8 +128,25 @@ class LocationServiceTest {
 
   @Test
   void assignOwner() {
-    when(locationRepositoryMock.findByName(NAME)).thenReturn(Optional.of(locationMock));
-    when(userRepositoryMock.findByUsername(USER_NAME)).thenReturn(Optional.of(userMock));
+
+    LocationEntity location =
+      LocationEntity.builder()
+          .owners(new ArrayList<>())
+          .name(NAME)
+          .build();
+
+    UserEntity user =
+      UserEntity.builder()
+        .ownedLocations(new ArrayList<>())
+        .username("user")
+        .build();
+
+    when(locationRepositoryMock.findByName(NAME)).thenReturn(Optional.of(location));
+    when(userRepositoryMock.findByUsername(USER_NAME)).thenReturn(Optional.of(user));
+
     locationService.assignOwner(NAME, USER_NAME);
+
+    assertThat(location.getOwners().get(0), is(user));
+    assertThat(user.getOwnedLocations().get(0), is(location));
   }
 }
