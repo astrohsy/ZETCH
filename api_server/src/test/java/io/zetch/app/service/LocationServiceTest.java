@@ -3,7 +3,6 @@ package io.zetch.app.service;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -129,17 +128,10 @@ class LocationServiceTest {
   @Test
   void assignOwner() {
 
-    LocationEntity location =
-      LocationEntity.builder()
-          .owners(new ArrayList<>())
-          .name(NAME)
-          .build();
+    LocationEntity location = LocationEntity.builder().owners(new ArrayList<>()).name(NAME).build();
 
     UserEntity user =
-      UserEntity.builder()
-        .ownedLocations(new ArrayList<>())
-        .username("user")
-        .build();
+        UserEntity.builder().ownedLocations(new ArrayList<>()).username("user").build();
 
     when(locationRepositoryMock.findByName(NAME)).thenReturn(Optional.of(location));
     when(userRepositoryMock.findByUsername(USER_NAME)).thenReturn(Optional.of(user));
