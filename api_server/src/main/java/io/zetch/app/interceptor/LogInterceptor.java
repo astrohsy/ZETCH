@@ -1,5 +1,7 @@
 package io.zetch.app.interceptor;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.zetch.app.domain.log.LogEntity;
 import io.zetch.app.repo.LogRepository;
@@ -48,7 +50,7 @@ public class LogInterceptor implements HandlerInterceptor {
     }
   }
 
-  private Map<String, String> getJWTClaimsFromAuthHeaders(String header) throws Exception {
+  private Map<String, String> getJWTClaimsFromAuthHeaders(String header) throws JsonProcessingException, JsonMappingException {
     // Get auth details from the header
     String[] chunks = header.split("\\.");
     String payload = new String(decoder.decode(chunks[1]));
