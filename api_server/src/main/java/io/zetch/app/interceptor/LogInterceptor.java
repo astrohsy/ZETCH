@@ -8,7 +8,6 @@ import java.util.Base64;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.lang.Nullable;
@@ -26,8 +25,8 @@ public class LogInterceptor implements HandlerInterceptor {
   @Override
   public void postHandle(
       HttpServletRequest request,
-      @NonNull HttpServletResponse response,
-      @NonNull Object handler,
+      HttpServletResponse response,
+      Object handler,
       @Nullable ModelAndView modelAndView)
       throws Exception {
     String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
@@ -39,10 +38,7 @@ public class LogInterceptor implements HandlerInterceptor {
       String method = request.getMethod();
 
       // Get auth details from the header
-      String[] chunks = authHeader.split("\\.");
-      String payload = new String(decoder.decode(chunks[1]));
-      @SuppressWarnings("unchecked")
-      Map<String, String> claims = mapper.readValue(payload, Map.class);
+      Map<String, String> claims = getJWTClaimsFromAuthHeaders(authHeader);
 
       String username = claims.get("username");
       String clientId = claims.get("client_id");
@@ -50,5 +46,15 @@ public class LogInterceptor implements HandlerInterceptor {
 
       logRepository.save(new LogEntity(clientId, username, requestURI, method, timestamp));
     }
+  }
+
+  private Map<String, String> getJWTClaimsFromAuthHeaders(String header) throws Exception {
+    // Get auth details from the header
+    String[] chunks = header.split("\\.");
+    String payload = new String(decoder.decode(chunks[1]));
+    @SuppressWarnings("unchecked")
+    Map<String, String> claims = mapper.readValue(payload, Map.class);
+
+    return claims;
   }
 }
