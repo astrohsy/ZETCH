@@ -11,18 +11,15 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 
-/** Configures our application with Spring Security to restrict access to our API endpoints. */
+/** Spring Security configuration to restrict access to our API endpoints. */
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
+  /** Returns a filter chain with security rules applied. */
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    /*
-    This is where we configure the security required for our endpoints and set up our app to serve as
-    an OAuth2 Resource Server, using JWT validation.
-    */
     http.cors().and().csrf().disable(); // NOSONAR not used in secure contexts
 
     http.authorizeRequests(

@@ -23,9 +23,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
                 @OAuthFlow(
                     authorizationUrl = "${cognito.auth-url}",
                     tokenUrl = "${cognito.token-url}")))
-class Application {
-
+class ZetchApplication {
   public static void main(String[] args) {
-    SpringApplication.run(Application.class, args);
+    SpringApplication.run(ZetchApplication.class, args);
   }
 }
