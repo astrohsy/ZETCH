@@ -1,7 +1,3 @@
-/**
- * This code is mostly from the Auth0 documentation with modifications for Amazon Cognito:
- * https://auth0.com/docs/quickstart/backend/java-spring-security5/interactive
- */
 package io.zetch.app.security;
 
 import org.springframework.context.annotation.Bean;
@@ -11,7 +7,11 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 
-/** Spring Security configuration to restrict access to our API endpoints. */
+/**
+ * Spring Security configuration to restrict access to our API endpoints. This code is mostly from
+ * the Auth0 documentation with modifications for Amazon Cognito: <a
+ * href="https://auth0.com/docs/quickstart/backend/java-spring-security5/interactive"></a>
+ */
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
