@@ -62,7 +62,7 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
       - name: Generate CheckStyles Report
         working-directory: ./${{ env.API_SERVER_PROJECT }}
-        run: mvn checkstyle:checkstyle-aggregate
+        run: mvn checkstyle:check
       - name: Build and analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
