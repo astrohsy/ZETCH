@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/** Controller for the log endpoints. */
 @RestController
 @RequestMapping(path = "/logs")
 @Tag(name = "Logs")

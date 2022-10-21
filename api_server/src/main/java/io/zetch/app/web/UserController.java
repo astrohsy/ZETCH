@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+/** Controller for the user endpoints. */
 @RestController
 @RequestMapping(path = "/users")
 @Tag(name = "Users")
@@ -49,20 +50,17 @@ public class UserController {
   @Operation(summary = "Create a new user")
   @SecurityRequirement(name = "OAuth2")
   @ResponseBody
-  UserDto addNewUser(@RequestBody UserDto newUserDto, JwtAuthenticationToken token) {
+  UserDto addNewUser(@RequestBody UserDto newUserDto) {
     return userService
         .createNew(
-            newUserDto.getUsername(),
-            newUserDto.getName(),
-            newUserDto.getEmail(),
-            newUserDto.getAffiliation())
+            newUserDto.username(), newUserDto.name(), newUserDto.email(), newUserDto.affiliation())
         .toDto();
   }
 
   @GetMapping("/{username}")
   @Operation(summary = "Retrieve a single user")
   @SecurityRequirement(name = "OAuth2")
-  UserDto getOneUser(@PathVariable String username, JwtAuthenticationToken token) {
+  UserDto getOneUser(@PathVariable String username) {
     return userService.getOne(username).toDto();
   }
 
@@ -75,7 +73,7 @@ public class UserController {
       @PathVariable String username,
       JwtAuthenticationToken token) {
     return userService
-        .update(username, newUserDto.getName(), newUserDto.getEmail(), newUserDto.getAffiliation())
+        .update(username, newUserDto.name(), newUserDto.email(), newUserDto.affiliation())
         .toDto();
   }
 
@@ -88,7 +86,7 @@ public class UserController {
   }
 
   /**
-   * Return 404 Not Found if NoSuchElementException is thrown in this Controller
+   * Returns 404 Not Found if NoSuchElementException is thrown in this Controller.
    *
    * @param ex Exception
    * @return Error message string
@@ -100,7 +98,7 @@ public class UserController {
   }
 
   /**
-   * Return 400 Bad Request if IllegalArgumentException is thrown in this Controller
+   * Returns 400 Bad Request if IllegalArgumentException is thrown in this Controller.
    *
    * @param ex Exception
    * @return Error message string

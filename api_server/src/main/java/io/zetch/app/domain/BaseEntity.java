@@ -6,6 +6,7 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import lombok.Getter;
 
+/** Base Entity providing common attributes/functionality for all subclass entities. */
 @MappedSuperclass
 @Getter
 public abstract class BaseEntity {
@@ -14,8 +15,12 @@ public abstract class BaseEntity {
 
   @Override
   public boolean equals(Object o) {
-    if (o == null) return false;
-    if (this == o) return true;
+    if (o == null) {
+      return false;
+    }
+    if (this == o) {
+      return true;
+    }
 
     if (o instanceof BaseEntity that) {
       return this.id != null && Objects.equals(this.id, that.id);
