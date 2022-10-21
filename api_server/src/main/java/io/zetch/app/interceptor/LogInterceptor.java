@@ -17,8 +17,8 @@ import org.springframework.web.servlet.ModelAndView;
 /** Spring interceptor for logging each API request. */
 public class LogInterceptor implements HandlerInterceptor {
 
-  Base64.Decoder decoder = Base64.getUrlDecoder();
-  ObjectMapper mapper = new ObjectMapper();
+  final Base64.Decoder decoder = Base64.getUrlDecoder();
+  final ObjectMapper mapper = new ObjectMapper();
 
   @Autowired LogRepository logRepository;
 

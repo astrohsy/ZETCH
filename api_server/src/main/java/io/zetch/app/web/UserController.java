@@ -53,10 +53,7 @@ public class UserController {
   UserDto addNewUser(@RequestBody UserDto newUserDto) {
     return userService
         .createNew(
-            newUserDto.getUsername(),
-            newUserDto.getName(),
-            newUserDto.getEmail(),
-            newUserDto.getAffiliation())
+            newUserDto.username(), newUserDto.name(), newUserDto.email(), newUserDto.affiliation())
         .toDto();
   }
 
@@ -76,7 +73,7 @@ public class UserController {
       @PathVariable String username,
       JwtAuthenticationToken token) {
     return userService
-        .update(username, newUserDto.getName(), newUserDto.getEmail(), newUserDto.getAffiliation())
+        .update(username, newUserDto.name(), newUserDto.email(), newUserDto.affiliation())
         .toDto();
   }
 
