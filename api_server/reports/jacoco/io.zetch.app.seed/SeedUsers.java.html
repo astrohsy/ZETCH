@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SeedUsers.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Zetch Reviews App</a> &gt; <a href="index.source.html" class="el_package">io.zetch.app.seed</a> &gt; <span class="el_source">SeedUsers.java</span></div><h1>SeedUsers.java</h1><pre class="source lang-java linenums">package io.zetch.app.seed;
+
+import io.zetch.app.domain.user.Affiliation;
+import io.zetch.app.domain.user.UserEntity;
+import java.util.List;
+
+<span class="nc" id="L7">public class SeedUsers {</span>
+  private static final UserEntity USER_1 =
+<span class="fc" id="L9">      UserEntity.builder()</span>
+<span class="fc" id="L10">          .username(&quot;admin&quot;)</span>
+<span class="fc" id="L11">          .affiliation(Affiliation.ADMIN)</span>
+<span class="fc" id="L12">          .displayName(&quot;Admin.&quot;)</span>
+<span class="fc" id="L13">          .email(&quot;admin@zetch.io&quot;)</span>
+<span class="fc" id="L14">          .build();</span>
+  private static final UserEntity USER_2 =
+<span class="fc" id="L16">      UserEntity.builder()</span>
+<span class="fc" id="L17">          .username(&quot;bob&quot;)</span>
+<span class="fc" id="L18">          .affiliation(Affiliation.STUDENT)</span>
+<span class="fc" id="L19">          .displayName(&quot;Bob R.&quot;)</span>
+<span class="fc" id="L20">          .email(&quot;bob@me.com&quot;)</span>
+<span class="fc" id="L21">          .build();</span>
+  private static final UserEntity USER_3 =
+<span class="fc" id="L23">      UserEntity.builder()</span>
+<span class="fc" id="L24">          .username(&quot;cat&quot;)</span>
+<span class="fc" id="L25">          .affiliation(Affiliation.STUDENT)</span>
+<span class="fc" id="L26">          .displayName(&quot;Kat F.&quot;)</span>
+<span class="fc" id="L27">          .email(&quot;kat@kat.com&quot;)</span>
+<span class="fc" id="L28">          .build();</span>
+  private static final UserEntity USER_4 =
+<span class="fc" id="L30">      UserEntity.builder()</span>
+<span class="fc" id="L31">          .username(&quot;amy&quot;)</span>
+<span class="fc" id="L32">          .affiliation(Affiliation.FACULTY)</span>
+<span class="fc" id="L33">          .displayName(&quot;Amy T.&quot;)</span>
+<span class="fc" id="L34">          .email(&quot;amy@dog.com&quot;)</span>
+<span class="fc" id="L35">          .build();</span>
+  private static final UserEntity USER_5 =
+<span class="fc" id="L37">      UserEntity.builder()</span>
+<span class="fc" id="L38">          .username(&quot;sam&quot;)</span>
+<span class="fc" id="L39">          .affiliation(Affiliation.OTHER)</span>
+<span class="fc" id="L40">          .displayName(&quot;Sam 2.&quot;)</span>
+<span class="fc" id="L41">          .email(&quot;sam@from.com&quot;)</span>
+<span class="fc" id="L42">          .build();</span>
+
+<span class="fc" id="L44">  public static final List&lt;UserEntity&gt; USERS = List.of(USER_1, USER_2, USER_3, USER_4, USER_5);</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

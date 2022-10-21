@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CognitoService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Zetch Reviews App</a> &gt; <a href="index.source.html" class="el_package">io.zetch.app.security</a> &gt; <span class="el_source">CognitoService.java</span></div><h1>CognitoService.java</h1><pre class="source lang-java linenums">package io.zetch.app.security;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
+import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.cognitoidentityprovider.CognitoIdentityProviderClient;
+import software.amazon.awssdk.services.cognitoidentityprovider.model.AdminDeleteUserRequest;
+import software.amazon.awssdk.services.cognitoidentityprovider.model.CognitoIdentityProviderException;
+import software.amazon.awssdk.services.cognitoidentityprovider.model.SignUpRequest;
+import software.amazon.awssdk.services.cognitoidentityprovider.model.UsernameExistsException;
+
+@Service
+public class CognitoService {
+  private final CognitoIdentityProviderClient cognito;
+  private final String clientId;
+  private final String userPoolId;
+<span class="fc" id="L22">  private final Logger logger = LoggerFactory.getLogger(CognitoService.class);</span>
+
+  @Autowired
+  public CognitoService(
+      @Value(&quot;${cognito.access-key-id}&quot;) String accessKey,
+      @Value(&quot;${cognito.secret-key}&quot;) String secretKey,
+      @Value(&quot;${cognito.client-id}&quot;) String clientId,
+<span class="fc" id="L29">      @Value(&quot;${cognito.user-pool-id}&quot;) String userPoolId) {</span>
+
+<span class="fc" id="L31">    this.clientId = clientId;</span>
+<span class="fc" id="L32">    this.userPoolId = userPoolId;</span>
+
+<span class="fc" id="L34">    AwsBasicCredentials awsCreds = AwsBasicCredentials.create(accessKey, secretKey);</span>
+<span class="fc" id="L35">    this.cognito =</span>
+<span class="fc" id="L36">        CognitoIdentityProviderClient.builder()</span>
+<span class="fc" id="L37">            .region(Region.US_EAST_1)</span>
+<span class="fc" id="L38">            .credentialsProvider(StaticCredentialsProvider.create(awsCreds))</span>
+<span class="fc" id="L39">            .build();</span>
+<span class="fc" id="L40">  }</span>
+
+  /**
+   * Sign up a new user in Cognito. Every user will share the same simple password for now.
+   *
+   * @param username User's username
+   */
+  public void signUp(String username) {
+    SignUpRequest signUpRequest =
+<span class="nc" id="L49">        SignUpRequest.builder().username(username).password(&quot;123456&quot;).clientId(clientId).build();</span>
+
+    try {
+<span class="nc" id="L52">      cognito.signUp(signUpRequest);</span>
+<span class="nc" id="L53">    } catch (UsernameExistsException e) {</span>
+      // Ignore this exception for now. Since we may not have data persistence during dev, we might
+      // create multiple users with the same username.
+<span class="nc" id="L56">      logger.warn(&quot;Username already exists in Cognito. Ignoring.&quot;);</span>
+<span class="nc" id="L57">    } catch (CognitoIdentityProviderException e) {</span>
+<span class="nc" id="L58">      logger.error(String.format(&quot;Cognito failed: %s&quot;, e.getMessage()));</span>
+<span class="nc" id="L59">    }</span>
+<span class="nc" id="L60">  }</span>
+
+  /**
+   * Delete a user from Cognito.
+   *
+   * @param username User's username
+   */
+  public void delete(String username) {
+    AdminDeleteUserRequest deleteRequest =
+<span class="nc" id="L69">        AdminDeleteUserRequest.builder().username(username).userPoolId(userPoolId).build();</span>
+
+    try {
+<span class="nc" id="L72">      cognito.adminDeleteUser(deleteRequest);</span>
+<span class="nc" id="L73">    } catch (CognitoIdentityProviderException e) {</span>
+<span class="nc" id="L74">      logger.error(String.format(&quot;Cognito failed: %s&quot;, e.getMessage()));</span>
+<span class="nc" id="L75">    }</span>
+<span class="nc" id="L76">  }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
