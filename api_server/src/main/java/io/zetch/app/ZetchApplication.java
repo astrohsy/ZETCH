@@ -24,7 +24,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
                     authorizationUrl = "${cognito.auth-url}",
                     tokenUrl = "${cognito.token-url}")))
 class Application {
-
   public static void main(String[] args) {
     SpringApplication.run(Application.class, args);
   }

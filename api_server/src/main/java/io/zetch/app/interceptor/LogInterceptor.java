@@ -14,10 +14,11 @@ import org.springframework.lang.Nullable;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
+/** Spring interceptor for logging each API request. */
 public class LogInterceptor implements HandlerInterceptor {
 
-  Base64.Decoder decoder = Base64.getUrlDecoder();
-  ObjectMapper mapper = new ObjectMapper();
+  final Base64.Decoder decoder = Base64.getUrlDecoder();
+  final ObjectMapper mapper = new ObjectMapper();
 
   @Autowired LogRepository logRepository;
 
@@ -34,21 +35,21 @@ public class LogInterceptor implements HandlerInterceptor {
     // Only log requests that are authenticated
     // (and hence contain a token with client id in the header)
     if (authHeader != null) {
-      String requestURI = request.getRequestURI();
+      String requestUri = request.getRequestURI();
       String method = request.getMethod();
 
       // Get auth details from the header
-      Map<String, String> claims = getJWTClaimsFromAuthHeaders(authHeader);
+      Map<String, String> claims = getJwtClaimsFromAuthHeaders(authHeader);
 
       String username = claims.get("username");
       String clientId = claims.get("client_id");
       Instant timestamp = Instant.now();
 
-      logRepository.save(new LogEntity(clientId, username, requestURI, method, timestamp));
+      logRepository.save(new LogEntity(clientId, username, requestUri, method, timestamp));
     }
   }
 
-  private Map<String, String> getJWTClaimsFromAuthHeaders(String header) throws Exception {
+  private Map<String, String> getJwtClaimsFromAuthHeaders(String header) throws Exception {
     // Get auth details from the header
     String[] chunks = header.split("\\.");
     String payload = new String(decoder.decode(chunks[1]));

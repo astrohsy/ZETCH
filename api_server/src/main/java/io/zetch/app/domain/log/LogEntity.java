@@ -1,4 +1,3 @@
-/** Log entity definition */
 package io.zetch.app.domain.log;
 
 import io.zetch.app.domain.BaseEntity;
@@ -11,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+/** Log entity definition. */
 @Getter
 @Setter
 @ToString
