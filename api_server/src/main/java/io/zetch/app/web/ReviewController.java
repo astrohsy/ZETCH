@@ -32,19 +32,15 @@ public class ReviewController {
   @PostMapping(path = "/")
   @Operation(summary = "Create a new review")
   @ResponseBody
-  ReviewGetDto addNewUser(@RequestBody ReviewPostDto newReviewDto) {
+  ReviewGetDto addNewUser(@RequestBody ReviewPostDto newReviewDto) throws JsonProcessingException {
     ReviewEntity r =
         reviewService.createNew(
             newReviewDto.getComment(),
             newReviewDto.getRating(),
             newReviewDto.getUserId(),
             newReviewDto.getLocationId());
-    try {
-      String serialized = mapper.writeValueAsString(r);
-      return mapper.readValue(serialized, ReviewGetDto.class);
-    } catch (JsonProcessingException e) {
-      throw new RuntimeException(JSON_PARSE_ERROR_MSG);
-    }
+    String serialized = mapper.writeValueAsString(r);
+    return mapper.readValue(serialized, ReviewGetDto.class);
   }
 
   /**
@@ -53,16 +49,12 @@ public class ReviewController {
   @GetMapping(path = "/")
   @Operation(summary = "Retrieve all reviews")
   @ResponseBody
-  Iterable<ReviewGetDto> getAllReviews() {
-    try {
-      var result = new ArrayList<ReviewGetDto>();
-      for (var x : reviewService.getAll().stream().toList()) {
-        result.add(mapper.readValue(mapper.writeValueAsString(x), ReviewGetDto.class));
-      }
-      return result;
-    } catch (JsonProcessingException e) {
-      throw new RuntimeException(JSON_PARSE_ERROR_MSG);
+  Iterable<ReviewGetDto> getAllReviews() throws JsonProcessingException {
+    var result = new ArrayList<ReviewGetDto>();
+    for (var x : reviewService.getAll().stream().toList()) {
+      result.add(mapper.readValue(mapper.writeValueAsString(x), ReviewGetDto.class));
     }
+    return result;
   }
 
   /**
@@ -71,13 +63,9 @@ public class ReviewController {
    */
   @GetMapping("/{reviewId}")
   @Operation(summary = "Retrieve a single restaurant")
-  ReviewGetDto getOneReview(@PathVariable Long reviewId) {
+  ReviewGetDto getOneReview(@PathVariable Long reviewId) throws JsonProcessingException {
     ReviewEntity review = reviewService.getOne(reviewId);
-    try {
-      String serialized = mapper.writeValueAsString(review);
-      return mapper.readValue(serialized, ReviewGetDto.class);
-    } catch (JsonProcessingException e) {
-      throw new RuntimeException(JSON_PARSE_ERROR_MSG);
-    }
+    String serialized = mapper.writeValueAsString(review);
+    return mapper.readValue(serialized, ReviewGetDto.class);
   }
 }
