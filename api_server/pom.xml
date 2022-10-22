@@ -8,6 +8,7 @@
       <plugin>
         <artifactId>spring-boot-maven-plugin</artifactId>
         <groupId>org.springframework.boot</groupId>
+        <version>2.7.4</version>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -77,18 +78,22 @@
     <dependency>
       <artifactId>spring-boot-starter-web</artifactId>
       <groupId>org.springframework.boot</groupId>
+      <version>2.7.4</version>
     </dependency>
     <dependency>
       <artifactId>spring-boot-starter-data-jpa</artifactId>
       <groupId>org.springframework.boot</groupId>
+      <version>2.7.4</version>
     </dependency>
     <dependency>
       <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
       <groupId>org.springframework.boot</groupId>
+      <version>2.7.4</version>
     </dependency>
     <dependency>
       <artifactId>spring-boot-starter-security</artifactId>
       <groupId>org.springframework.boot</groupId>
+      <version>2.7.4</version>
     </dependency>
     <dependency>
       <artifactId>cognitoidentityprovider</artifactId>
@@ -135,7 +140,13 @@
     <dependency>
       <artifactId>modelmapper</artifactId>
       <groupId>org.modelmapper</groupId>
-      <version>2.3.5</version>
+      <version>3.1.0</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <version>2.9.1</version>
+      <scope>compile</scope>
     </dependency>
   </dependencies>
   <dependencyManagement>
