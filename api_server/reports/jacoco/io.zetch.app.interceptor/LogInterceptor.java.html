@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LogInterceptor.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Zetch Reviews App</a> &gt; <a href="index.source.html" class="el_package">io.zetch.app.interceptor</a> &gt; <span class="el_source">LogInterceptor.java</span></div><h1>LogInterceptor.java</h1><pre class="source lang-java linenums">package io.zetch.app.interceptor;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.zetch.app.domain.log.LogEntity;
+import io.zetch.app.repo.LogRepository;
+import java.time.Instant;
+import java.util.Base64;
+import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.lang.Nullable;
+import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.ModelAndView;
+
+/** Spring interceptor for logging each API request. */
+<span class="fc" id="L18">public class LogInterceptor implements HandlerInterceptor {</span>
+
+<span class="fc" id="L20">  final Base64.Decoder decoder = Base64.getUrlDecoder();</span>
+<span class="fc" id="L21">  final ObjectMapper mapper = new ObjectMapper();</span>
+
+  @Autowired LogRepository logRepository;
+
+  // Using `postHandle` to avoid logging requests that were deemed unauthorized by `@PreAuthorize`
+  @Override
+  public void postHandle(
+      HttpServletRequest request,
+      HttpServletResponse response,
+      Object handler,
+      @Nullable ModelAndView modelAndView)
+      throws Exception {
+<span class="fc" id="L33">    String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);</span>
+
+    // Only log requests that are authenticated
+    // (and hence contain a token with client id in the header)
+<span class="fc bfc" id="L37" title="All 2 branches covered.">    if (authHeader != null) {</span>
+<span class="fc" id="L38">      String requestUri = request.getRequestURI();</span>
+<span class="fc" id="L39">      String method = request.getMethod();</span>
+
+      // Get auth details from the header
+<span class="fc" id="L42">      Map&lt;String, String&gt; claims = getJwtClaimsFromAuthHeaders(authHeader);</span>
+
+<span class="fc" id="L44">      String username = claims.get(&quot;username&quot;);</span>
+<span class="fc" id="L45">      String clientId = claims.get(&quot;client_id&quot;);</span>
+<span class="fc" id="L46">      Instant timestamp = Instant.now();</span>
+
+<span class="fc" id="L48">      logRepository.save(new LogEntity(clientId, username, requestUri, method, timestamp));</span>
+    }
+<span class="fc" id="L50">  }</span>
+
+  private Map&lt;String, String&gt; getJwtClaimsFromAuthHeaders(String header) throws Exception {
+    // Get auth details from the header
+<span class="fc" id="L54">    String[] chunks = header.split(&quot;\\.&quot;);</span>
+<span class="fc" id="L55">    String payload = new String(decoder.decode(chunks[1]));</span>
+    @SuppressWarnings(&quot;unchecked&quot;)
+<span class="fc" id="L57">    Map&lt;String, String&gt; claims = mapper.readValue(payload, Map.class);</span>
+
+<span class="fc" id="L59">    return claims;</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
