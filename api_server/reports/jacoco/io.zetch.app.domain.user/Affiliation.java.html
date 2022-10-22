@@ -2,26 +2,34 @@
 
 import lombok.AllArgsConstructor;
 
-<span class="fc" id="L5">@AllArgsConstructor</span>
+/** Enum for all possible user affiliations. */
+<span class="fc" id="L6">@AllArgsConstructor</span>
 public enum Affiliation {
-<span class="fc" id="L7">  STUDENT(&quot;student&quot;),</span>
-<span class="fc" id="L8">  FACULTY(&quot;faculty&quot;),</span>
-<span class="fc" id="L9">  OTHER(&quot;other&quot;),</span>
-<span class="fc" id="L10">  ADMIN(&quot;admin&quot;);</span>
+<span class="fc" id="L8">  STUDENT(&quot;student&quot;),</span>
+<span class="fc" id="L9">  FACULTY(&quot;faculty&quot;),</span>
+<span class="fc" id="L10">  OTHER(&quot;other&quot;),</span>
+<span class="fc" id="L11">  ADMIN(&quot;admin&quot;);</span>
 
   private final String text;
 
+  /**
+   * Returns an `Affiliation` type from a string.
+   *
+   * @throws IllegalArgumentException If value doesn't match affiliation
+   */
   public static Affiliation fromString(String value) {
-<span class="fc bfc" id="L15" title="All 2 branches covered.">    for (Affiliation v : values()) {</span>
-<span class="fc bfc" id="L16" title="All 2 branches covered.">      if (v.toString().equalsIgnoreCase(value)) return v;</span>
+<span class="fc bfc" id="L21" title="All 2 branches covered.">    for (Affiliation v : values()) {</span>
+<span class="fc bfc" id="L22" title="All 2 branches covered.">      if (v.toString().equalsIgnoreCase(value)) {</span>
+<span class="fc" id="L23">        return v;</span>
+      }
     }
 
-<span class="fc" id="L19">    throw new IllegalArgumentException(&quot;Invalid affiliation: &quot; + value);</span>
+<span class="fc" id="L27">    throw new IllegalArgumentException(&quot;Invalid affiliation: &quot; + value);</span>
   }
 
   @Override
   public String toString() {
-<span class="fc" id="L24">    return text;</span>
+<span class="fc" id="L32">    return text;</span>
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

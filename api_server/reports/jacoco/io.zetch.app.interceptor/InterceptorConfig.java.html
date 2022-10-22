@@ -5,16 +5,17 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+/** Configuration for adding interceptors to Spring. */
 @Configuration
-<span class="fc" id="L9">public class InterceptorConfig implements WebMvcConfigurer {</span>
+<span class="fc" id="L10">public class InterceptorConfig implements WebMvcConfigurer {</span>
 
   @Bean
   public LogInterceptor logInterceptor() {
-<span class="fc" id="L13">    return new LogInterceptor();</span>
+<span class="fc" id="L14">    return new LogInterceptor();</span>
   }
 
   public void addInterceptors(InterceptorRegistry registry) {
-<span class="fc" id="L17">    registry.addInterceptor(logInterceptor()).addPathPatterns(&quot;/**&quot;);</span>
-<span class="fc" id="L18">  }</span>
+<span class="fc" id="L18">    registry.addInterceptor(logInterceptor()).addPathPatterns(&quot;/**&quot;);</span>
+<span class="fc" id="L19">  }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

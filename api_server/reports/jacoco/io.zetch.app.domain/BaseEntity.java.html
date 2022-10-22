@@ -6,26 +6,31 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import lombok.Getter;
 
+/** Base Entity providing common attributes/functionality for all subclass entities. */
 @MappedSuperclass
 @Getter
-<span class="fc" id="L11">public abstract class BaseEntity {</span>
+<span class="fc" id="L12">public abstract class BaseEntity {</span>
 
   @Id @GeneratedValue private Long id;
 
   @Override
   public boolean equals(Object o) {
-<span class="fc bfc" id="L17" title="All 2 branches covered.">    if (o == null) return false;</span>
-<span class="fc bfc" id="L18" title="All 2 branches covered.">    if (this == o) return true;</span>
-
-<span class="fc bfc" id="L20" title="All 2 branches covered.">    if (o instanceof BaseEntity that) {</span>
-<span class="pc bpc" id="L21" title="3 of 4 branches missed.">      return this.id != null &amp;&amp; Objects.equals(this.id, that.id);</span>
+<span class="fc bfc" id="L18" title="All 2 branches covered.">    if (o == null) {</span>
+<span class="fc" id="L19">      return false;</span>
     }
-<span class="fc" id="L23">    return false;</span>
+<span class="fc bfc" id="L21" title="All 2 branches covered.">    if (this == o) {</span>
+<span class="fc" id="L22">      return true;</span>
+    }
+
+<span class="fc bfc" id="L25" title="All 2 branches covered.">    if (o instanceof BaseEntity that) {</span>
+<span class="pc bpc" id="L26" title="3 of 4 branches missed.">      return this.id != null &amp;&amp; Objects.equals(this.id, that.id);</span>
+    }
+<span class="fc" id="L28">    return false;</span>
   }
 
   @Override
   public int hashCode() {
-<span class="nc" id="L28">    return getClass().hashCode();</span>
+<span class="nc" id="L33">    return getClass().hashCode();</span>
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

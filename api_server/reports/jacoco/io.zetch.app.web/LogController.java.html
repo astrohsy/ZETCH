@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/** Controller for the log endpoints. */
 @RestController
 @RequestMapping(path = &quot;/logs&quot;)
 @Tag(name = &quot;Logs&quot;)
@@ -24,9 +25,9 @@ public class LogController {
   private final LogRepository logRepository;
 
   @Autowired
-<span class="fc" id="L27">  LogController(LogRepository logRepository) {</span>
-<span class="fc" id="L28">    this.logRepository = logRepository;</span>
-<span class="fc" id="L29">  }</span>
+<span class="fc" id="L28">  LogController(LogRepository logRepository) {</span>
+<span class="fc" id="L29">    this.logRepository = logRepository;</span>
+<span class="fc" id="L30">  }</span>
 
   @GetMapping(&quot;/{clientId}&quot;)
   @Operation(summary = &quot;Retrieve all logs for the user's client&quot;)
@@ -34,7 +35,7 @@ public class LogController {
   @PreAuthorize(&quot;@securityService.isSelfClient(#token, #clientId)&quot;)
   public List&lt;LogEntity&gt; getAllClientLogs(
       JwtAuthenticationToken token, @PathVariable String clientId) {
-<span class="fc" id="L37">    return logRepository.findByClientId(clientId);</span>
+<span class="fc" id="L38">    return logRepository.findByClientId(clientId);</span>
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

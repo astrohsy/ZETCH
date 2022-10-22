@@ -14,10 +14,11 @@ import org.springframework.lang.Nullable;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
-<span class="fc" id="L17">public class LogInterceptor implements HandlerInterceptor {</span>
+/** Spring interceptor for logging each API request. */
+<span class="fc" id="L18">public class LogInterceptor implements HandlerInterceptor {</span>
 
-<span class="fc" id="L19">  Base64.Decoder decoder = Base64.getUrlDecoder();</span>
-<span class="fc" id="L20">  ObjectMapper mapper = new ObjectMapper();</span>
+<span class="fc" id="L20">  final Base64.Decoder decoder = Base64.getUrlDecoder();</span>
+<span class="fc" id="L21">  final ObjectMapper mapper = new ObjectMapper();</span>
 
   @Autowired LogRepository logRepository;
 
@@ -29,33 +30,33 @@ import org.springframework.web.servlet.ModelAndView;
       Object handler,
       @Nullable ModelAndView modelAndView)
       throws Exception {
-<span class="fc" id="L32">    String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);</span>
+<span class="fc" id="L33">    String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);</span>
 
     // Only log requests that are authenticated
     // (and hence contain a token with client id in the header)
-<span class="fc bfc" id="L36" title="All 2 branches covered.">    if (authHeader != null) {</span>
-<span class="fc" id="L37">      String requestURI = request.getRequestURI();</span>
-<span class="fc" id="L38">      String method = request.getMethod();</span>
+<span class="fc bfc" id="L37" title="All 2 branches covered.">    if (authHeader != null) {</span>
+<span class="fc" id="L38">      String requestUri = request.getRequestURI();</span>
+<span class="fc" id="L39">      String method = request.getMethod();</span>
 
       // Get auth details from the header
-<span class="fc" id="L41">      Map&lt;String, String&gt; claims = getJWTClaimsFromAuthHeaders(authHeader);</span>
+<span class="fc" id="L42">      Map&lt;String, String&gt; claims = getJwtClaimsFromAuthHeaders(authHeader);</span>
 
-<span class="fc" id="L43">      String username = claims.get(&quot;username&quot;);</span>
-<span class="fc" id="L44">      String clientId = claims.get(&quot;client_id&quot;);</span>
-<span class="fc" id="L45">      Instant timestamp = Instant.now();</span>
+<span class="fc" id="L44">      String username = claims.get(&quot;username&quot;);</span>
+<span class="fc" id="L45">      String clientId = claims.get(&quot;client_id&quot;);</span>
+<span class="fc" id="L46">      Instant timestamp = Instant.now();</span>
 
-<span class="fc" id="L47">      logRepository.save(new LogEntity(clientId, username, requestURI, method, timestamp));</span>
+<span class="fc" id="L48">      logRepository.save(new LogEntity(clientId, username, requestUri, method, timestamp));</span>
     }
-<span class="fc" id="L49">  }</span>
+<span class="fc" id="L50">  }</span>
 
-  private Map&lt;String, String&gt; getJWTClaimsFromAuthHeaders(String header) throws Exception {
+  private Map&lt;String, String&gt; getJwtClaimsFromAuthHeaders(String header) throws Exception {
     // Get auth details from the header
-<span class="fc" id="L53">    String[] chunks = header.split(&quot;\\.&quot;);</span>
-<span class="fc" id="L54">    String payload = new String(decoder.decode(chunks[1]));</span>
+<span class="fc" id="L54">    String[] chunks = header.split(&quot;\\.&quot;);</span>
+<span class="fc" id="L55">    String payload = new String(decoder.decode(chunks[1]));</span>
     @SuppressWarnings(&quot;unchecked&quot;)
-<span class="fc" id="L56">    Map&lt;String, String&gt; claims = mapper.readValue(payload, Map.class);</span>
+<span class="fc" id="L57">    Map&lt;String, String&gt; claims = mapper.readValue(payload, Map.class);</span>
 
-<span class="fc" id="L58">    return claims;</span>
+<span class="fc" id="L59">    return claims;</span>
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
