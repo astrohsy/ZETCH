@@ -51,12 +51,12 @@ class ReviewControllerTest {
   private MockMvc mockMvc;
   @Autowired private WebApplicationContext context;
   @MockBean private ReviewService reviewServiceMock;
-  private List<String> jsonReviews;
   private List<ReviewEntity> reviews;
   static Gson gson = new Gson();
 
   @BeforeEach
   void setup() {
+    List<String> jsonReviews;
     mockMvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
     jsonReviews = new ArrayList<>();
     jsonReviews.add(
@@ -79,7 +79,7 @@ class ReviewControllerTest {
   }
 
   @Test
-  public void createReview() throws Exception {
+  void createReview() throws Exception {
     ReviewEntity r1 = reviews.get(0);
 
     when(reviewServiceMock.createNew(
@@ -95,11 +95,10 @@ class ReviewControllerTest {
                     ReviewPostDto.builder()
                         .comment(r1.getComment())
                         .rating(r1.getRating())
-                        .user_id(r1.getUser().getId())
-                        .location_id(r1.getLocation().getId())
+                        .userId(r1.getUser().getId())
+                        .locationId(r1.getLocation().getId())
                         .build()));
 
-    Gson g = new Gson();
     mockMvc
         .perform(mockRequest)
         .andExpect(status().isOk())
