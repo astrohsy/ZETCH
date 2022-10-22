@@ -69,11 +69,7 @@ public class LocationController {
       @PathVariable String name,
       JwtAuthenticationToken token) {
     return locationService
-        .update(
-            name,
-            newLocationDto.getName(),
-            newLocationDto.getCuisine(),
-            newLocationDto.getAddress())
+        .update(name, newLocationDto.name(), newLocationDto.cuisine(), newLocationDto.address())
         .toDto();
   }
 
@@ -100,7 +96,7 @@ public class LocationController {
   LocationDto addNewLocation(
       @RequestBody @Validated LocationDto locationDto, JwtAuthenticationToken token) {
     return locationService
-        .createNew(locationDto.getName(), locationDto.getCuisine(), locationDto.getAddress())
+        .createNew(locationDto.name(), locationDto.cuisine(), locationDto.address())
         .toDto();
   }
 

@@ -107,11 +107,7 @@ class LocationControllerTest {
             .accept(MediaType.APPLICATION_JSON)
             .content(
                 mapper.writeValueAsString(
-                    LocationDto.builder()
-                        .name(r1.getName())
-                        .cuisine(r1.getCuisine())
-                        .address(r1.getAddress())
-                        .build()));
+                    new LocationDto(r1.getName(), r1.getCuisine(), r1.getAddress())));
 
     mockMvc
         .perform(mockRequest)
@@ -137,9 +133,7 @@ class LocationControllerTest {
         put(LOCATION_ENDPOINT + NAME_1)
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
-            .content(
-                mapper.writeValueAsString(
-                    LocationDto.builder().name("New Bob's").cuisine(null).address(null).build()));
+            .content(mapper.writeValueAsString(new LocationDto("New Bob's", null, null)));
 
     mockMvc
         .perform(mockRequest)
@@ -165,9 +159,7 @@ class LocationControllerTest {
         put(LOCATION_ENDPOINT + NAME_1)
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
-            .content(
-                mapper.writeValueAsString(
-                    LocationDto.builder().name(null).cuisine("New Italian").address(null).build()));
+            .content(mapper.writeValueAsString(new LocationDto(null, "New Italian", null)));
 
     mockMvc
         .perform(mockRequest)
@@ -193,13 +185,7 @@ class LocationControllerTest {
         put(LOCATION_ENDPOINT + NAME_1)
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
-            .content(
-                mapper.writeValueAsString(
-                    LocationDto.builder()
-                        .name(null)
-                        .cuisine(null)
-                        .address("New 1234 Broadway")
-                        .build()));
+            .content(mapper.writeValueAsString(new LocationDto(null, null, "New 1234 Broadway")));
 
     mockMvc
         .perform(mockRequest)
@@ -229,11 +215,7 @@ class LocationControllerTest {
             .accept(MediaType.APPLICATION_JSON)
             .content(
                 mapper.writeValueAsString(
-                    LocationDto.builder()
-                        .name("New Bob's")
-                        .cuisine("New Italian")
-                        .address("New 1234 Broadway")
-                        .build()));
+                    new LocationDto("New Bob's", "New Italian", "New 1234 Broadway")));
 
     mockMvc.perform(mockRequest).andExpect(status().isNotFound());
   }
