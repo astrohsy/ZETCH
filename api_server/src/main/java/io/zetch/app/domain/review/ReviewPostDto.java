@@ -1,18 +1,16 @@
 package io.zetch.app.domain.review;
 
-import java.io.Serializable;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.ToString;
-import lombok.Value;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
-@Value
-@Builder
-@AllArgsConstructor
-public class ReviewPostDto implements Serializable {
-  @ToString.Exclude Long id;
-  String comment;
-  Integer rating;
-  Long user_id;
-  Long location_id;
+@Getter
+@SuperBuilder
+@NoArgsConstructor
+public class ReviewPostDto extends ReviewDto {
+  @JsonProperty("user_id")
+  Long userId;
+
+  @JsonProperty("location_id")
+  Long locationId;
 }

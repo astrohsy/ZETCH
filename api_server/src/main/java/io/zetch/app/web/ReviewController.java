@@ -3,11 +3,10 @@ package io.zetch.app.web;
 import com.google.gson.Gson;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import io.zetch.app.domain.review.ReviewDto;
 import io.zetch.app.domain.review.ReviewEntity;
+import io.zetch.app.domain.review.ReviewGetDto;
 import io.zetch.app.domain.review.ReviewPostDto;
 import io.zetch.app.service.ReviewService;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,9 +15,8 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Reviews")
 @CrossOrigin(origins = "*") // NOSONAR
 public class ReviewController {
-  ModelMapper modelMapper = new ModelMapper();
   private final ReviewService reviewService;
-  private Gson g = new Gson();
+  private final Gson g = new Gson();
 
   @Autowired
   public ReviewController(ReviewService reviewService) {
@@ -28,15 +26,15 @@ public class ReviewController {
   @PostMapping(path = "/")
   @Operation(summary = "Create a new review")
   @ResponseBody
-  ReviewDto addNewUser(@RequestBody ReviewPostDto newReviewDto) {
+  ReviewGetDto addNewUser(@RequestBody ReviewPostDto newReviewDto) {
     ReviewEntity r =
         reviewService.createNew(
             newReviewDto.getComment(),
             newReviewDto.getRating(),
-            newReviewDto.getUser_id(),
-            newReviewDto.getLocation_id());
+            newReviewDto.getUserId(),
+            newReviewDto.getLocationId());
 
-    return g.fromJson(g.toJson(r), ReviewDto.class);
+    return g.fromJson(g.toJson(r), ReviewGetDto.class);
   }
 
   /**
@@ -45,9 +43,9 @@ public class ReviewController {
   @GetMapping(path = "/")
   @Operation(summary = "Retrieve all reviews")
   @ResponseBody
-  Iterable<ReviewDto> getAllReviews() {
+  Iterable<ReviewGetDto> getAllReviews() {
     return reviewService.getAll().stream()
-        .map(r -> g.fromJson(g.toJson(r), ReviewDto.class))
+        .map(r -> g.fromJson(g.toJson(r), ReviewGetDto.class))
         .toList();
   }
 
@@ -57,8 +55,8 @@ public class ReviewController {
    */
   @GetMapping("/{reviewId}")
   @Operation(summary = "Retrieve a single restaurant")
-  ReviewDto getOneReview(@PathVariable Long reviewId) {
+  ReviewGetDto getOneReview(@PathVariable Long reviewId) {
     ReviewEntity review = reviewService.getOne(reviewId);
-    return g.fromJson(g.toJson(review), ReviewDto.class);
+    return g.fromJson(g.toJson(review), ReviewGetDto.class);
   }
 }
