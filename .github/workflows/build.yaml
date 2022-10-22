@@ -19,7 +19,7 @@ jobs:
           distribution: 'adopt'
       - uses: axel-op/googlejavaformat-action@v3
         with:
-          commitMessage: "style: formatted by GoogleJavaFormat 🤖!"
+          commitMessage: "style: formatted by GoogleJavaFormat 🤖"
           args: "--skip-sorting-imports --replace"
 
   build:

@@ -22,9 +22,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class LocationServiceTest {
+class LocationServiceTest {
 
-  private static final Long ID = 1L;
   private static final String NAME = "Bob's";
   private static final String NAME_2 = "Sally's";
   private static final String USER_NAME = "Bob";
@@ -40,19 +39,19 @@ public class LocationServiceTest {
   // VERIFY SERVICE RETURN VALUE
 
   @Test
-  public void getOne() {
+  void getOne() {
     when(locationRepositoryMock.findByName(NAME)).thenReturn(Optional.of(locationMock));
     assertThat(locationService.getOne(NAME), is(locationMock));
   }
 
   @Test
-  public void getOneFails() {
+  void getOneFails() {
     when(locationRepositoryMock.findByName(NAME)).thenReturn(Optional.empty());
     assertThrows(NoSuchElementException.class, () -> locationService.getOne(NAME));
   }
 
   @Test
-  public void getAll() {
+  void getAll() {
     when(locationRepositoryMock.findAll())
         .thenReturn(List.of(locationMock, locationMock, locationMock));
     assertThat(locationService.getAll().size(), is(3));
@@ -62,7 +61,7 @@ public class LocationServiceTest {
   // VERIFY INVOCATION OF DEPS + PARAMETERS
 
   @Test
-  public void createNew() {
+  void createNew() {
     // Prepare to capture a Location object
     ArgumentCaptor<LocationEntity> locationCaptor = ArgumentCaptor.forClass(LocationEntity.class);
 
@@ -80,14 +79,14 @@ public class LocationServiceTest {
   }
 
   @Test
-  public void createNewUnavailable() {
+  void createNewUnavailable() {
     when(locationRepositoryMock.existsByName(NAME)).thenReturn(true);
     assertThrows(
         IllegalArgumentException.class, () -> locationService.createNew(NAME, CUISINE, ADDRESS));
   }
 
   @Test
-  public void updateLocationName() throws Exception {
+  void updateLocationName() throws Exception {
     LocationEntity old =
         LocationEntity.builder()
             .owners(new ArrayList<>())
@@ -118,7 +117,7 @@ public class LocationServiceTest {
   }
 
   @Test
-  public void updateLocationUnavailable() {
+  void updateLocationUnavailable() {
     when(locationRepositoryMock.findByName(NAME)).thenReturn(Optional.of(locationMock));
     when(locationRepositoryMock.existsByName(NAME_2)).thenReturn(true);
     assertThrows(
@@ -127,9 +126,19 @@ public class LocationServiceTest {
   }
 
   @Test
-  public void assignOwner() {
-    when(locationRepositoryMock.findByName(NAME)).thenReturn(Optional.of(locationMock));
-    when(userRepositoryMock.findByUsername(USER_NAME)).thenReturn(Optional.of(userMock));
+  void assignOwner() {
+
+    LocationEntity location = LocationEntity.builder().owners(new ArrayList<>()).name(NAME).build();
+
+    UserEntity user =
+        UserEntity.builder().ownedLocations(new ArrayList<>()).username("user").build();
+
+    when(locationRepositoryMock.findByName(NAME)).thenReturn(Optional.of(location));
+    when(userRepositoryMock.findByUsername(USER_NAME)).thenReturn(Optional.of(user));
+
     locationService.assignOwner(NAME, USER_NAME);
+
+    assertThat(location.getOwners().get(0), is(user));
+    assertThat(user.getOwnedLocations().get(0), is(location));
   }
 }

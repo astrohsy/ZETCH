@@ -44,7 +44,7 @@ import org.springframework.web.context.WebApplicationContext;
         @OpenIdClaims(
             otherClaims =
                 @Claims(stringClaims = @StringClaim(name = "username", value = "some_user"))))
-public class LocationControllerTest {
+class LocationControllerTest {
 
   private static final String LOCATION_ENDPOINT = "/locations/";
   private static final String NAME_1 = "Bob's";
@@ -64,12 +64,12 @@ public class LocationControllerTest {
   @MockBean private LocationService locationServiceMock;
 
   @BeforeEach
-  public void setup() {
+  void setup() {
     mockMvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
   }
 
   @Test
-  public void getAllLocations() throws Exception {
+  void getAllLocations() throws Exception {
     when(locationServiceMock.getAll()).thenReturn(List.of(r1, r2));
 
     mockMvc
@@ -83,7 +83,7 @@ public class LocationControllerTest {
   }
 
   @Test
-  public void getLocationByName() throws Exception {
+  void getLocationByName() throws Exception {
     when(locationServiceMock.getOne(NAME_1)).thenReturn(r1);
 
     mockMvc
@@ -97,7 +97,7 @@ public class LocationControllerTest {
   }
 
   @Test
-  public void createLocation() throws Exception {
+  void createLocation() throws Exception {
     when(locationServiceMock.createNew(r1.getName(), r1.getCuisine(), r1.getAddress()))
         .thenReturn(r1);
 
@@ -123,7 +123,7 @@ public class LocationControllerTest {
   }
 
   @Test
-  public void updateLocationName() throws Exception {
+  void updateLocationName() throws Exception {
     LocationEntity updated =
         LocationEntity.builder()
             .owners(new ArrayList<>())
@@ -151,7 +151,7 @@ public class LocationControllerTest {
   }
 
   @Test
-  public void updateLocationCuisine() throws Exception {
+  void updateLocationCuisine() throws Exception {
     LocationEntity updated =
         LocationEntity.builder()
             .owners(new ArrayList<>())
@@ -179,7 +179,7 @@ public class LocationControllerTest {
   }
 
   @Test
-  public void updateLocationAddress() throws Exception {
+  void updateLocationAddress() throws Exception {
     LocationEntity updated =
         LocationEntity.builder()
             .owners(new ArrayList<>())
@@ -211,7 +211,7 @@ public class LocationControllerTest {
   }
 
   @Test
-  public void updateUserNotFound() throws Exception {
+  void updateUserNotFound() throws Exception {
     LocationEntity updated =
         LocationEntity.builder()
             .owners(new ArrayList<>())
