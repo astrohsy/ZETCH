@@ -8,14 +8,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class BaseEntityTest {
+class BaseEntityTest {
 
   private static final String USERNAME = "bob";
   private static final String NAME = "Bob";
   private static final String EMAIL = "bob@example.com";
 
   @Test
-  public void testEquals() {
+  void testEquals() {
     ConcreteEntity entityA = new ConcreteEntity("concreteA");
     ConcreteEntity entityB = new ConcreteEntity("concreteB");
 

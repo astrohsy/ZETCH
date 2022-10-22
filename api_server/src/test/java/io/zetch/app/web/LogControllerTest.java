@@ -42,7 +42,7 @@ import org.springframework.web.context.WebApplicationContext;
                       @StringClaim(name = "username", value = "some_user"),
                       @StringClaim(name = "client_id", value = "some_client")
                     })))
-public class LogControllerTest {
+class LogControllerTest {
 
   private static final String LOGS_ENDPOINT = "/logs/";
 

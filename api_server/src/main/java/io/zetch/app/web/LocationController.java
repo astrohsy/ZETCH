@@ -7,7 +7,6 @@ import io.zetch.app.domain.location.LocationDto;
 import io.zetch.app.domain.location.LocationEntity;
 import io.zetch.app.service.LocationService;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
@@ -44,9 +43,7 @@ public class LocationController {
   @SecurityRequirement(name = "OAuth2")
   @ResponseBody
   Iterable<LocationDto> getAllLocations(JwtAuthenticationToken token) {
-    return locationService.getAll().stream()
-        .map(LocationEntity::toDto)
-        .collect(Collectors.toList());
+    return locationService.getAll().stream().map(LocationEntity::toDto).toList();
   }
 
   /**

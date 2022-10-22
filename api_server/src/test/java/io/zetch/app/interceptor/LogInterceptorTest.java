@@ -18,7 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpHeaders;
 
 @ExtendWith(MockitoExtension.class)
-public class LogInterceptorTest {
+class LogInterceptorTest {
 
   @Mock private LogRepository logRepositoryMock;
   @InjectMocks private LogInterceptor logInterceptor;
