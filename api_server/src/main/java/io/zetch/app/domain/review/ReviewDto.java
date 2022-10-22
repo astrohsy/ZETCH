@@ -1,7 +1,9 @@
 package io.zetch.app.domain.review;
 
 import java.io.Serializable;
-import lombok.*;
+import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 @Getter

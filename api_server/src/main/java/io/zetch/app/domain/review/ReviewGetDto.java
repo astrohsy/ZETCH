@@ -2,7 +2,8 @@ package io.zetch.app.domain.review;
 
 import io.zetch.app.domain.location.LocationDto;
 import io.zetch.app.domain.user.UserDto;
-import lombok.*;
+import lombok.NoArgsConstructor;
+import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 
 @Getter

@@ -1,7 +1,8 @@
 package io.zetch.app.domain.review;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.*;
+import lombok.NoArgsConstructor;
+import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 
 @Getter
