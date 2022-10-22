@@ -65,3 +65,12 @@ See Discord for `.env` specifying secret values.
 
 For a list of users which can log in with Cognito, see the `Application.commandLineRunner()` method.
 Every user has the same password -- `123456`.
+
+### Run checkstyle
+
+```
+mvn checkstyle:checkstyle
+# generate checkstyle reports in /target/site/
+mvn install
+# copies the whole /target/site/ into /reports
+```
