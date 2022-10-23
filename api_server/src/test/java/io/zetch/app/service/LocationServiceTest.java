@@ -63,7 +63,7 @@ class LocationServiceTest {
   @Test
   void search() {
     when(locationRepositoryMock.findByNameAndType(NAME, Type.fromString(TYPE)))
-            .thenReturn(List.of(locationMock, locationMock, locationMock));
+        .thenReturn(List.of(locationMock, locationMock, locationMock));
     assertThat(locationService.search(NAME, TYPE).size(), is(3));
     assertThat(locationService.search(NAME, TYPE).get(0), is(locationMock));
   }
@@ -93,7 +93,8 @@ class LocationServiceTest {
   void createNewUnavailable() {
     when(locationRepositoryMock.existsByName(NAME)).thenReturn(true);
     assertThrows(
-        IllegalArgumentException.class, () -> locationService.createNew(NAME, DESCRIPTION, ADDRESS, TYPE));
+        IllegalArgumentException.class,
+        () -> locationService.createNew(NAME, DESCRIPTION, ADDRESS, TYPE));
   }
 
   @Test
@@ -116,7 +117,8 @@ class LocationServiceTest {
             .build();
 
     when(locationRepositoryMock.findByName(NAME)).thenReturn(Optional.of(old));
-    locationService.update(NAME, updated.getName(), updated.getDescription(), updated.getAddress(), TYPE);
+    locationService.update(
+        NAME, updated.getName(), updated.getDescription(), updated.getAddress(), TYPE);
 
     ArgumentCaptor<LocationEntity> locationCaptor = ArgumentCaptor.forClass(LocationEntity.class);
     verify(locationRepositoryMock).save(locationCaptor.capture());

@@ -61,18 +61,28 @@ class LocationControllerTest {
   private static final String USERNAME_1 = "Bob";
   @Autowired ObjectMapper mapper;
   LocationEntity r1 =
-      LocationEntity.builder().name(NAME_1).description(DESCRIPTION_1).address(ADDRESS_1).type(Type.fromString(TYPE_1)).build();
+      LocationEntity.builder()
+          .name(NAME_1)
+          .description(DESCRIPTION_1)
+          .address(ADDRESS_1)
+          .type(Type.fromString(TYPE_1))
+          .build();
 
   LocationEntity r2 =
-      LocationEntity.builder().name(NAME_2).description(DESCRIPTION_2).address(ADDRESS_2).type(Type.fromString(TYPE_2)).build();
+      LocationEntity.builder()
+          .name(NAME_2)
+          .description(DESCRIPTION_2)
+          .address(ADDRESS_2)
+          .type(Type.fromString(TYPE_2))
+          .build();
 
   UserEntity u1 =
-          UserEntity.builder()
-                  .username(USERNAME_1)
-                  .displayName(USERNAME_1)
-                  .email(null)
-                  .affiliation(Affiliation.STUDENT)
-                  .build();
+      UserEntity.builder()
+          .username(USERNAME_1)
+          .displayName(USERNAME_1)
+          .email(null)
+          .affiliation(Affiliation.STUDENT)
+          .build();
   private MockMvc mockMvc;
   @Autowired private WebApplicationContext context;
   @MockBean private LocationService locationServiceMock;
@@ -144,7 +154,8 @@ class LocationControllerTest {
             .address(ADDRESS_1)
             .type(Type.fromString(TYPE_1))
             .build();
-    when(locationServiceMock.update(NAME_1, updated.getName(), null, null, null)).thenReturn(updated);
+    when(locationServiceMock.update(NAME_1, updated.getName(), null, null, null))
+        .thenReturn(updated);
 
     MockHttpServletRequestBuilder mockRequest =
         put(LOCATION_ENDPOINT + NAME_1)
@@ -172,7 +183,8 @@ class LocationControllerTest {
             .address(ADDRESS_1)
             .type(Type.fromString(TYPE_1))
             .build();
-    when(locationServiceMock.update(NAME_1, null, updated.getDescription(), null, null)).thenReturn(updated);
+    when(locationServiceMock.update(NAME_1, null, updated.getDescription(), null, null))
+        .thenReturn(updated);
 
     MockHttpServletRequestBuilder mockRequest =
         put(LOCATION_ENDPOINT + NAME_1)
@@ -200,13 +212,15 @@ class LocationControllerTest {
             .address("New 1234 Broadway")
             .type(Type.fromString(TYPE_1))
             .build();
-    when(locationServiceMock.update(NAME_1, null, null, "New 1234 Broadway", null)).thenReturn(updated);
+    when(locationServiceMock.update(NAME_1, null, null, "New 1234 Broadway", null))
+        .thenReturn(updated);
 
     MockHttpServletRequestBuilder mockRequest =
         put(LOCATION_ENDPOINT + NAME_1)
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
-            .content(mapper.writeValueAsString(new LocationDto(null, null, "New 1234 Broadway", null)));
+            .content(
+                mapper.writeValueAsString(new LocationDto(null, null, "New 1234 Broadway", null)));
 
     mockMvc
         .perform(mockRequest)
@@ -245,68 +259,71 @@ class LocationControllerTest {
   @Test
   void updateIllegalArgument() throws Exception {
     LocationEntity updated =
-            LocationEntity.builder()
-                    .owners(new ArrayList<>())
-                    .name("New Bob's")
-                    .description("New Italian")
-                    .address("New 1234 Broadway")
-                    .build();
+        LocationEntity.builder()
+            .owners(new ArrayList<>())
+            .name("New Bob's")
+            .description("New Italian")
+            .address("New 1234 Broadway")
+            .build();
     when(locationServiceMock.update(
             NAME_1, updated.getName(), updated.getDescription(), updated.getAddress(), TYPE_1))
-            .thenThrow(IllegalArgumentException.class);
+        .thenThrow(IllegalArgumentException.class);
 
     MockHttpServletRequestBuilder mockRequest =
-            put(LOCATION_ENDPOINT + NAME_1)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .accept(MediaType.APPLICATION_JSON)
-                    .content(
-                            mapper.writeValueAsString(
-                                    new LocationDto("New Bob's", "New Italian", "New 1234 Broadway", TYPE_1)));
+        put(LOCATION_ENDPOINT + NAME_1)
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON)
+            .content(
+                mapper.writeValueAsString(
+                    new LocationDto("New Bob's", "New Italian", "New 1234 Broadway", TYPE_1)));
 
     mockMvc.perform(mockRequest).andExpect(status().isBadRequest());
   }
 
   @Test
-  void search() throws Exception{
+  void search() throws Exception {
     when(locationServiceMock.search(NAME_1, TYPE_1)).thenReturn(Arrays.asList(r1));
 
     mockMvc
-            .perform(get(LOCATION_ENDPOINT + NAME_1 + '/' + TYPE_1).contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("*", notNullValue()))
-            .andExpect(jsonPath("$", hasSize(1)))
-            .andExpect(jsonPath("$[0].*", hasSize(4)))
-            .andExpect(jsonPath("$[0].name", is(r1.getName())))
-            .andExpect(jsonPath("$[0].description", is(r1.getDescription())))
-            .andExpect(jsonPath("$[0].address", is(r1.getAddress())))
-            .andExpect(jsonPath("$[0].type", is(TYPE_1)));
+        .perform(
+            get(LOCATION_ENDPOINT + NAME_1 + '/' + TYPE_1).contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("*", notNullValue()))
+        .andExpect(jsonPath("$", hasSize(1)))
+        .andExpect(jsonPath("$[0].*", hasSize(4)))
+        .andExpect(jsonPath("$[0].name", is(r1.getName())))
+        .andExpect(jsonPath("$[0].description", is(r1.getDescription())))
+        .andExpect(jsonPath("$[0].address", is(r1.getAddress())))
+        .andExpect(jsonPath("$[0].type", is(TYPE_1)));
   }
 
   @Test
   void assignOwner() throws Exception {
     LocationEntity assigned =
-            LocationEntity.builder()
-                    .owners(Arrays.asList(u1))
-                    .name("New Bob's")
-                    .description(DESCRIPTION_1)
-                    .address(ADDRESS_1)
-                    .type(Type.fromString(TYPE_1))
-                    .build();
+        LocationEntity.builder()
+            .owners(Arrays.asList(u1))
+            .name("New Bob's")
+            .description(DESCRIPTION_1)
+            .address(ADDRESS_1)
+            .type(Type.fromString(TYPE_1))
+            .build();
     when(locationServiceMock.assignOwner(NAME_1, USERNAME_1)).thenReturn(assigned);
 
     MockHttpServletRequestBuilder mockRequest =
-            put(LOCATION_ENDPOINT + NAME_1 + '/' + USERNAME_1)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .accept(MediaType.APPLICATION_JSON)
-                    .content(mapper.writeValueAsString(new LocationDto("New Bob's", DESCRIPTION_1, ADDRESS_1, TYPE_1)));
+        put(LOCATION_ENDPOINT + NAME_1 + '/' + USERNAME_1)
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON)
+            .content(
+                mapper.writeValueAsString(
+                    new LocationDto("New Bob's", DESCRIPTION_1, ADDRESS_1, TYPE_1)));
 
     mockMvc
-            .perform(mockRequest)
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("*", notNullValue()))
-            .andExpect(jsonPath("$.name", is(assigned.getName())))
-            .andExpect(jsonPath("$.description", is(assigned.getDescription())))
-            .andExpect(jsonPath("$.address", is(assigned.getAddress())))
-            .andExpect(jsonPath("$.type", is(TYPE_1)));
+        .perform(mockRequest)
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("*", notNullValue()))
+        .andExpect(jsonPath("$.name", is(assigned.getName())))
+        .andExpect(jsonPath("$.description", is(assigned.getDescription())))
+        .andExpect(jsonPath("$.address", is(assigned.getAddress())))
+        .andExpect(jsonPath("$.type", is(TYPE_1)));
   }
 }

@@ -65,7 +65,8 @@ public class LocationService {
    * @return Updated User object
    * @throws NoSuchElementException If User not found
    */
-  public LocationEntity update(String name, String newName, String newDescription, String newAddress, String type)
+  public LocationEntity update(
+      String name, String newName, String newDescription, String newAddress, String type)
       throws IllegalArgumentException, NoSuchElementException {
     LocationEntity currLocation = verifyLocation(name);
     if (!name.equals(newName) && locationRepository.existsByName(newName)) {

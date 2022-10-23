@@ -64,7 +64,8 @@ public class LocationController {
   @GetMapping("/{name}/{type}")
   @Operation(summary = "Search locations by name and type")
   @SecurityRequirement(name = "OAuth2")
-  Iterable<LocationDto> searchLocation(@PathVariable String name, @PathVariable String type, JwtAuthenticationToken token) {
+  Iterable<LocationDto> searchLocation(
+      @PathVariable String name, @PathVariable String type, JwtAuthenticationToken token) {
     return locationService.search(name, type).stream().map(LocationEntity::toDto).toList();
   }
 
@@ -80,7 +81,12 @@ public class LocationController {
       @PathVariable String name,
       JwtAuthenticationToken token) {
     return locationService
-        .update(name, newLocationDto.name(), newLocationDto.description(), newLocationDto.address(), newLocationDto.type())
+        .update(
+            name,
+            newLocationDto.name(),
+            newLocationDto.description(),
+            newLocationDto.address(),
+            newLocationDto.type())
         .toDto();
   }
 
@@ -107,7 +113,11 @@ public class LocationController {
   LocationDto addNewLocation(
       @RequestBody @Validated LocationDto locationDto, JwtAuthenticationToken token) {
     return locationService
-        .createNew(locationDto.name(), locationDto.description(), locationDto.address(), locationDto.type())
+        .createNew(
+            locationDto.name(),
+            locationDto.description(),
+            locationDto.address(),
+            locationDto.type())
         .toDto();
   }
 

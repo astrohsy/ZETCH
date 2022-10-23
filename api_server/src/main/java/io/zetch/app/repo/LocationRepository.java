@@ -12,5 +12,6 @@ public interface LocationRepository extends JpaRepository<LocationEntity, Long> 
   boolean existsByName(String name);
 
   Optional<LocationEntity> findByName(String name);
+
   List<LocationEntity> findByNameAndType(String name, Type type);
 }
