@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.zetch.app.domain.review.ReviewEntity;
 import io.zetch.app.domain.review.ReviewGetDto;
@@ -31,6 +32,7 @@ public class ReviewController {
 
   @PostMapping(path = "/")
   @Operation(summary = "Create a new review")
+  @SecurityRequirement(name = "OAuth2")
   @ResponseBody
   ReviewGetDto addNewUser(@RequestBody ReviewPostDto newReviewDto) throws JsonProcessingException {
     ReviewEntity r =
@@ -48,6 +50,7 @@ public class ReviewController {
    */
   @GetMapping(path = "/")
   @Operation(summary = "Retrieve all reviews")
+  @SecurityRequirement(name = "OAuth2")
   @ResponseBody
   Iterable<ReviewGetDto> getAllReviews() throws JsonProcessingException {
     var result = new ArrayList<ReviewGetDto>();
@@ -63,6 +66,7 @@ public class ReviewController {
    */
   @GetMapping("/{reviewId}")
   @Operation(summary = "Retrieve a single restaurant")
+  @SecurityRequirement(name = "OAuth2")
   ReviewGetDto getOneReview(@PathVariable Long reviewId) throws JsonProcessingException {
     ReviewEntity review = reviewService.getOne(reviewId);
     String serialized = mapper.writeValueAsString(review);
