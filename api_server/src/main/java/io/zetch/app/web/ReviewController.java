@@ -11,6 +11,7 @@ import io.zetch.app.domain.review.ReviewGetDto;
 import io.zetch.app.domain.review.ReviewPostDto;
 import io.zetch.app.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -71,5 +72,13 @@ public class ReviewController {
     ReviewEntity review = reviewService.getOne(reviewId);
     String serialized = mapper.writeValueAsString(review);
     return mapper.readValue(serialized, ReviewGetDto.class);
+  }
+
+  @DeleteMapping("/{reviewId}")
+  @Operation(summary = "Retrieve a review with reviewId")
+  @SecurityRequirement(name = "OAuth2")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  void deleteOneReview(@PathVariable Long reviewId) {
+    reviewService.deleteOne(reviewId);
   }
 }
