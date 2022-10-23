@@ -1,6 +1,7 @@
 package io.zetch.app.service;
 
 import io.zetch.app.domain.location.LocationEntity;
+import io.zetch.app.domain.location.Type;
 import io.zetch.app.domain.user.UserEntity;
 import io.zetch.app.repo.LocationRepository;
 import io.zetch.app.repo.UserRepository;
@@ -43,25 +44,50 @@ public class LocationService {
   }
 
   /**
+   * Search location by name & type
+   *
+   * @param name Location name
+   * @param type Location type
+   * @return List of locations
+   */
+  public List<LocationEntity> search(String name, String type) {
+    return locationRepository.findByNameAndType(name, Type.fromString(type));
+  }
+
+  /**
    * Update existing Location with any non-null attributes. Changing username is not supported.
    *
    * @param name Name of Location to be updated
    * @param newName New name
-   * @param newCuisine New cuisine
+   * @param newDescription New description
    * @param newAddress New address
+   * @param type New type
    * @return Updated User object
    * @throws NoSuchElementException If User not found
    */
-  public LocationEntity update(String name, String newName, String newCuisine, String newAddress)
+  public LocationEntity update(
+      String name, String newName, String newDescription, String newAddress, String type)
       throws IllegalArgumentException, NoSuchElementException {
     LocationEntity currLocation = verifyLocation(name);
-    if (!name.equals(newName) && locationRepository.existsByName(newName)) {
-      throw new IllegalArgumentException("Name unavailable: " + newName);
+
+    if (newName != null) {
+      if (!name.equals(newName) && locationRepository.existsByName(newName)) {
+        throw new IllegalArgumentException("Name unavailable: " + newName);
+      }
+      currLocation.setName(newName);
     }
 
-    currLocation.setName(newName);
-    currLocation.setCuisine(newCuisine);
-    currLocation.setAddress(newAddress);
+    if (newDescription != null) {
+      currLocation.setDescription(newDescription);
+    }
+
+    if (newAddress != null) {
+      currLocation.setAddress(newAddress);
+    }
+
+    if (type != null) {
+      currLocation.setType(Type.fromString(type));
+    }
 
     return locationRepository.save(currLocation);
   }
@@ -95,11 +121,12 @@ public class LocationService {
    * Create a new Location in the database
    *
    * @param name Location name
-   * @param cuisine Location cuisine
+   * @param description Location description
    * @param address Location address
-   * @throws IllegalArgumentException If username unavailable or invalid Affiliation passed
+   * @param type Location type
+   * @throws IllegalArgumentException If username unavailable or invalid Type passed
    */
-  public LocationEntity createNew(String name, String cuisine, String address)
+  public LocationEntity createNew(String name, String description, String address, String type)
       throws IllegalArgumentException {
     if (locationRepository.existsByName(name)) {
       throw new IllegalArgumentException("Name unavailable: " + name);
@@ -107,9 +134,10 @@ public class LocationService {
     LocationEntity newLocation =
         LocationEntity.builder()
             .name(name)
-            .cuisine(cuisine)
+            .description(description)
             .address(address)
             .owners(new ArrayList<>())
+            .type(Type.fromString(type))
             .build();
     return locationRepository.save(newLocation);
   }

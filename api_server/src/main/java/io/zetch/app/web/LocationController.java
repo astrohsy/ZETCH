@@ -61,6 +61,18 @@ public class LocationController {
    * @param name Location's name
    * @return A location by name
    */
+  @GetMapping("/{name}/{type}")
+  @Operation(summary = "Search locations by name and type")
+  @SecurityRequirement(name = "OAuth2")
+  Iterable<LocationDto> searchLocation(
+      @PathVariable String name, @PathVariable String type, JwtAuthenticationToken token) {
+    return locationService.search(name, type).stream().map(LocationEntity::toDto).toList();
+  }
+
+  /**
+   * @param name Location's name
+   * @return A location by name
+   */
   @PutMapping("/{name}")
   @Operation(summary = "Modify a single location")
   @SecurityRequirement(name = "OAuth2")
@@ -69,7 +81,12 @@ public class LocationController {
       @PathVariable String name,
       JwtAuthenticationToken token) {
     return locationService
-        .update(name, newLocationDto.name(), newLocationDto.cuisine(), newLocationDto.address())
+        .update(
+            name,
+            newLocationDto.name(),
+            newLocationDto.description(),
+            newLocationDto.address(),
+            newLocationDto.type())
         .toDto();
   }
 
@@ -96,7 +113,11 @@ public class LocationController {
   LocationDto addNewLocation(
       @RequestBody @Validated LocationDto locationDto, JwtAuthenticationToken token) {
     return locationService
-        .createNew(locationDto.name(), locationDto.cuisine(), locationDto.address())
+        .createNew(
+            locationDto.name(),
+            locationDto.description(),
+            locationDto.address(),
+            locationDto.type())
         .toDto();
   }
 
