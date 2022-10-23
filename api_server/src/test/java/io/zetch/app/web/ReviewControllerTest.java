@@ -4,6 +4,7 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -22,6 +23,8 @@ import io.zetch.app.service.ReviewService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -128,5 +131,17 @@ class ReviewControllerTest {
         .perform(get(REVIEWS_ENDPOINT + testReviewId).contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(jsonPath("*", notNullValue()));
+  }
+
+  @Test
+  void deleteOneReview() throws Exception {
+    doThrow(NoSuchElementException.class).when(reviewServiceMock).deleteOne(2L);
+    mockMvc
+        .perform(delete(REVIEWS_ENDPOINT + 1l).contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isNoContent());
+
+    mockMvc
+        .perform(delete(REVIEWS_ENDPOINT + 2L).contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isNotFound());
   }
 }

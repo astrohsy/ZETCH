@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping(path = "/reviews")
@@ -80,5 +81,11 @@ public class ReviewController {
   @ResponseStatus(HttpStatus.NO_CONTENT)
   void deleteOneReview(@PathVariable Long reviewId) {
     reviewService.deleteOne(reviewId);
+  }
+
+  @ResponseStatus(HttpStatus.NOT_FOUND)
+  @ExceptionHandler(NoSuchElementException.class)
+  String return404(NoSuchElementException ex) {
+    return ex.getMessage();
   }
 }

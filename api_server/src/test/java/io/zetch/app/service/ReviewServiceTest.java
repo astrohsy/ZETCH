@@ -5,7 +5,7 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import io.zetch.app.domain.location.LocationEntity;
 import io.zetch.app.domain.review.ReviewEntity;
@@ -90,5 +90,18 @@ public class ReviewServiceTest {
 
     assertTrue(exceptionWhenNoUser.getMessage().equals(expectedMessage));
     assertTrue(exceptionWhenNoLocation.getMessage().equals(expectedMessage));
+  }
+
+  @Test
+  public void deleteOne() {
+    doReturn(true).when(reviewRepositoryMock).existsById(1L);
+    reviewService.deleteOne(1L);
+
+    doReturn(false).when(reviewRepositoryMock).existsById(2L);
+    assertThrows(
+        NoSuchElementException.class,
+        () -> {
+          reviewService.deleteOne(2L);
+        });
   }
 }

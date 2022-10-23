@@ -68,9 +68,10 @@ public class ReviewService {
     return reviewRepository.save(newReview);
   }
 
-  public Boolean deleteOne(Long reviewId) throws NoSuchElementException {
-    ReviewEntity review = reviewRepository.findById(reviewId).orElseThrow();
-    reviewRepository.delete(review);
-    return reviewRepository.existsById(reviewId);
+  public void deleteOne(Long reviewId) {
+    if (!reviewRepository.existsById(reviewId)) {
+      throw new NoSuchElementException();
+    }
+    reviewRepository.deleteById(reviewId);
   }
 }
