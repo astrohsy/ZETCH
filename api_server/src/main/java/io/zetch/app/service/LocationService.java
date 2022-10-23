@@ -10,7 +10,7 @@ import java.util.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-/** Location business logic */
+/** Location business logic. */
 @Service
 public class LocationService {
   private final LocationRepository locationRepository;
@@ -23,7 +23,7 @@ public class LocationService {
   }
 
   /**
-   * Retrieve all location
+   * Retrieves all locations.
    *
    * @return List of all locations
    */
@@ -32,7 +32,7 @@ public class LocationService {
   }
 
   /**
-   * Retrieve one location
+   * Retrieves one location.
    *
    * @param name Location name
    * @return Location
@@ -43,7 +43,7 @@ public class LocationService {
   }
 
   /**
-   * Update existing Location with any non-null attributes. Changing username is not supported.
+   * Updates existing Location with any non-null attributes. Changing username is not supported.
    *
    * @param name Name of Location to be updated
    * @param newName New name
@@ -75,7 +75,7 @@ public class LocationService {
   }
 
   /**
-   * Assign owner to location
+   * Assigns owner to location.
    *
    * @param name Location name
    * @param owner Owner name
@@ -100,7 +100,7 @@ public class LocationService {
   }
 
   /**
-   * Create a new Location in the database
+   * Creates a new Location in the database.
    *
    * @param name Location name
    * @param cuisine Location cuisine
@@ -123,7 +123,7 @@ public class LocationService {
   }
 
   /**
-   * Verify and return Location for a particular id
+   * Verifies and returns Location for a particular id.
    *
    * @param name Location name
    * @return Found Location
