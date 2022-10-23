@@ -69,14 +69,25 @@ public class LocationService {
       String name, String newName, String newDescription, String newAddress, String type)
       throws IllegalArgumentException, NoSuchElementException {
     LocationEntity currLocation = verifyLocation(name);
-    if (!name.equals(newName) && locationRepository.existsByName(newName)) {
-      throw new IllegalArgumentException("Name unavailable: " + newName);
+
+    if (newName != null) {
+      if (!name.equals(newName) && locationRepository.existsByName(newName)) {
+        throw new IllegalArgumentException("Name unavailable: " + newName);
+      }
+      currLocation.setName(newName);
     }
 
-    currLocation.setName(newName);
-    currLocation.setDescription(newDescription);
-    currLocation.setAddress(newAddress);
-    currLocation.setType(Type.fromString(type));
+    if (newDescription != null) {
+      currLocation.setDescription(newDescription);
+    }
+
+    if (newAddress != null) {
+      currLocation.setAddress(newAddress);
+    }
+
+    if (type != null) {
+      currLocation.setType(Type.fromString(type));
+    }
 
     return locationRepository.save(currLocation);
   }

@@ -17,6 +17,8 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -36,7 +38,6 @@ class LocationServiceTest {
   @Mock private UserRepository userRepositoryMock;
   @InjectMocks private LocationService locationService;
   @Mock private LocationEntity locationMock;
-  @Mock private UserEntity userMock;
 
   // VERIFY SERVICE RETURN VALUE
 
@@ -97,28 +98,37 @@ class LocationServiceTest {
         () -> locationService.createNew(NAME, DESCRIPTION, ADDRESS, TYPE));
   }
 
-  @Test
-  void updateLocationName() throws Exception {
+  @ParameterizedTest
+  @CsvSource(
+      value = {
+        "New Name, null, null, null",
+        "null, New Desc, null, null",
+        "null, null, New Addr, null",
+        "null, null, null, museum",
+        "New Name, New Desc, New Addr, museum"
+      },
+      nullValues = {"null"})
+  void updateLocation(String newName, String newDesc, String newAddr, String newType) {
     LocationEntity old =
         LocationEntity.builder()
             .owners(new ArrayList<>())
             .name(NAME)
             .description(DESCRIPTION)
             .address(ADDRESS)
+            .type(Type.fromString("restaurant"))
             .build();
 
     LocationEntity updated =
         LocationEntity.builder()
             .owners(new ArrayList<>())
-            .name("New Bob's")
-            .description(DESCRIPTION)
-            .address(ADDRESS)
-            .type(Type.fromString(TYPE))
+            .name(newName != null ? newName : NAME)
+            .description(newDesc != null ? newDesc : DESCRIPTION)
+            .address(newAddr != null ? newAddr : ADDRESS)
+            .type(newType != null ? Type.fromString(newType) : Type.fromString("restaurant"))
             .build();
 
     when(locationRepositoryMock.findByName(NAME)).thenReturn(Optional.of(old));
-    locationService.update(
-        NAME, updated.getName(), updated.getDescription(), updated.getAddress(), TYPE);
+    locationService.update(NAME, newName, newDesc, newAddr, newType);
 
     ArgumentCaptor<LocationEntity> locationCaptor = ArgumentCaptor.forClass(LocationEntity.class);
     verify(locationRepositoryMock).save(locationCaptor.capture());
@@ -127,6 +137,7 @@ class LocationServiceTest {
     assertThat(value.getName(), is(updated.getName()));
     assertThat(value.getDescription(), is(updated.getDescription()));
     assertThat(value.getAddress(), is(updated.getAddress()));
+    assertThat(value.getType(), is(updated.getType()));
     assertThat(value.getOwners().isEmpty(), is(true));
   }
 
