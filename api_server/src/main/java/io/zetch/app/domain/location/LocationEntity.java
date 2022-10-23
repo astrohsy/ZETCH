@@ -30,8 +30,9 @@ public class LocationEntity extends BaseEntity {
   private List<UserEntity> owners;
   // Every location must have a name
   @NonNull private String name;
-  private String cuisine;
+  private String description;
   private String address;
+  private Type type;
 
   /**
    * Convert the Location entity to a Location data transfer object
@@ -39,6 +40,6 @@ public class LocationEntity extends BaseEntity {
    * @return Location DTO
    */
   public LocationDto toDto() {
-    return new LocationDto(name, cuisine, address);
+    return new LocationDto(name, description, address, type.toString());
   }
 }
