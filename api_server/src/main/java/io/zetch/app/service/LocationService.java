@@ -147,7 +147,7 @@ public class LocationService {
    *
    * @param name Name of Location to delete
    * @return Location that was just deleted
-   * @throws NoSuchElementException If User not found
+   * @throws NoSuchElementException If Location not found
    */
   public LocationEntity delete(String name)
           throws NoSuchElementException {
