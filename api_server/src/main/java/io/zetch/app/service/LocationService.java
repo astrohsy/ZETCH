@@ -149,8 +149,7 @@ public class LocationService {
    * @return Location that was just deleted
    * @throws NoSuchElementException If User not found
    */
-  public LocationEntity delete(String name)
-          throws NoSuchElementException {
+  public LocationEntity delete(String name) throws NoSuchElementException {
     LocationEntity location = verifyLocation(name);
     locationRepository.delete(location);
     return location;

@@ -328,27 +328,27 @@ class LocationControllerTest {
   @Test
   void deleteLocation() throws Exception {
     LocationEntity deleted =
-            LocationEntity.builder()
-                    .owners(Arrays.asList(u1))
-                    .name("New Bob's")
-                    .description(DESCRIPTION_1)
-                    .address(ADDRESS_1)
-                    .type(Type.fromString(TYPE_1))
-                    .build();
+        LocationEntity.builder()
+            .owners(Arrays.asList(u1))
+            .name("New Bob's")
+            .description(DESCRIPTION_1)
+            .address(ADDRESS_1)
+            .type(Type.fromString(TYPE_1))
+            .build();
     when(locationServiceMock.delete(NAME_1)).thenReturn(deleted);
 
     MockHttpServletRequestBuilder mockRequest =
-            delete(LOCATION_ENDPOINT + NAME_1)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .accept(MediaType.APPLICATION_JSON);
+        delete(LOCATION_ENDPOINT + NAME_1)
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON);
 
     mockMvc
-            .perform(mockRequest)
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("*", notNullValue()))
-            .andExpect(jsonPath("$.name", is(deleted.getName())))
-            .andExpect(jsonPath("$.description", is(deleted.getDescription())))
-            .andExpect(jsonPath("$.address", is(deleted.getAddress())))
-            .andExpect(jsonPath("$.type", is(TYPE_1)));
+        .perform(mockRequest)
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("*", notNullValue()))
+        .andExpect(jsonPath("$.name", is(deleted.getName())))
+        .andExpect(jsonPath("$.description", is(deleted.getDescription())))
+        .andExpect(jsonPath("$.address", is(deleted.getAddress())))
+        .andExpect(jsonPath("$.type", is(TYPE_1)));
   }
 }
