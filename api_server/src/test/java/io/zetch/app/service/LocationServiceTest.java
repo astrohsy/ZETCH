@@ -34,7 +34,6 @@ class LocationServiceTest {
   @Mock private UserRepository userRepositoryMock;
   @InjectMocks private LocationService locationService;
   @Mock private LocationEntity locationMock;
-  @Mock private UserEntity userMock;
 
   // VERIFY SERVICE RETURN VALUE
 
@@ -86,7 +85,7 @@ class LocationServiceTest {
   }
 
   @Test
-  void updateLocationName() throws Exception {
+  void updateLocationName() {
     LocationEntity old =
         LocationEntity.builder()
             .owners(new ArrayList<>())
@@ -104,7 +103,69 @@ class LocationServiceTest {
             .build();
 
     when(locationRepositoryMock.findByName(NAME)).thenReturn(Optional.of(old));
-    locationService.update(NAME, updated.getName(), updated.getCuisine(), updated.getAddress());
+    locationService.update(NAME, updated.getName(), null, null);
+
+    ArgumentCaptor<LocationEntity> locationCaptor = ArgumentCaptor.forClass(LocationEntity.class);
+    verify(locationRepositoryMock).save(locationCaptor.capture());
+
+    LocationEntity value = locationCaptor.getValue();
+    assertThat(value.getName(), is(updated.getName()));
+    assertThat(value.getCuisine(), is(updated.getCuisine()));
+    assertThat(value.getAddress(), is(updated.getAddress()));
+    assertThat(value.getOwners().isEmpty(), is(true));
+  }
+
+  @Test
+  void updateLocationCuisine() {
+    LocationEntity old =
+        LocationEntity.builder()
+            .owners(new ArrayList<>())
+            .name(NAME)
+            .cuisine(CUISINE)
+            .address(ADDRESS)
+            .build();
+
+    LocationEntity updated =
+        LocationEntity.builder()
+            .owners(new ArrayList<>())
+            .name(NAME)
+            .cuisine("New Cuisine")
+            .address(ADDRESS)
+            .build();
+
+    when(locationRepositoryMock.findByName(NAME)).thenReturn(Optional.of(old));
+    locationService.update(NAME, null, updated.getCuisine(), null);
+
+    ArgumentCaptor<LocationEntity> locationCaptor = ArgumentCaptor.forClass(LocationEntity.class);
+    verify(locationRepositoryMock).save(locationCaptor.capture());
+
+    LocationEntity value = locationCaptor.getValue();
+    assertThat(value.getName(), is(updated.getName()));
+    assertThat(value.getCuisine(), is(updated.getCuisine()));
+    assertThat(value.getAddress(), is(updated.getAddress()));
+    assertThat(value.getOwners().isEmpty(), is(true));
+  }
+
+  @Test
+  void updateLocationAddress() {
+    LocationEntity old =
+        LocationEntity.builder()
+            .owners(new ArrayList<>())
+            .name(NAME)
+            .cuisine(CUISINE)
+            .address(ADDRESS)
+            .build();
+
+    LocationEntity updated =
+        LocationEntity.builder()
+            .owners(new ArrayList<>())
+            .name(NAME)
+            .cuisine(CUISINE)
+            .address("New Addr")
+            .build();
+
+    when(locationRepositoryMock.findByName(NAME)).thenReturn(Optional.of(old));
+    locationService.update(NAME, null, null, updated.getAddress());
 
     ArgumentCaptor<LocationEntity> locationCaptor = ArgumentCaptor.forClass(LocationEntity.class);
     verify(locationRepositoryMock).save(locationCaptor.capture());
