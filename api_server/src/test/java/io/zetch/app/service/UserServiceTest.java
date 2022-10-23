@@ -36,7 +36,7 @@ class UserServiceTest {
 
   @Test
   void getOne() {
-    when(userRepositoryMock.findByUsername(USERNAME)).thenReturn(Optional.of(userMock));
+    when(userRepositoryMock.findByUsernameIgnoreCase(USERNAME)).thenReturn(Optional.of(userMock));
     assertThat(service.getOne(USERNAME), is(userMock));
   }
 
@@ -51,7 +51,7 @@ class UserServiceTest {
 
   @Test
   void update() {
-    when(userRepositoryMock.findByUsername(USERNAME)).thenReturn(Optional.of(userMock));
+    when(userRepositoryMock.findByUsernameIgnoreCase(USERNAME)).thenReturn(Optional.of(userMock));
     service.update(USERNAME, NAME, EMAIL, AFFILIATION_STUDENT);
 
     // Verify save() invoked
@@ -65,7 +65,7 @@ class UserServiceTest {
 
   @Test
   void delete() {
-    when(userRepositoryMock.findByUsername(USERNAME)).thenReturn(Optional.of(userMock));
+    when(userRepositoryMock.findByUsernameIgnoreCase(USERNAME)).thenReturn(Optional.of(userMock));
     service.delete(USERNAME);
 
     // Verify delete() invoked

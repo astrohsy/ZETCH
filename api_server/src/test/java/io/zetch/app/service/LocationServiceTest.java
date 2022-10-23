@@ -134,7 +134,7 @@ class LocationServiceTest {
         UserEntity.builder().ownedLocations(new ArrayList<>()).username("user").build();
 
     when(locationRepositoryMock.findByName(NAME)).thenReturn(Optional.of(location));
-    when(userRepositoryMock.findByUsername(USER_NAME)).thenReturn(Optional.of(user));
+    when(userRepositoryMock.findByUsernameIgnoreCase(USER_NAME)).thenReturn(Optional.of(user));
 
     locationService.assignOwner(NAME, USER_NAME);
 

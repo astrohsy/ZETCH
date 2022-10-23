@@ -76,7 +76,7 @@ public class LocationService {
     LocationEntity location = verifyLocation(name);
     UserEntity user =
         userRepository
-            .findByUsername(owner)
+            .findByUsernameIgnoreCase(owner)
             .orElseThrow(() -> new NoSuchElementException("User does not exist: " + owner));
 
     List<UserEntity> ownerList = location.getOwners();
