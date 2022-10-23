@@ -5,9 +5,7 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -325,5 +323,32 @@ class LocationControllerTest {
         .andExpect(jsonPath("$.description", is(assigned.getDescription())))
         .andExpect(jsonPath("$.address", is(assigned.getAddress())))
         .andExpect(jsonPath("$.type", is(TYPE_1)));
+  }
+
+  @Test
+  void deleteLocation() throws Exception {
+    LocationEntity deleted =
+            LocationEntity.builder()
+                    .owners(Arrays.asList(u1))
+                    .name("New Bob's")
+                    .description(DESCRIPTION_1)
+                    .address(ADDRESS_1)
+                    .type(Type.fromString(TYPE_1))
+                    .build();
+    when(locationServiceMock.delete(NAME_1)).thenReturn(deleted);
+
+    MockHttpServletRequestBuilder mockRequest =
+            delete(LOCATION_ENDPOINT + NAME_1)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON);
+
+    mockMvc
+            .perform(mockRequest)
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("*", notNullValue()))
+            .andExpect(jsonPath("$.name", is(deleted.getName())))
+            .andExpect(jsonPath("$.description", is(deleted.getDescription())))
+            .andExpect(jsonPath("$.address", is(deleted.getAddress())))
+            .andExpect(jsonPath("$.type", is(TYPE_1)));
   }
 }
