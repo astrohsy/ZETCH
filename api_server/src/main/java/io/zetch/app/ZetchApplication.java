@@ -15,8 +15,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 @OpenAPIDefinition(
     info = @Info(title = "ZETCH API", description = "API Definitions of the ZETCH server"),
-    servers = {@Server(url = "/", description = "Default Server URL")}
-  )
+    servers = {@Server(url = "/", description = "Default Server URL")})
 @SecurityScheme(
     name = "OAuth2",
     type = SecuritySchemeType.OAUTH2,
