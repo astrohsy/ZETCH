@@ -170,13 +170,13 @@ class LocationServiceTest {
   @Test
   void delete() {
     LocationEntity deleted =
-            LocationEntity.builder()
-                    .owners(new ArrayList<>())
-                    .name(NAME)
-                    .description(DESCRIPTION)
-                    .address(ADDRESS)
-                    .type(Type.fromString(TYPE))
-                    .build();
+        LocationEntity.builder()
+            .owners(new ArrayList<>())
+            .name(NAME)
+            .description(DESCRIPTION)
+            .address(ADDRESS)
+            .type(Type.fromString(TYPE))
+            .build();
     when(locationRepositoryMock.findByName(NAME)).thenReturn(Optional.of(deleted));
     assertThat(locationService.delete(NAME), is(deleted));
   }
