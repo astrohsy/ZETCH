@@ -65,7 +65,7 @@ public class ReviewController {
    * @return A review with id
    */
   @GetMapping("/{reviewId}")
-  @Operation(summary = "Retrieve a single restaurant")
+  @Operation(summary = "Retrieve a review with reviewId")
   @SecurityRequirement(name = "OAuth2")
   ReviewGetDto getOneReview(@PathVariable Long reviewId) throws JsonProcessingException {
     ReviewEntity review = reviewService.getOne(reviewId);
