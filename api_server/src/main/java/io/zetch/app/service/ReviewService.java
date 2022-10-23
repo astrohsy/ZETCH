@@ -67,4 +67,11 @@ public class ReviewService {
         ReviewEntity.builder().comment(comment).rating(rating).user(u).location(l).build();
     return reviewRepository.save(newReview);
   }
+
+  public void deleteOne(Long reviewId) {
+    if (!reviewRepository.existsById(reviewId)) {
+      throw new NoSuchElementException();
+    }
+    reviewRepository.deleteById(reviewId);
+  }
 }

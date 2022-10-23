@@ -166,4 +166,18 @@ class LocationServiceTest {
     assertThat(location.getOwners().get(0), is(user));
     assertThat(user.getOwnedLocations().get(0), is(location));
   }
+
+  @Test
+  void delete() {
+    LocationEntity deleted =
+        LocationEntity.builder()
+            .owners(new ArrayList<>())
+            .name(NAME)
+            .description(DESCRIPTION)
+            .address(ADDRESS)
+            .type(Type.fromString(TYPE))
+            .build();
+    when(locationRepositoryMock.findByName(NAME)).thenReturn(Optional.of(deleted));
+    assertThat(locationService.delete(NAME), is(deleted));
+  }
 }
