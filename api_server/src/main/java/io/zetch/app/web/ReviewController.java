@@ -75,8 +75,12 @@ public class ReviewController {
     return mapper.readValue(serialized, ReviewGetDto.class);
   }
 
+  /**
+   * @param reviewId Review's id
+   * @return Nothing
+   */
   @DeleteMapping("/{reviewId}")
-  @Operation(summary = "Retrieve a review with reviewId")
+  @Operation(summary = "Delete a review with reviewId")
   @SecurityRequirement(name = "OAuth2")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   void deleteOneReview(@PathVariable Long reviewId) {
