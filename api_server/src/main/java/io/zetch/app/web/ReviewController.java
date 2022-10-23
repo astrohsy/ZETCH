@@ -39,10 +39,10 @@ public class ReviewController {
   ReviewGetDto addNewUser(@RequestBody ReviewPostDto newReviewDto) throws JsonProcessingException {
     ReviewEntity r =
         reviewService.createNew(
-            newReviewDto.getComment(),
-            newReviewDto.getRating(),
-            newReviewDto.getUserId(),
-            newReviewDto.getLocationId());
+            newReviewDto.comment(),
+            newReviewDto.rating(),
+            newReviewDto.userId(),
+            newReviewDto.locationId());
     String serialized = mapper.writeValueAsString(r);
     return mapper.readValue(serialized, ReviewGetDto.class);
   }

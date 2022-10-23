@@ -95,12 +95,11 @@ class ReviewControllerTest {
             .accept(MediaType.APPLICATION_JSON)
             .content(
                 mapper.writeValueAsString(
-                    ReviewPostDto.builder()
-                        .comment(r1.getComment())
-                        .rating(r1.getRating())
-                        .userId(r1.getUser().getId())
-                        .locationId(r1.getLocation().getId())
-                        .build()));
+                    new ReviewPostDto(
+                        r1.getComment(),
+                        r1.getRating(),
+                        r1.getUser().getId(),
+                        r1.getLocation().getId())));
 
     mockMvc
         .perform(mockRequest)
