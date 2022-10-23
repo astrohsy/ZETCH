@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.zetch.app.domain.location.LocationDto;
 import io.zetch.app.domain.location.LocationEntity;
+import io.zetch.app.domain.location.LocationGetDto;
 import io.zetch.app.service.LocationService;
 import java.util.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,8 +44,8 @@ public class LocationController {
   @Operation(summary = "Retrieve all locations")
   @SecurityRequirement(name = "OAuth2")
   @ResponseBody
-  Iterable<LocationDto> getAllLocations(JwtAuthenticationToken token) {
-    return locationService.getAll().stream().map(LocationEntity::toDto).toList();
+  Iterable<LocationGetDto> getAllLocations(JwtAuthenticationToken token) {
+    return locationService.getAll().stream().map(LocationEntity::toGetDto).toList();
   }
 
   /**
@@ -54,8 +55,8 @@ public class LocationController {
   @GetMapping("/{name}")
   @Operation(summary = "Retrieve a single location")
   @SecurityRequirement(name = "OAuth2")
-  LocationDto getOneLocation(@PathVariable String name, JwtAuthenticationToken token) {
-    return locationService.getOne(name).toDto();
+  LocationGetDto getOneLocation(@PathVariable String name, JwtAuthenticationToken token) {
+    return locationService.getOne(name).toGetDto();
   }
 
   /**
@@ -65,9 +66,9 @@ public class LocationController {
   @GetMapping("/{name}/{type}")
   @Operation(summary = "Search locations by name and type")
   @SecurityRequirement(name = "OAuth2")
-  Iterable<LocationDto> searchLocation(
+  Iterable<LocationGetDto> searchLocation(
       @PathVariable String name, @PathVariable String type, JwtAuthenticationToken token) {
-    return locationService.search(name, type).stream().map(LocationEntity::toDto).toList();
+    return locationService.search(name, type).stream().map(LocationEntity::toGetDto).toList();
   }
 
   /**
@@ -77,7 +78,7 @@ public class LocationController {
   @PutMapping("/{name}")
   @Operation(summary = "Modify a single location")
   @SecurityRequirement(name = "OAuth2")
-  LocationDto updateLocation(
+  LocationGetDto updateLocation(
       @RequestBody LocationDto newLocationDto,
       @PathVariable String name,
       JwtAuthenticationToken token) {
@@ -88,7 +89,7 @@ public class LocationController {
             newLocationDto.description(),
             newLocationDto.address(),
             newLocationDto.type())
-        .toDto();
+        .toGetDto();
   }
 
   /**
@@ -98,9 +99,9 @@ public class LocationController {
   @PutMapping("/{name}/{owner}")
   @Operation(summary = "Assign owner to a location")
   @SecurityRequirement(name = "OAuth2")
-  LocationDto assignLocationOwner(
+  LocationGetDto assignLocationOwner(
       @PathVariable String name, @PathVariable String owner, JwtAuthenticationToken token) {
-    return locationService.assignOwner(name, owner).toDto();
+    return locationService.assignOwner(name, owner).toGetDto();
   }
 
   /**
@@ -111,7 +112,7 @@ public class LocationController {
   @Operation(summary = "Create a new location")
   @SecurityRequirement(name = "OAuth2")
   @ResponseBody
-  LocationDto addNewLocation(
+  LocationGetDto addNewLocation(
       @RequestBody @Validated LocationDto locationDto, JwtAuthenticationToken token) {
     return locationService
         .createNew(
@@ -119,7 +120,7 @@ public class LocationController {
             locationDto.description(),
             locationDto.address(),
             locationDto.type())
-        .toDto();
+        .toGetDto();
   }
 
   /**

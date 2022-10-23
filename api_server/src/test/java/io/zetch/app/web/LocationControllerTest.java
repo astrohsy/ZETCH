@@ -102,7 +102,7 @@ class LocationControllerTest {
         .andExpect(status().isOk())
         .andExpect(jsonPath("*", notNullValue()))
         .andExpect(jsonPath("$", hasSize(2)))
-        .andExpect(jsonPath("$[0].*", hasSize(4)))
+        .andExpect(jsonPath("$[0].*", hasSize(5)))
         .andExpect(jsonPath("$[0].name", is(NAME_1)))
         .andExpect(jsonPath("$[1].name", is(NAME_2)));
   }
@@ -115,7 +115,7 @@ class LocationControllerTest {
         .perform(get(LOCATION_ENDPOINT + NAME_1).contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(jsonPath("*", notNullValue()))
-        .andExpect(jsonPath("$.*", hasSize(4)))
+        .andExpect(jsonPath("$.*", hasSize(5)))
         .andExpect(jsonPath("$.name", is(r1.getName())))
         .andExpect(jsonPath("$.description", is(r1.getDescription())))
         .andExpect(jsonPath("$.address", is(r1.getAddress())))
@@ -291,7 +291,7 @@ class LocationControllerTest {
         .andExpect(status().isOk())
         .andExpect(jsonPath("*", notNullValue()))
         .andExpect(jsonPath("$", hasSize(1)))
-        .andExpect(jsonPath("$[0].*", hasSize(4)))
+        .andExpect(jsonPath("$[0].*", hasSize(5)))
         .andExpect(jsonPath("$[0].name", is(r1.getName())))
         .andExpect(jsonPath("$[0].description", is(r1.getDescription())))
         .andExpect(jsonPath("$[0].address", is(r1.getAddress())))

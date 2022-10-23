@@ -42,4 +42,8 @@ public class LocationEntity extends BaseEntity {
   public LocationDto toDto() {
     return new LocationDto(name, description, address, type.toString());
   }
+
+  public LocationGetDto toGetDto() {
+    return new LocationGetDto(super.getId(), name, description, address, type.toString());
+  }
 }
