@@ -143,6 +143,19 @@ public class LocationService {
   }
 
   /**
+   * Deletes a Location from the database.
+   *
+   * @param name Name of Location to delete
+   * @return Location that was just deleted
+   * @throws NoSuchElementException If Location not found
+   */
+  public LocationEntity delete(String name) throws NoSuchElementException {
+    LocationEntity location = verifyLocation(name);
+    locationRepository.delete(location);
+    return location;
+  }
+
+  /**
    * Verify and return Location for a particular id
    *
    * @param name Location name

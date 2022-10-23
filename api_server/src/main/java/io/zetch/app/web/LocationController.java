@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -119,6 +120,18 @@ public class LocationController {
             locationDto.address(),
             locationDto.type())
         .toDto();
+  }
+
+  /**
+   * @param name Name of Location to delete
+   * @return Confirmation message if successful
+   */
+  @DeleteMapping(path = "/{name}")
+  @Operation(summary = "Delete a location")
+  @SecurityRequirement(name = "OAuth2")
+  @ResponseBody
+  LocationDto deleteLocation(@PathVariable String name, JwtAuthenticationToken token) {
+    return locationService.delete(name).toDto();
   }
 
   /**
