@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.zetch.app.domain.user.UserDto;
 import io.zetch.app.domain.user.UserEntity;
+import io.zetch.app.domain.user.UserPutDto;
 import io.zetch.app.service.UserService;
 import java.util.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,7 +70,7 @@ public class UserController {
   @SecurityRequirement(name = "OAuth2")
   @PreAuthorize("@securityService.isSelf(#token, #username)")
   UserDto updateUser(
-      @RequestBody UserDto newUserDto,
+      @RequestBody UserPutDto newUserDto,
       @PathVariable String username,
       JwtAuthenticationToken token) {
     return userService
