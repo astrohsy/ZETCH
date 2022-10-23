@@ -66,4 +66,8 @@ public class UserEntity extends BaseEntity {
   public UserDto toDto() {
     return new UserDto(username, displayName, email, affiliation.toString());
   }
+
+  public UserGetDto toGetDto() {
+    return new UserGetDto(super.getId(), username, displayName, email, affiliation.toString());
+  }
 }
