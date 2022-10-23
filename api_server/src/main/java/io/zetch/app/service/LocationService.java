@@ -55,13 +55,21 @@ public class LocationService {
   public LocationEntity update(String name, String newName, String newCuisine, String newAddress)
       throws IllegalArgumentException, NoSuchElementException {
     LocationEntity currLocation = verifyLocation(name);
-    if (!name.equals(newName) && locationRepository.existsByName(newName)) {
-      throw new IllegalArgumentException("Name unavailable: " + newName);
+
+    if (newName != null) {
+      if (!name.equals(newName) && locationRepository.existsByName(newName)) {
+        throw new IllegalArgumentException("Name unavailable: " + newName);
+      }
+      currLocation.setName(newName);
     }
 
-    currLocation.setName(newName);
-    currLocation.setCuisine(newCuisine);
-    currLocation.setAddress(newAddress);
+    if (newCuisine != null) {
+      currLocation.setCuisine(newCuisine);
+    }
+
+    if (newAddress != null) {
+      currLocation.setAddress(newAddress);
+    }
 
     return locationRepository.save(currLocation);
   }
