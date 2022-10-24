@@ -5,6 +5,8 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.zetch.app.domain.user.UserDto;
 import io.zetch.app.domain.user.UserEntity;
+import io.zetch.app.domain.user.UserGetDto;
+import io.zetch.app.domain.user.UserPutDto;
 import io.zetch.app.service.UserService;
 import java.util.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+/** Controller for the user endpoints. */
 @RestController
 @RequestMapping(path = "/users")
 @Tag(name = "Users")
@@ -41,54 +44,51 @@ public class UserController {
   @SecurityRequirement(name = "OAuth2")
   @PreAuthorize("@securityService.isAdmin(#token)")
   @ResponseBody
-  Iterable<UserDto> getAllUsers(JwtAuthenticationToken token) {
-    return userService.getAll().stream().map(UserEntity::toDto).toList();
+  Iterable<UserGetDto> getAllUsers(JwtAuthenticationToken token) {
+    return userService.getAll().stream().map(UserEntity::toGetDto).toList();
   }
 
   @PostMapping(path = "/")
   @Operation(summary = "Create a new user")
   @SecurityRequirement(name = "OAuth2")
   @ResponseBody
-  UserDto addNewUser(@RequestBody UserDto newUserDto, JwtAuthenticationToken token) {
+  UserGetDto addNewUser(@RequestBody UserDto newUserDto) {
     return userService
         .createNew(
-            newUserDto.getUsername(),
-            newUserDto.getName(),
-            newUserDto.getEmail(),
-            newUserDto.getAffiliation())
-        .toDto();
+            newUserDto.username(), newUserDto.name(), newUserDto.email(), newUserDto.affiliation())
+        .toGetDto();
   }
 
   @GetMapping("/{username}")
   @Operation(summary = "Retrieve a single user")
   @SecurityRequirement(name = "OAuth2")
-  UserDto getOneUser(@PathVariable String username, JwtAuthenticationToken token) {
-    return userService.getOne(username).toDto();
+  UserGetDto getOneUser(@PathVariable String username) {
+    return userService.getOne(username).toGetDto();
   }
 
   @PutMapping("/{username}")
   @Operation(summary = "Modify user attributes")
   @SecurityRequirement(name = "OAuth2")
   @PreAuthorize("@securityService.isSelf(#token, #username)")
-  UserDto updateUser(
-      @RequestBody UserDto newUserDto,
+  UserGetDto updateUser(
+      @RequestBody UserPutDto newUserDto,
       @PathVariable String username,
       JwtAuthenticationToken token) {
     return userService
-        .update(username, newUserDto.getName(), newUserDto.getEmail(), newUserDto.getAffiliation())
-        .toDto();
+        .update(username, newUserDto.name(), newUserDto.email(), newUserDto.affiliation())
+        .toGetDto();
   }
 
   @DeleteMapping("/{username}")
   @PreAuthorize("@securityService.isSelf(#token, #username)")
   @SecurityRequirement(name = "OAuth2")
   @Operation(summary = "Delete a user")
-  UserDto deleteUser(@PathVariable String username, JwtAuthenticationToken token) {
-    return userService.delete(username).toDto();
+  UserGetDto deleteUser(@PathVariable String username, JwtAuthenticationToken token) {
+    return userService.delete(username).toGetDto();
   }
 
   /**
-   * Return 404 Not Found if NoSuchElementException is thrown in this Controller
+   * Returns 404 Not Found if NoSuchElementException is thrown in this Controller.
    *
    * @param ex Exception
    * @return Error message string
@@ -100,7 +100,7 @@ public class UserController {
   }
 
   /**
-   * Return 400 Bad Request if IllegalArgumentException is thrown in this Controller
+   * Returns 400 Bad Request if IllegalArgumentException is thrown in this Controller.
    *
    * @param ex Exception
    * @return Error message string

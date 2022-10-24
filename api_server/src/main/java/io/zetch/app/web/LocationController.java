@@ -5,14 +5,25 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.zetch.app.domain.location.LocationDto;
 import io.zetch.app.domain.location.LocationEntity;
+import io.zetch.app.domain.location.LocationGetDto;
 import io.zetch.app.service.LocationService;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(path = "/locations")
@@ -33,10 +44,8 @@ public class LocationController {
   @Operation(summary = "Retrieve all locations")
   @SecurityRequirement(name = "OAuth2")
   @ResponseBody
-  Iterable<LocationDto> getAllLocations(JwtAuthenticationToken token) {
-    return locationService.getAll().stream()
-        .map(LocationEntity::toDto)
-        .collect(Collectors.toList());
+  Iterable<LocationGetDto> getAllLocations(JwtAuthenticationToken token) {
+    return locationService.getAll().stream().map(LocationEntity::toGetDto).toList();
   }
 
   /**
@@ -46,8 +55,20 @@ public class LocationController {
   @GetMapping("/{name}")
   @Operation(summary = "Retrieve a single location")
   @SecurityRequirement(name = "OAuth2")
-  LocationDto getOneLocation(@PathVariable String name, JwtAuthenticationToken token) {
-    return locationService.getOne(name).toDto();
+  LocationGetDto getOneLocation(@PathVariable String name, JwtAuthenticationToken token) {
+    return locationService.getOne(name).toGetDto();
+  }
+
+  /**
+   * @param name Location's name
+   * @return A location by name
+   */
+  @GetMapping("/{name}/{type}")
+  @Operation(summary = "Search locations by name and type")
+  @SecurityRequirement(name = "OAuth2")
+  Iterable<LocationGetDto> searchLocation(
+      @PathVariable String name, @PathVariable String type, JwtAuthenticationToken token) {
+    return locationService.search(name, type).stream().map(LocationEntity::toGetDto).toList();
   }
 
   /**
@@ -57,17 +78,18 @@ public class LocationController {
   @PutMapping("/{name}")
   @Operation(summary = "Modify a single location")
   @SecurityRequirement(name = "OAuth2")
-  LocationDto updateLocation(
+  LocationGetDto updateLocation(
       @RequestBody LocationDto newLocationDto,
       @PathVariable String name,
       JwtAuthenticationToken token) {
     return locationService
         .update(
             name,
-            newLocationDto.getName(),
-            newLocationDto.getCuisine(),
-            newLocationDto.getAddress())
-        .toDto();
+            newLocationDto.name(),
+            newLocationDto.description(),
+            newLocationDto.address(),
+            newLocationDto.type())
+        .toGetDto();
   }
 
   /**
@@ -77,9 +99,9 @@ public class LocationController {
   @PutMapping("/{name}/{owner}")
   @Operation(summary = "Assign owner to a location")
   @SecurityRequirement(name = "OAuth2")
-  LocationDto assignLocationOwner(
+  LocationGetDto assignLocationOwner(
       @PathVariable String name, @PathVariable String owner, JwtAuthenticationToken token) {
-    return locationService.assignOwner(name, owner).toDto();
+    return locationService.assignOwner(name, owner).toGetDto();
   }
 
   /**
@@ -90,11 +112,27 @@ public class LocationController {
   @Operation(summary = "Create a new location")
   @SecurityRequirement(name = "OAuth2")
   @ResponseBody
-  LocationDto addNewLocation(
+  LocationGetDto addNewLocation(
       @RequestBody @Validated LocationDto locationDto, JwtAuthenticationToken token) {
     return locationService
-        .createNew(locationDto.getName(), locationDto.getCuisine(), locationDto.getAddress())
-        .toDto();
+        .createNew(
+            locationDto.name(),
+            locationDto.description(),
+            locationDto.address(),
+            locationDto.type())
+        .toGetDto();
+  }
+
+  /**
+   * @param name Name of Location to delete
+   * @return Confirmation message if successful
+   */
+  @DeleteMapping(path = "/{name}")
+  @Operation(summary = "Delete a location")
+  @SecurityRequirement(name = "OAuth2")
+  @ResponseBody
+  LocationDto deleteLocation(@PathVariable String name, JwtAuthenticationToken token) {
+    return locationService.delete(name).toDto();
   }
 
   /**

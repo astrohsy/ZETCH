@@ -8,6 +8,7 @@
       <plugin>
         <artifactId>spring-boot-maven-plugin</artifactId>
         <groupId>org.springframework.boot</groupId>
+        <version>2.7.4</version>
       </plugin>
       <plugin>
         <artifactId>jacoco-maven-plugin</artifactId>
@@ -28,24 +29,45 @@
         <groupId>org.jacoco</groupId>
         <version>0.8.8</version>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <version>3.2.0</version>
+        <dependencies>
+          <dependency>
+            <groupId>com.puppycrawl.tools</groupId>
+            <artifactId>checkstyle</artifactId>
+            <version>10.3.4</version>
+          </dependency>
+        </dependencies>
+        <configuration>
+          <consoleOutput>true</consoleOutput>
+          <configLocation>google_checks.xml</configLocation>
+          <linkXRef>false</linkXRef>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
   <dependencies>
     <dependency>
       <artifactId>spring-boot-starter-web</artifactId>
       <groupId>org.springframework.boot</groupId>
+      <version>2.7.4</version>
     </dependency>
     <dependency>
       <artifactId>spring-boot-starter-data-jpa</artifactId>
       <groupId>org.springframework.boot</groupId>
+      <version>2.7.4</version>
     </dependency>
     <dependency>
       <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
       <groupId>org.springframework.boot</groupId>
+      <version>2.7.4</version>
     </dependency>
     <dependency>
       <artifactId>spring-boot-starter-security</artifactId>
       <groupId>org.springframework.boot</groupId>
+      <version>2.7.4</version>
     </dependency>
     <dependency>
       <artifactId>cognitoidentityprovider</artifactId>
@@ -92,7 +114,13 @@
     <dependency>
       <artifactId>modelmapper</artifactId>
       <groupId>org.modelmapper</groupId>
-      <version>2.3.5</version>
+      <version>3.1.0</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <version>2.9.1</version>
+      <scope>compile</scope>
     </dependency>
   </dependencies>
   <dependencyManagement>

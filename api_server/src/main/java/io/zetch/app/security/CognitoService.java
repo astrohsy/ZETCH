@@ -14,6 +14,7 @@ import software.amazon.awssdk.services.cognitoidentityprovider.model.CognitoIden
 import software.amazon.awssdk.services.cognitoidentityprovider.model.SignUpRequest;
 import software.amazon.awssdk.services.cognitoidentityprovider.model.UsernameExistsException;
 
+/** Service providing Cognito business logic. */
 @Service
 public class CognitoService {
   private final CognitoIdentityProviderClient cognito;
@@ -21,6 +22,7 @@ public class CognitoService {
   private final String userPoolId;
   private final Logger logger = LoggerFactory.getLogger(CognitoService.class);
 
+  /** Initialize a Cognito service using AWS and Cognito keys. */
   @Autowired
   public CognitoService(
       @Value("${cognito.access-key-id}") String accessKey,

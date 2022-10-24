@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SecurityService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Zetch Reviews App</a> &gt; <a href="index.source.html" class="el_package">io.zetch.app.security</a> &gt; <span class="el_source">SecurityService.java</span></div><h1>SecurityService.java</h1><pre class="source lang-java linenums">package io.zetch.app.security;
+
+import io.zetch.app.domain.user.Affiliation;
+import io.zetch.app.domain.user.UserEntity;
+import io.zetch.app.repo.UserRepository;
+import java.util.Objects;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
+import org.springframework.stereotype.Service;
+
+/** Service providing authorization business logic. */
+@Service
+public class SecurityService {
+  private final UserRepository userRepository;
+
+  @Autowired
+<span class="fc" id="L17">  public SecurityService(UserRepository userRepository) {</span>
+<span class="fc" id="L18">    this.userRepository = userRepository;</span>
+<span class="fc" id="L19">  }</span>
+
+  /** Returns True if the user from the provided token is an admin. */
+  public boolean isAdmin(JwtAuthenticationToken token) {
+<span class="pc bpc" id="L23" title="1 of 2 branches missed.">    if (token == null) {</span>
+<span class="nc" id="L24">      return false;</span>
+    }
+
+<span class="fc" id="L27">    UserEntity user = getUserFromToken(token);</span>
+<span class="fc bfc" id="L28" title="All 2 branches covered.">    return user.getAffiliation() == Affiliation.ADMIN;</span>
+  }
+
+  /**
+   * Returns True if the user from the provided token is the same user that was passed in the path
+   * variable.
+   */
+  public boolean isSelf(JwtAuthenticationToken token, String pathUsername) {
+<span class="fc bfc" id="L36" title="All 2 branches covered.">    if (token == null) {</span>
+<span class="fc" id="L37">      return false;</span>
+    }
+
+<span class="fc" id="L40">    return Objects.equals(getUsernameFromToken(token), pathUsername);</span>
+  }
+
+  /**
+   * Returns True if the client ID from the provided token is the same client ID that was passed in.
+   */
+  public boolean isSelfClient(JwtAuthenticationToken token, String clientId) {
+<span class="pc bpc" id="L47" title="1 of 2 branches missed.">    if (token == null) {</span>
+<span class="nc" id="L48">      return false;</span>
+    }
+
+<span class="fc" id="L51">    return Objects.equals(getClientIdFromToken(token), clientId);</span>
+  }
+
+  /** Returns the UserEntity corresponding to the provided token. */
+  private UserEntity getUserFromToken(JwtAuthenticationToken token) {
+<span class="fc" id="L56">    String username = token.getToken().getClaimAsString(&quot;username&quot;);</span>
+<span class="fc" id="L57">    return userRepository.findByUsername(username).orElseThrow();</span>
+  }
+
+  /** Returns the username from the provided token. */
+  private String getUsernameFromToken(JwtAuthenticationToken token) {
+<span class="fc" id="L62">    return token.getToken().getClaimAsString(&quot;username&quot;);</span>
+  }
+
+  /** Returns the username from the provided token. */
+  private String getClientIdFromToken(JwtAuthenticationToken token) {
+<span class="fc" id="L67">    return token.getToken().getClaimAsString(&quot;client_id&quot;);</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

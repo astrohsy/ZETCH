@@ -126,7 +126,7 @@ class UserControllerTest {
         .andExpect(status().isOk())
         .andExpect(jsonPath("*", notNullValue()))
         .andExpect(jsonPath("$.username", is(u1.getUsername())))
-        .andExpect(jsonPath("$.name", is(u1.getDisplayName())))
+        .andExpect(jsonPath("$.display_name", is(u1.getDisplayName())))
         .andExpect(jsonPath("$.email", is(u1.getEmail())));
   }
 
@@ -147,7 +147,7 @@ class UserControllerTest {
         .andExpect(status().isOk())
         .andExpect(jsonPath("*", notNullValue()))
         .andExpect(jsonPath("$.username", is(u1.getUsername())))
-        .andExpect(jsonPath("$.name", is(u1.getDisplayName())))
+        .andExpect(jsonPath("$.display_name", is(u1.getDisplayName())))
         .andExpect(jsonPath("$.email", is(u1.getEmail())));
   }
 
@@ -200,7 +200,7 @@ class UserControllerTest {
         .andExpect(status().isOk())
         .andExpect(jsonPath("*", notNullValue()))
         .andExpect(jsonPath("$.username", is(u1.getUsername())))
-        .andExpect(jsonPath("$.name", is(updated.getDisplayName())))
+        .andExpect(jsonPath("$.display_name", is(updated.getDisplayName())))
         .andExpect(jsonPath("$.email", is(updated.getEmail())))
         .andExpect(jsonPath("$.affiliation", is(updated.getAffiliation().toString())));
   }
@@ -304,7 +304,7 @@ class UserControllerTest {
         .andExpect(status().isOk())
         .andExpect(jsonPath("*", notNullValue()))
         .andExpect(jsonPath("$.username", is(u1.getUsername())))
-        .andExpect(jsonPath("$.name", is(u1.getDisplayName())))
+        .andExpect(jsonPath("$.display_name", is(u1.getDisplayName())))
         .andExpect(jsonPath("$.email", is(u1.getEmail())))
         .andExpect(jsonPath("$.affiliation", is(u1.getAffiliation().toString())));
   }

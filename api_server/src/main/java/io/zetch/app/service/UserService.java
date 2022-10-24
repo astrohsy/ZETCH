@@ -10,6 +10,7 @@ import java.util.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/** Service providing User business logic. */
 @Service
 public class UserService {
   private final UserRepository userRepository;
@@ -22,7 +23,7 @@ public class UserService {
   }
 
   /**
-   * Retrieve all users
+   * Retrieves all users.
    *
    * @return List of all users
    */
@@ -31,7 +32,7 @@ public class UserService {
   }
 
   /**
-   * Retrieve one user
+   * Retrieves one user.
    *
    * @param username User's username
    * @return User
@@ -41,7 +42,7 @@ public class UserService {
   }
 
   /**
-   * Create a new User in the database and Cognito
+   * Creates a new User in the database and Cognito.
    *
    * @param username User's username
    * @param name User's name
@@ -71,7 +72,7 @@ public class UserService {
   }
 
   /**
-   * Update existing User with any non-null attributes. Changing username is not supported.
+   * Updates existing User with any non-null attributes. Changing username is not supported.
    *
    * @param currUsername Username of User to be updated
    * @param newName New name
@@ -101,7 +102,7 @@ public class UserService {
   }
 
   /**
-   * Delete a User from the database
+   * Deletes a User from the database.
    *
    * @param username Username of User to delete
    * @return User that was just deleted
@@ -116,7 +117,7 @@ public class UserService {
   }
 
   /**
-   * Verify and return the User for a particular username
+   * Verifies and returns the User for a particular username.
    *
    * @param username Username to find
    * @return Found User
@@ -124,7 +125,7 @@ public class UserService {
    */
   public UserEntity verifyUser(String username) throws NoSuchElementException {
     return userRepository
-        .findByUsername(username)
+        .findByUsernameIgnoreCase(username)
         .orElseThrow(() -> new NoSuchElementException("User does not exist: " + username));
   }
 }
