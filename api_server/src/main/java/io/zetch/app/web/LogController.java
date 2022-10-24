@@ -33,7 +33,8 @@ public class LogController {
   }
 
   @GetMapping("/{clientId}")
-  @Operation(summary = "Retrieve all logs for the user's client.")
+  @Operation(
+      summary = "Retrieve all logs for the user's client. Auth: user has to belong to the client.")
   @SecurityRequirement(name = "OAuth2")
   @PreAuthorize("@securityService.isSelfClient(#token, #clientId)")
   public List<LogEntity> getAllClientLogs(
@@ -42,7 +43,8 @@ public class LogController {
   }
 
   @DeleteMapping("/{clientId}")
-  @Operation(summary = "Delete all logs for the user's client.")
+  @Operation(
+      summary = "Delete all logs for the user's client. Auth: user has to belong to the client.")
   @SecurityRequirement(name = "OAuth2")
   @PreAuthorize("@securityService.isSelfClient(#token, #clientId)")
   @Transactional
