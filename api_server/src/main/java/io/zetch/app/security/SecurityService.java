@@ -37,7 +37,7 @@ public class SecurityService {
       return false;
     }
 
-    return Objects.equals(getUsernameFromToken(token), pathUsername);
+    return Objects.equals(getUsernameFromToken(token), pathUsername.toLowerCase());
   }
 
   /**
@@ -53,16 +53,16 @@ public class SecurityService {
 
   /** Returns the UserEntity corresponding to the provided token. */
   private UserEntity getUserFromToken(JwtAuthenticationToken token) {
-    String username = token.getToken().getClaimAsString("username");
-    return userRepository.findByUsername(username).orElseThrow();
+    String username = token.getToken().getClaimAsString("username").toLowerCase();
+    return userRepository.findByUsernameIgnoreCase(username).orElseThrow();
   }
 
   /** Returns the username from the provided token. */
   private String getUsernameFromToken(JwtAuthenticationToken token) {
-    return token.getToken().getClaimAsString("username");
+    return token.getToken().getClaimAsString("username").toLowerCase();
   }
 
-  /** Returns the username from the provided token. */
+  /** Returns the client ID from the provided token. */
   private String getClientIdFromToken(JwtAuthenticationToken token) {
     return token.getToken().getClaimAsString("client_id");
   }

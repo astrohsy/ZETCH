@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -76,5 +77,16 @@ class LogControllerTest {
     mockMvc
         .perform(get(LOGS_ENDPOINT + "another_client").contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isForbidden());
+  }
+
+  @Test
+  void deleteLogs() throws Exception {
+    when(logRepositoryMock.deleteByClientId("some_client")).thenReturn(1L);
+
+    mockMvc
+        .perform(delete(LOGS_ENDPOINT + "some_client").contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("*", notNullValue()))
+        .andExpect(jsonPath("$.deleted_count", is(1)));
   }
 }
