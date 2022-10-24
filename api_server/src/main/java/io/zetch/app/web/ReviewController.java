@@ -10,13 +10,23 @@ import io.zetch.app.domain.review.ReviewEntity;
 import io.zetch.app.domain.review.ReviewGetDto;
 import io.zetch.app.domain.review.ReviewPostDto;
 import io.zetch.app.service.ReviewService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
+/** Controller for the review endpoints. */
 @RestController
 @RequestMapping(path = "/reviews")
 @Tag(name = "Reviews")
@@ -47,9 +57,7 @@ public class ReviewController {
     return mapper.readValue(serialized, ReviewGetDto.class);
   }
 
-  /**
-   * @return A list of all restraurants
-   */
+  /** Returns a list of all restraurants. */
   @GetMapping(path = "/")
   @Operation(summary = "Retrieve all reviews")
   @SecurityRequirement(name = "OAuth2")
@@ -63,6 +71,8 @@ public class ReviewController {
   }
 
   /**
+   * Returns a review with id.
+   *
    * @param reviewId Review's id
    * @return A review with id
    */
@@ -76,6 +86,8 @@ public class ReviewController {
   }
 
   /**
+   * Deletes a review.
+   *
    * @param reviewId Review's id
    * @return Nothing if successful
    */

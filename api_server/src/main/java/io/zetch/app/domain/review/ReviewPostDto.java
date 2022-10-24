@@ -1,9 +1,9 @@
 package io.zetch.app.domain.review;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.io.Serializable;
 
+/** DTO for posting reviews. */
 public record ReviewPostDto(
     String comment,
     Integer rating,

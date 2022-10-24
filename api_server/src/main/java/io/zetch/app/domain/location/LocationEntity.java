@@ -1,4 +1,3 @@
-/** Location entity definition */
 package io.zetch.app.domain.location;
 
 import io.zetch.app.domain.BaseEntity;
@@ -15,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+/** Location entity definition. */
 @Getter
 @Setter
 @ToString
@@ -35,7 +35,7 @@ public class LocationEntity extends BaseEntity {
   private Type type;
 
   /**
-   * Convert the Location entity to a Location data transfer object
+   * Converts the Location entity to a Location data transfer object.
    *
    * @return Location DTO
    */
@@ -43,6 +43,11 @@ public class LocationEntity extends BaseEntity {
     return new LocationDto(name, description, address, type.toString());
   }
 
+  /**
+   * Converts the Location entity to a GET Location data transfer object.
+   *
+   * @return Location DTO
+   */
   public LocationGetDto toGetDto() {
     return new LocationGetDto(super.getId(), name, description, address, type.toString());
   }
