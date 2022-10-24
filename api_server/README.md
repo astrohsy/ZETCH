@@ -1,84 +1,79 @@
 # Zetch API Server
-
+## How to build, run, and test
 ### 1. Build and run entire development environment
-See a ZETCH team member for `.env` specifying secret values, place in `src/main/resources/`
+**Important:** See a ZETCH team member for a `.env` file specifying secret values, place the file in `src/main/resources/`.
 
 ```
 docker-compose build && docker-compose up -d
 ```
 
-note: the docker-compose build section is only necessary if you have made code changes
+Note: the docker-compose build section is only necessary if you have made code changes
 
 ### 2. Stop environment
-
 ```
 docker-compose down --remove-orphans
 ```
 
 ### 3. View running logs
-
 ```
 docker-compose logs -f
 ```
 
-### 4. Run specific service
+### 4. Run a specific service
+Database: `docker-compose up db -d`
 
-database: `docker-compose up db -d`
+API: `docker-compose up api -d`
 
-api: `docker-compose up api -d`
-
-### 5. View swagger UI of apis:
-
-`localhost:8080/swagger-ui/index.html`
-
-### 6. Deployed service swagger link:
-`https://zetch.tech/swagger-ui/index.html`
-
-### 6. Run Jacoco test coverage:
-
-```bash
-mvn test
-# Generated in target/site/jacoco/index.html
+### 5. Testing
+```shell
+ZETCH/api_server$ ./mvnw test
 ```
 
-### Run PMD static analysis bug finder:
+Jacoco coverage is generated in `api_server/target/site/jacoco/index.html`.
 
-```bash
-mvn pmd:pmd
-# Generated in target/site/pmd.html
+## Style checker
+```shell
+ZETCH/api_server$ ./mvnw checkstyle:checkstyle
 ```
 
-### Auth
+Checkstyle report is in `api_server/reports/checkstyle.html`.
 
-Some routes are protected by OAuth2 authentication using Cognito.
-Auth tokens can be generated either in Postman or Swagger UI.
-
-In Postman, utilizing [variables](https://learning.postman.com/docs/sending-requests/variables/):
-
-![postman_auth_config.png](docs/postman_auth_config.png)
-
-In Swagger UI, click on Authorize, then enter the client id.
-
-See a ZETCH team member for `.env` specifying secret values.
-
-For a list of users which can log in with Cognito, see the `Application.commandLineRunner()` method.
-Every user has the same password -- `123456`.
-
-### Run checkstyle
-
-```
-mvn checkstyle:checkstyle
-# generate checkstyle reports in /target/site/
-mvn install
-# copies the whole /target/site/ into /reports
-
-# view checkstyle report in /reports/checkstyle.html
+## Static analysis
+```shell
+ZETCH/api_server$ ./mvnw pmd:pmd
 ```
 
+PMD report is generated in `api_server/target/site/jacoco/index.html`.
 
-
-### SonarQube
+In addition, we are utilizing SonarCloud:
 
 ```
 https://sonarcloud.io/project/overview?id=astrohsy_ZETCH
 ```
+
+## API Documentation
+### View Swagger UI
+`localhost:8080/swagger-ui/index.html`
+
+### View deployed Swagger UI
+`https://zetch.tech/swagger-ui/index.html`
+
+### Authentication notes
+All API endpoints are protected by OAuth2 authentication using AWS Cognito. Some endpoints perform additional security checks. See the Swagger documentation for more details (for example, to view client logs a user has to belong to that client).
+
+For testing/demo, the following existing users can login:
+
+- `admin`: admin user
+- `amy`: regular user
+- `bob`: regular user
+
+Every user has the same password -- `123456`.
+
+#### Generating Auth tokens
+##### In Postman
+Utilizing [variables](https://learning.postman.com/docs/sending-requests/variables/):
+
+![postman_auth_config.png](docs/postman_auth_config.png)
+
+##### In Swagger UI
+In Swagger UI, click on Authorize, then enter a client id from `.env`.
