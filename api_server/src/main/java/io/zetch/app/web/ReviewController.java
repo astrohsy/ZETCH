@@ -43,7 +43,7 @@ public class ReviewController {
   }
 
   @PostMapping(path = "/")
-  @Operation(summary = "Create a new review")
+  @Operation(summary = "Create a new review.")
   @SecurityRequirement(name = "OAuth2")
   @ResponseBody
   ReviewGetDto addNewUser(@RequestBody ReviewPostDto newReviewDto) throws JsonProcessingException {
@@ -59,7 +59,7 @@ public class ReviewController {
 
   /** Returns a list of all restraurants. */
   @GetMapping(path = "/")
-  @Operation(summary = "Retrieve all reviews")
+  @Operation(summary = "Retrieve all reviews.")
   @SecurityRequirement(name = "OAuth2")
   @ResponseBody
   Iterable<ReviewGetDto> getAllReviews() throws JsonProcessingException {
@@ -77,7 +77,7 @@ public class ReviewController {
    * @return A review with id
    */
   @GetMapping("/{reviewId}")
-  @Operation(summary = "Retrieve a review with reviewId")
+  @Operation(summary = "Retrieve a review with reviewId.")
   @SecurityRequirement(name = "OAuth2")
   ReviewGetDto getOneReview(@PathVariable Long reviewId) throws JsonProcessingException {
     ReviewEntity review = reviewService.getOne(reviewId);
@@ -92,7 +92,7 @@ public class ReviewController {
    * @return Nothing if successful
    */
   @DeleteMapping("/{reviewId}")
-  @Operation(summary = "Delete a review with reviewId")
+  @Operation(summary = "Delete a review with reviewId.")
   @SecurityRequirement(name = "OAuth2")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   void deleteOneReview(@PathVariable Long reviewId) {

@@ -40,7 +40,7 @@ public class LocationController {
 
   /** Returns a list of all locations. */
   @GetMapping(path = "/")
-  @Operation(summary = "Retrieve all locations")
+  @Operation(summary = "Retrieve all locations.")
   @SecurityRequirement(name = "OAuth2")
   @ResponseBody
   Iterable<LocationGetDto> getAllLocations(JwtAuthenticationToken token) {
@@ -54,7 +54,7 @@ public class LocationController {
    * @return A location by name
    */
   @GetMapping("/{name}")
-  @Operation(summary = "Retrieve a single location")
+  @Operation(summary = "Retrieve a single location.")
   @SecurityRequirement(name = "OAuth2")
   LocationGetDto getOneLocation(@PathVariable String name, JwtAuthenticationToken token) {
     return locationService.getOne(name).toGetDto();
@@ -67,7 +67,7 @@ public class LocationController {
    * @return A location by name
    */
   @GetMapping("/{name}/{type}")
-  @Operation(summary = "Search locations by name and type")
+  @Operation(summary = "Search for locations. Work in progress. Do not call.")
   @SecurityRequirement(name = "OAuth2")
   Iterable<LocationGetDto> searchLocation(
       @PathVariable String name, @PathVariable String type, JwtAuthenticationToken token) {
@@ -81,7 +81,7 @@ public class LocationController {
    * @return A location by name
    */
   @PutMapping("/{name}")
-  @Operation(summary = "Modify a single location")
+  @Operation(summary = "Modify a single location.")
   @SecurityRequirement(name = "OAuth2")
   LocationGetDto updateLocation(
       @RequestBody LocationDto newLocationDto,
@@ -104,7 +104,7 @@ public class LocationController {
    * @param name Owner's name return Confirmation message if successful
    */
   @PutMapping("/{name}/{owner}")
-  @Operation(summary = "Assign owner to a location")
+  @Operation(summary = "Assign owner to a location.")
   @SecurityRequirement(name = "OAuth2")
   LocationGetDto assignLocationOwner(
       @PathVariable String name, @PathVariable String owner, JwtAuthenticationToken token) {
@@ -118,7 +118,7 @@ public class LocationController {
    * @return Confirmation message if successful
    */
   @PostMapping(path = "/")
-  @Operation(summary = "Create a new location")
+  @Operation(summary = "Create a new location.")
   @SecurityRequirement(name = "OAuth2")
   @ResponseBody
   LocationGetDto addNewLocation(
@@ -139,7 +139,7 @@ public class LocationController {
    * @return Confirmation message if successful
    */
   @DeleteMapping(path = "/{name}")
-  @Operation(summary = "Delete a location")
+  @Operation(summary = "Delete a location.")
   @SecurityRequirement(name = "OAuth2")
   @ResponseBody
   LocationDto deleteLocation(@PathVariable String name, JwtAuthenticationToken token) {
