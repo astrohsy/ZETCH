@@ -25,11 +25,17 @@ Database: `docker-compose up db -d`
 API: `docker-compose up api -d`
 
 ### 5. Testing
+JUnit tests:
 ```shell
 ZETCH/api_server$ ./mvnw test
 ```
-
 Jacoco coverage is generated in `api_server/target/site/jacoco/index.html`.
+
+Integration tests are run in postman: 
+```shell
+newman run https://api.getpostman.com/collections/23680701-9829f32b-1694-4065-b6b9-93cbc808c454?apikey={{postman-api-key}}
+```
+**Important:** See a ZETCH team member for postman-api-key.
 
 ## Style checker
 ```shell
