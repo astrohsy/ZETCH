@@ -13,6 +13,8 @@ import java.util.Map;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -43,15 +45,54 @@ class SecurityServiceTest {
     assertThat(securityService.isSelf(null, USERNAME_1), is(false));
   }
 
-  @Test
-  void isSelf() {
-    assertThat(securityService.isSelf(getJwtForTest(USERNAME_1, CLIENT_1), USERNAME_1), is(true));
+  @ParameterizedTest
+  @CsvSource({
+    "bob, bob, true",
+    "bob, Bob, true",
+    "Bob, bob, true",
+    "bob, amy, false",
+    "Bob, amy, false",
+    "bob, Amy, false"
+  })
+  void isSelf(String username1, String username2, Boolean expected) {
+    assertThat(securityService.isSelf(getJwtForTest(username1, CLIENT_1), username2), is(expected));
   }
 
-  @Test
-  void isSelf_Failure() {
-    assertThat(securityService.isSelf(getJwtForTest(USERNAME_1, CLIENT_1), USERNAME_2), is(false));
-  }
+  //  @Test
+  //  void isSelf() {
+  //    assertThat(securityService.isSelf(getJwtForTest(USERNAME_1, CLIENT_1), USERNAME_1),
+  // is(true));
+  //  }
+  //
+  //  @Test
+  //  void isSelf_Failure() {
+  //    assertThat(securityService.isSelf(getJwtForTest(USERNAME_1, CLIENT_1), USERNAME_2),
+  // is(false));
+  //  }
+  //
+  //  @Test
+  //  void isSelf_Uppercase() {
+  //    assertThat(securityService.isSelf(getJwtForTest("Username", CLIENT_1), "Username"),
+  // is(true));
+  //  }
+  //
+  //  @Test
+  //  void isSelf_Uppercase_Failure() {
+  //    assertThat(securityService.isSelf(getJwtForTest("Username", CLIENT_1), "Another"),
+  // is(false));
+  //  }
+  //
+  //  @Test
+  //  void isSelf_Uppercase() {
+  //    assertThat(securityService.isSelf(getJwtForTest("Username", CLIENT_1), "Username"),
+  // is(true));
+  //  }
+  //
+  //  @Test
+  //  void isSelf_Uppercase_Failure() {
+  //    assertThat(securityService.isSelf(getJwtForTest("Username", CLIENT_1), "Another"),
+  // is(false));
+  //  }
 
   @Test
   void isSelfClient() {
@@ -67,13 +108,14 @@ class SecurityServiceTest {
 
   @Test
   void isAdmin() {
-    when(userRepository.findByUsername(USERNAME_2)).thenReturn(Optional.ofNullable(admin));
+    when(userRepository.findByUsernameIgnoreCase(USERNAME_2))
+        .thenReturn(Optional.ofNullable(admin));
     assertThat(securityService.isAdmin(getJwtForTest(USERNAME_2, CLIENT_1)), is(true));
   }
 
   @Test
   void isAdmin_Failure() {
-    when(userRepository.findByUsername(USERNAME_1)).thenReturn(Optional.ofNullable(bob));
+    when(userRepository.findByUsernameIgnoreCase(USERNAME_1)).thenReturn(Optional.ofNullable(bob));
     assertThat(securityService.isAdmin(getJwtForTest(USERNAME_1, CLIENT_1)), is(false));
   }
 

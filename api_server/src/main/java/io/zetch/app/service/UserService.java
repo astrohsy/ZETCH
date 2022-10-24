@@ -125,7 +125,7 @@ public class UserService {
    */
   public UserEntity verifyUser(String username) throws NoSuchElementException {
     return userRepository
-        .findByUsername(username)
+        .findByUsernameIgnoreCase(username)
         .orElseThrow(() -> new NoSuchElementException("User does not exist: " + username));
   }
 }

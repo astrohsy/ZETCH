@@ -4,6 +4,7 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -22,6 +23,8 @@ import io.zetch.app.service.ReviewService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -63,7 +66,7 @@ class ReviewControllerTest {
         """
                    {
                       "id": 0, "rating": 4, "comment": "Very tasty!",
-                      location: { id: 0, "name": "Bob's", "cuisine": "Italian", "address": "1234 Broadway" },
+                      location: { id: 0, "name": "Bob's", "description": "Italian", "address": "1234 Broadway" },
                       user: { id: 0, "username": "bob", "name": "Bob", "email": "bob@example.com" }
                    }
                 """);
@@ -71,7 +74,7 @@ class ReviewControllerTest {
         """
                       {
                         "id": 1, "rating": 1, "comment": "Terrible service.",
-                        location: { id: 0, "name": "Bob's", "cuisine": "Italian", "address": "1234 Broadway" },
+                        location: { id: 0, "name": "Bob's", "description": "Italian", "address": "1234 Broadway" },
                         user: { id: 1, "username": "joe", "name": "Job", "email": "joe@example.com" }
                        }
                     """);
@@ -92,12 +95,11 @@ class ReviewControllerTest {
             .accept(MediaType.APPLICATION_JSON)
             .content(
                 mapper.writeValueAsString(
-                    ReviewPostDto.builder()
-                        .comment(r1.getComment())
-                        .rating(r1.getRating())
-                        .userId(r1.getUser().getId())
-                        .locationId(r1.getLocation().getId())
-                        .build()));
+                    new ReviewPostDto(
+                        r1.getComment(),
+                        r1.getRating(),
+                        r1.getUser().getId(),
+                        r1.getLocation().getId())));
 
     mockMvc
         .perform(mockRequest)
@@ -128,5 +130,17 @@ class ReviewControllerTest {
         .perform(get(REVIEWS_ENDPOINT + testReviewId).contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(jsonPath("*", notNullValue()));
+  }
+
+  @Test
+  void deleteOneReview() throws Exception {
+    doThrow(NoSuchElementException.class).when(reviewServiceMock).deleteOne(2L);
+    mockMvc
+        .perform(delete(REVIEWS_ENDPOINT + 1l).contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isNoContent());
+
+    mockMvc
+        .perform(delete(REVIEWS_ENDPOINT + 2L).contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isNotFound());
   }
 }

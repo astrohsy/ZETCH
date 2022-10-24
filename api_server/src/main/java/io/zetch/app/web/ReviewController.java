@@ -11,9 +11,11 @@ import io.zetch.app.domain.review.ReviewGetDto;
 import io.zetch.app.domain.review.ReviewPostDto;
 import io.zetch.app.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping(path = "/reviews")
@@ -37,10 +39,10 @@ public class ReviewController {
   ReviewGetDto addNewUser(@RequestBody ReviewPostDto newReviewDto) throws JsonProcessingException {
     ReviewEntity r =
         reviewService.createNew(
-            newReviewDto.getComment(),
-            newReviewDto.getRating(),
-            newReviewDto.getUserId(),
-            newReviewDto.getLocationId());
+            newReviewDto.comment(),
+            newReviewDto.rating(),
+            newReviewDto.userId(),
+            newReviewDto.locationId());
     String serialized = mapper.writeValueAsString(r);
     return mapper.readValue(serialized, ReviewGetDto.class);
   }
@@ -65,11 +67,29 @@ public class ReviewController {
    * @return A review with id
    */
   @GetMapping("/{reviewId}")
-  @Operation(summary = "Retrieve a single restaurant")
+  @Operation(summary = "Retrieve a review with reviewId")
   @SecurityRequirement(name = "OAuth2")
   ReviewGetDto getOneReview(@PathVariable Long reviewId) throws JsonProcessingException {
     ReviewEntity review = reviewService.getOne(reviewId);
     String serialized = mapper.writeValueAsString(review);
     return mapper.readValue(serialized, ReviewGetDto.class);
+  }
+
+  /**
+   * @param reviewId Review's id
+   * @return Nothing if successful
+   */
+  @DeleteMapping("/{reviewId}")
+  @Operation(summary = "Delete a review with reviewId")
+  @SecurityRequirement(name = "OAuth2")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  void deleteOneReview(@PathVariable Long reviewId) {
+    reviewService.deleteOne(reviewId);
+  }
+
+  @ResponseStatus(HttpStatus.NOT_FOUND)
+  @ExceptionHandler(NoSuchElementException.class)
+  String return404(NoSuchElementException ex) {
+    return ex.getMessage();
   }
 }
