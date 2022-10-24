@@ -14,6 +14,6 @@ RUN mvn package
 # Package stage
 #
 FROM openjdk:17.0.2-jdk
-COPY --from=build /usr/app/target/app.jar /usr/app/app.jar
+COPY --from=build /usr/app/target/app-0.0.1-SNAPSHOT.jar /usr/app/app-0.0.1-SNAPSHOT.jar
 EXPOSE 8080
-ENTRYPOINT ["java","-jar","/usr/app/app.jar"]
+ENTRYPOINT ["java","-jar","/usr/app/app-0.0.1-SNAPSHOT.jar"]
