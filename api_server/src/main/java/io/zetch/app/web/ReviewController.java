@@ -1,8 +1,6 @@
 package io.zetch.app.web;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -33,9 +31,6 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(origins = "*") // NOSONAR
 public class ReviewController {
   private final ReviewService reviewService;
-  private static final String JSON_PARSE_ERROR_MSG = "Cannot handle this json";
-  private final ObjectMapper mapper =
-      new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
   @Autowired
   public ReviewController(ReviewService reviewService) {
@@ -61,7 +56,7 @@ public class ReviewController {
   @Operation(summary = "Retrieve all reviews.")
   @SecurityRequirement(name = "OAuth2")
   @ResponseBody
-  Iterable<ReviewGetDto> getAllReviews() throws JsonProcessingException {
+  Iterable<ReviewGetDto> getAllReviews() {
     var result = new ArrayList<ReviewGetDto>();
     for (var x : reviewService.getAll().stream().toList()) {
       result.add(x.toGetDto());
@@ -78,7 +73,7 @@ public class ReviewController {
   @GetMapping("/{reviewId}")
   @Operation(summary = "Retrieve a review with reviewId.")
   @SecurityRequirement(name = "OAuth2")
-  ReviewGetDto getOneReview(@PathVariable Long reviewId) throws JsonProcessingException {
+  ReviewGetDto getOneReview(@PathVariable Long reviewId) {
     ReviewEntity review = reviewService.getOne(reviewId);
     return review.toGetDto();
   }
