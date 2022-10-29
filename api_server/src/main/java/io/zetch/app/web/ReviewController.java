@@ -53,8 +53,7 @@ public class ReviewController {
             newReviewDto.rating(),
             newReviewDto.userId(),
             newReviewDto.locationId());
-    String serialized = mapper.writeValueAsString(r);
-    return mapper.readValue(serialized, ReviewGetDto.class);
+    return r.toGetDto();
   }
 
   /** Returns a list of all restraurants. */
@@ -65,7 +64,7 @@ public class ReviewController {
   Iterable<ReviewGetDto> getAllReviews() throws JsonProcessingException {
     var result = new ArrayList<ReviewGetDto>();
     for (var x : reviewService.getAll().stream().toList()) {
-      result.add(mapper.readValue(mapper.writeValueAsString(x), ReviewGetDto.class));
+      result.add(x.toGetDto());
     }
     return result;
   }
@@ -81,8 +80,7 @@ public class ReviewController {
   @SecurityRequirement(name = "OAuth2")
   ReviewGetDto getOneReview(@PathVariable Long reviewId) throws JsonProcessingException {
     ReviewEntity review = reviewService.getOne(reviewId);
-    String serialized = mapper.writeValueAsString(review);
-    return mapper.readValue(serialized, ReviewGetDto.class);
+    return review.toGetDto();
   }
 
   /**
