@@ -5,6 +5,9 @@ import io.zetch.app.domain.user.UserEntity;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,6 +30,7 @@ public class LocationEntity extends BaseEntity {
 
   @ManyToMany // A location might have multiple owners; a User might own multiple locations
   @ToString.Exclude
+  @JsonIgnore
   private List<UserEntity> owners;
   // Every location must have a name
   @NonNull private String name;
