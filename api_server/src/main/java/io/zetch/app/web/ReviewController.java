@@ -41,7 +41,7 @@ public class ReviewController {
   @Operation(summary = "Create a new review.")
   @SecurityRequirement(name = "OAuth2")
   @ResponseBody
-  ReviewGetDto addNewUser(@RequestBody ReviewPostDto newReviewDto) throws JsonProcessingException {
+  ReviewGetDto addNewUser(@RequestBody ReviewPostDto newReviewDto) {
     ReviewEntity r =
         reviewService.createNew(
             newReviewDto.comment(),
