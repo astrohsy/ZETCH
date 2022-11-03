@@ -10,35 +10,35 @@ public class SeedUsers {
     throw new IllegalStateException("Utility class");
   }
 
-  private static final UserEntity USER_1 =
+  public static final UserEntity USER_1 =
       UserEntity.builder()
           .username("admin")
           .affiliation(Affiliation.ADMIN)
           .displayName("Admin.")
           .email(null)
           .build();
-  private static final UserEntity USER_2 =
+  public static final UserEntity USER_2 =
       UserEntity.builder()
           .username("bob")
           .affiliation(Affiliation.STUDENT)
           .displayName("Bob R.")
           .email("bob@me.com")
           .build();
-  private static final UserEntity USER_3 =
+  public static final UserEntity USER_3 =
       UserEntity.builder()
           .username("cat")
           .affiliation(Affiliation.STUDENT)
           .displayName("Kat F.")
           .email("kat@kat.com")
           .build();
-  private static final UserEntity USER_4 =
+  public static final UserEntity USER_4 =
       UserEntity.builder()
           .username("amy")
           .affiliation(Affiliation.FACULTY)
           .displayName("Amy T.")
           .email("amy@dog.com")
           .build();
-  private static final UserEntity USER_5 =
+  public static final UserEntity USER_5 =
       UserEntity.builder()
           .username("sam")
           .affiliation(Affiliation.OTHER)

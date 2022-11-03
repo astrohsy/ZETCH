@@ -49,7 +49,7 @@ public class UserController {
   }
 
   @PostMapping(path = "/")
-  @Operation(summary = "Create a new user")
+  @Operation(summary = "Create a new replyUser")
   @SecurityRequirement(name = "OAuth2")
   @ResponseBody
   UserGetDto addNewUser(@RequestBody UserDto newUserDto) {
@@ -60,14 +60,14 @@ public class UserController {
   }
 
   @GetMapping("/{username}")
-  @Operation(summary = "Retrieve a single user")
+  @Operation(summary = "Retrieve a single replyUser")
   @SecurityRequirement(name = "OAuth2")
   UserGetDto getOneUser(@PathVariable String username) {
     return userService.getOne(username).toGetDto();
   }
 
   @PutMapping("/{username}")
-  @Operation(summary = "Modify user attributes")
+  @Operation(summary = "Modify replyUser attributes")
   @SecurityRequirement(name = "OAuth2")
   @PreAuthorize("@securityService.isSelf(#token, #username)")
   UserGetDto updateUser(
@@ -82,7 +82,7 @@ public class UserController {
   @DeleteMapping("/{username}")
   @PreAuthorize("@securityService.isSelf(#token, #username)")
   @SecurityRequirement(name = "OAuth2")
-  @Operation(summary = "Delete a user")
+  @Operation(summary = "Delete a replyUser")
   UserGetDto deleteUser(@PathVariable String username, JwtAuthenticationToken token) {
     return userService.delete(username).toGetDto();
   }
