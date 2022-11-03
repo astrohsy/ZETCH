@@ -9,7 +9,7 @@ services:
       - POSTGRES_PASSWORD=secret
 
   api:
-    image: 'zetchtest.azurecr.io/zetch-api:latest'
+    image: 'zetch-api:latest'
     build:
       context: .
     container_name: api

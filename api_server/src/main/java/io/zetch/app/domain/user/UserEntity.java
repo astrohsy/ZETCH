@@ -7,6 +7,9 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -37,6 +40,7 @@ public class UserEntity extends BaseEntity {
   // A location might have multiple owners; a User might own multiple locations
   @ManyToMany(mappedBy = "owners")
   @ToString.Exclude
+  @JsonIgnore
   private List<LocationEntity> ownedLocations;
 
   // TODO: List of posted reviews

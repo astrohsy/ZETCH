@@ -11,13 +11,14 @@ import java.util.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-/** Review business logic */
+/** Review business logic. */
 @Service
 public class ReviewService {
   private final ReviewRepository reviewRepository;
   private final UserRepository userRepository;
   private final LocationRepository locationRepository;
 
+  /** Review service constructor. */
   @Autowired
   public ReviewService(
       ReviewRepository reviewRepository,
@@ -29,7 +30,7 @@ public class ReviewService {
   }
 
   /**
-   * Retrieve all Reviews
+   * Retrieve all Reviews.
    *
    * @return List of all Reviews
    */
@@ -38,7 +39,7 @@ public class ReviewService {
   }
 
   /**
-   * Retrieve one Review
+   * Retrieve one Review.
    *
    * @param id Review id
    * @return Review
@@ -51,7 +52,7 @@ public class ReviewService {
   }
 
   /**
-   * Create a new Review in the database
+   * Create a new Review in the database.
    *
    * @param comment Review comment
    */
@@ -68,6 +69,7 @@ public class ReviewService {
     return reviewRepository.save(newReview);
   }
 
+  /** Deletes one review. */
   public void deleteOne(Long reviewId) {
     if (!reviewRepository.existsById(reviewId)) {
       throw new NoSuchElementException();

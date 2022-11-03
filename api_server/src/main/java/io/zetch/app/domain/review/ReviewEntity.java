@@ -1,4 +1,3 @@
-/** Review entity definition */
 package io.zetch.app.domain.review;
 
 import io.zetch.app.domain.BaseEntity;
@@ -8,13 +7,14 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-import lombok.RequiredArgsConstructor;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
+/** Review entity definition. */
 @Getter
 @Setter
 @ToString
@@ -43,5 +43,9 @@ public class ReviewEntity extends BaseEntity {
   @Override
   public int hashCode() {
     return super.hashCode();
+  }
+
+  public ReviewGetDto toGetDto() {
+    return new ReviewGetDto(super.getId(), comment, rating, user.toGetDto(), location.toGetDto());
   }
 }

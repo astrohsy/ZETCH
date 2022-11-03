@@ -1,7 +1,6 @@
 package io.zetch.app.domain.user;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.io.Serializable;
 
 /** A DTO for the {@link UserEntity} entity. */
