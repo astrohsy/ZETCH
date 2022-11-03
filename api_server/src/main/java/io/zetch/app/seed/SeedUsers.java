@@ -4,6 +4,7 @@ import io.zetch.app.domain.user.Affiliation;
 import io.zetch.app.domain.user.UserEntity;
 import java.util.List;
 
+/** Sample users. */
 public class SeedUsers {
 
   private SeedUsers() {

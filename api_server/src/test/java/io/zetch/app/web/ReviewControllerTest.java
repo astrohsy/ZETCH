@@ -66,16 +66,16 @@ class ReviewControllerTest {
         """
                    {
                       "id": 0, "rating": 4, "comment": "Very tasty!",
-                      location: { id: 0, "name": "Bob's", "description": "Italian", "address": "1234 Broadway" },
-                      user: { id: 0, "username": "bob", "name": "Bob", "email": "bob@example.com" }
+                      location: { id: 0, "name": "Bob's", "description": "Italian", "address": "1234 Broadway", "type": "museum" },
+                      user: { id: 0, "username": "bob", "name": "Bob", "email": "bob@example.com", "affiliation": "student" }
                    }
                 """);
     jsonReviews.add(
         """
                       {
                         "id": 1, "rating": 1, "comment": "Terrible service.",
-                        location: { id: 0, "name": "Bob's", "description": "Italian", "address": "1234 Broadway" },
-                        user: { id: 1, "username": "joe", "name": "Job", "email": "joe@example.com" }
+                        location: { id: 0, "name": "Bob's", "description": "Italian", "address": "1234 Broadway", "type": "museum" },
+                        user: { id: 1, "username": "joe", "name": "Job", "email": "joe@example.com", "affiliation": "student" }
                        }
                     """);
     reviews = jsonReviews.stream().map(x -> gson.fromJson(x, ReviewEntity.class)).toList();
@@ -95,12 +95,11 @@ class ReviewControllerTest {
             .accept(MediaType.APPLICATION_JSON)
             .content(
                 mapper.writeValueAsString(
-                    ReviewPostDto.builder()
-                        .comment(r1.getComment())
-                        .rating(r1.getRating())
-                        .userId(r1.getUser().getId())
-                        .locationId(r1.getLocation().getId())
-                        .build()));
+                    new ReviewPostDto(
+                        r1.getComment(),
+                        r1.getRating(),
+                        r1.getUser().getId(),
+                        r1.getLocation().getId())));
 
     mockMvc
         .perform(mockRequest)

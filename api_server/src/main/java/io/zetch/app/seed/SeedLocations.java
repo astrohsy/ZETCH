@@ -4,6 +4,7 @@ import io.zetch.app.domain.location.LocationEntity;
 import io.zetch.app.domain.location.Type;
 import java.util.List;
 
+/** Sample locations. */
 public class SeedLocations {
 
   private SeedLocations() {

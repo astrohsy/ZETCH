@@ -1,8 +1,5 @@
 package io.zetch.app.web;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -26,14 +23,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+/** Controller for the review endpoints. */
 @RestController
 @RequestMapping(path = "/reviews")
 @Tag(name = "Reviews")
 @CrossOrigin(origins = "*") // NOSONAR
 public class ReviewController {
   private final ReviewService reviewService;
-  private final ObjectMapper mapper =
-      new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
   @Autowired
   public ReviewController(ReviewService reviewService) {
@@ -41,54 +37,54 @@ public class ReviewController {
   }
 
   @PostMapping(path = "/")
-  @Operation(summary = "Create a new review")
+  @Operation(summary = "Create a new review.")
   @SecurityRequirement(name = "OAuth2")
   @ResponseBody
-  ReviewGetDto addNewReview(@RequestBody ReviewPostDto newReviewDto)
-      throws JsonProcessingException {
+  ReviewGetDto addNewUser(@RequestBody ReviewPostDto newReviewDto) {
     ReviewEntity r =
         reviewService.createNew(
-            newReviewDto.getComment(),
-            newReviewDto.getRating(),
-            newReviewDto.getUserId(),
-            newReviewDto.getLocationId());
-    String serialized = mapper.writeValueAsString(r);
-    return mapper.readValue(serialized, ReviewGetDto.class);
+            newReviewDto.comment(),
+            newReviewDto.rating(),
+            newReviewDto.userId(),
+            newReviewDto.locationId());
+    return r.toGetDto();
   }
 
-  /**
-   * @return A list of all reviews
-   */
+  /** Returns a list of all restraurants. */
   @GetMapping(path = "/")
-  @Operation(summary = "Retrieve all reviews")
+  @Operation(summary = "Retrieve all reviews.")
   @SecurityRequirement(name = "OAuth2")
   @ResponseBody
-  Iterable<ReviewGetDto> getAllReviews() throws JsonProcessingException {
+  Iterable<ReviewGetDto> getAllReviews() {
     var result = new ArrayList<ReviewGetDto>();
     for (var x : reviewService.getAll().stream().toList()) {
-      result.add(mapper.readValue(mapper.writeValueAsString(x), ReviewGetDto.class));
+      result.add(x.toGetDto());
     }
     return result;
   }
 
   /**
+   * Returns a review with id.
+   *
    * @param reviewId Review's id
    * @return A review with id
    */
   @GetMapping("/{reviewId}")
-  @Operation(summary = "Retrieve a review with reviewId")
+  @Operation(summary = "Retrieve a review with reviewId.")
   @SecurityRequirement(name = "OAuth2")
-  ReviewGetDto getOneReview(@PathVariable Long reviewId) throws JsonProcessingException {
+  ReviewGetDto getOneReview(@PathVariable Long reviewId) {
     ReviewEntity review = reviewService.getOne(reviewId);
-    String serialized = mapper.writeValueAsString(review);
-    return mapper.readValue(serialized, ReviewGetDto.class);
+    return review.toGetDto();
   }
 
   /**
+   * Deletes a review.
+   *
    * @param reviewId Review's id
+   * @return Nothing if successful
    */
   @DeleteMapping("/{reviewId}")
-  @Operation(summary = "Delete a review with reviewId")
+  @Operation(summary = "Delete a review with reviewId.")
   @SecurityRequirement(name = "OAuth2")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   void deleteOneReview(@PathVariable Long reviewId) {

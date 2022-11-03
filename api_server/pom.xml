@@ -44,6 +44,8 @@
           <consoleOutput>true</consoleOutput>
           <configLocation>google_checks.xml</configLocation>
           <linkXRef>false</linkXRef>
+          <suppressionsLocation>checkstyle-suppressions.xml</suppressionsLocation>
+          <suppressionsFileExpression>checkstyle.suppressions.file</suppressionsFileExpression>
         </configuration>
       </plugin>
     </plugins>

@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+/** Controller for the location endpoints. */
 @RestController
 @RequestMapping(path = "/locations")
 @Tag(name = "Locations")
@@ -37,11 +38,9 @@ public class LocationController {
     this.locationService = locationService;
   }
 
-  /**
-   * @return A list of all restraurants
-   */
+  /** Returns a list of all locations. */
   @GetMapping(path = "/")
-  @Operation(summary = "Retrieve all locations")
+  @Operation(summary = "Retrieve all locations.")
   @SecurityRequirement(name = "OAuth2")
   @ResponseBody
   Iterable<LocationGetDto> getAllLocations(JwtAuthenticationToken token) {
@@ -49,22 +48,26 @@ public class LocationController {
   }
 
   /**
+   * Returns a single location.
+   *
    * @param name Location's name
    * @return A location by name
    */
   @GetMapping("/{name}")
-  @Operation(summary = "Retrieve a single location")
+  @Operation(summary = "Retrieve a single location.")
   @SecurityRequirement(name = "OAuth2")
   LocationGetDto getOneLocation(@PathVariable String name, JwtAuthenticationToken token) {
     return locationService.getOne(name).toGetDto();
   }
 
   /**
+   * Searches for a location.
+   *
    * @param name Location's name
    * @return A location by name
    */
   @GetMapping("/{name}/{type}")
-  @Operation(summary = "Search locations by name and type")
+  @Operation(summary = "Search for locations. Work in progress. Do not call.")
   @SecurityRequirement(name = "OAuth2")
   Iterable<LocationGetDto> searchLocation(
       @PathVariable String name, @PathVariable String type, JwtAuthenticationToken token) {
@@ -72,11 +75,13 @@ public class LocationController {
   }
 
   /**
+   * Updates a location.
+   *
    * @param name Location's name
    * @return A location by name
    */
   @PutMapping("/{name}")
-  @Operation(summary = "Modify a single location")
+  @Operation(summary = "Modify a single location.")
   @SecurityRequirement(name = "OAuth2")
   LocationGetDto updateLocation(
       @RequestBody LocationDto newLocationDto,
@@ -93,11 +98,13 @@ public class LocationController {
   }
 
   /**
+   * Assigns an owner to a location.
+   *
    * @param name Location's name
    * @param name Owner's name return Confirmation message if successful
    */
   @PutMapping("/{name}/{owner}")
-  @Operation(summary = "Assign owner to a location")
+  @Operation(summary = "Assign owner to a location.")
   @SecurityRequirement(name = "OAuth2")
   LocationGetDto assignLocationOwner(
       @PathVariable String name, @PathVariable String owner, JwtAuthenticationToken token) {
@@ -105,11 +112,13 @@ public class LocationController {
   }
 
   /**
+   * Creates a location.
+   *
    * @param locationDto Location data transfer object
    * @return Confirmation message if successful
    */
   @PostMapping(path = "/")
-  @Operation(summary = "Create a new location")
+  @Operation(summary = "Create a new location.")
   @SecurityRequirement(name = "OAuth2")
   @ResponseBody
   LocationGetDto addNewLocation(
@@ -124,11 +133,13 @@ public class LocationController {
   }
 
   /**
+   * Deletes a location.
+   *
    * @param name Name of Location to delete
    * @return Confirmation message if successful
    */
   @DeleteMapping(path = "/{name}")
-  @Operation(summary = "Delete a location")
+  @Operation(summary = "Delete a location.")
   @SecurityRequirement(name = "OAuth2")
   @ResponseBody
   LocationDto deleteLocation(@PathVariable String name, JwtAuthenticationToken token) {
@@ -136,7 +147,7 @@ public class LocationController {
   }
 
   /**
-   * Exception handler if NoSuchElementException is thrown in this Controller
+   * Exception handler if NoSuchElementException is thrown in this Controller.
    *
    * @param ex Exception
    * @return Error message string
@@ -148,7 +159,7 @@ public class LocationController {
   }
 
   /**
-   * Return 400 Bad Request if IllegalArgumentException is thrown in this Controller
+   * Return 400 Bad Request if IllegalArgumentException is thrown in this Controller.
    *
    * @param ex Exception
    * @return Error message string
