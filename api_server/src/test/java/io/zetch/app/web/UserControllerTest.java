@@ -64,14 +64,14 @@ class UserControllerTest {
           .username(USERNAME_1)
           .displayName(NAME_1)
           .email(EMAIL_1)
-          .affiliation(Affiliation.STUDENT)
+          .affiliation(Affiliation.OTHER)
           .build();
   UserEntity u2 =
       UserEntity.builder()
           .username(USERNAME_2)
           .displayName(NAME_2)
           .email(EMAIL_2)
-          .affiliation(Affiliation.STUDENT)
+          .affiliation(Affiliation.OTHER)
           .build();
   private MockMvc mockMvc;
   @Autowired private WebApplicationContext context;
@@ -179,7 +179,7 @@ class UserControllerTest {
             .username(USERNAME_1)
             .displayName("Bob New")
             .email("bob_new@me.com")
-            .affiliation(Affiliation.FACULTY)
+            .affiliation(Affiliation.OTHER)
             .build();
 
     when(userServiceMock.update(
@@ -217,7 +217,7 @@ class UserControllerTest {
             .username(USERNAME_1)
             .displayName("Bob New")
             .email("bob_new@me.com")
-            .affiliation(Affiliation.FACULTY)
+            .affiliation(Affiliation.OTHER)
             .build();
 
     MockHttpServletRequestBuilder mockRequest =
@@ -243,7 +243,7 @@ class UserControllerTest {
             .username(USERNAME_1)
             .displayName("Bob New")
             .email("bob_new@me.com")
-            .affiliation(Affiliation.FACULTY)
+            .affiliation(Affiliation.OTHER)
             .build();
 
     when(userServiceMock.update(

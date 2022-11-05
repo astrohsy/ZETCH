@@ -67,7 +67,7 @@ class ReviewControllerTest {
                    {
                       "id": 0, "rating": 4, "comment": "Very tasty!",
                       location: { id: 0, "name": "Bob's", "description": "Italian", "address": "1234 Broadway", "type": "museum" },
-                      user: { id: 0, "username": "bob", "name": "Bob", "email": "bob@example.com", "affiliation": "student" }
+                      user: { id: 0, "username": "bob", "name": "Bob", "email": "bob@example.com", "affiliation": "other" }
                    }
                 """);
     jsonReviews.add(
@@ -75,7 +75,7 @@ class ReviewControllerTest {
                       {
                         "id": 1, "rating": 1, "comment": "Terrible service.",
                         location: { id: 0, "name": "Bob's", "description": "Italian", "address": "1234 Broadway", "type": "museum" },
-                        user: { id: 1, "username": "joe", "name": "Job", "email": "joe@example.com", "affiliation": "student" }
+                        user: { id: 1, "username": "joe", "name": "Job", "email": "joe@example.com", "affiliation": "other" }
                        }
                     """);
     reviews = jsonReviews.stream().map(x -> gson.fromJson(x, ReviewEntity.class)).toList();
