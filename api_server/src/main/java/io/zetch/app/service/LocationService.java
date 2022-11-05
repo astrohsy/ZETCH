@@ -2,8 +2,10 @@ package io.zetch.app.service;
 
 import io.zetch.app.domain.location.LocationEntity;
 import io.zetch.app.domain.location.Type;
+import io.zetch.app.domain.review.ReviewEntity;
 import io.zetch.app.domain.user.UserEntity;
 import io.zetch.app.repo.LocationRepository;
+import io.zetch.app.repo.ReviewRepository;
 import io.zetch.app.repo.UserRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,11 +18,16 @@ import org.springframework.stereotype.Service;
 public class LocationService {
   private final LocationRepository locationRepository;
   private final UserRepository userRepository;
+  private final ReviewRepository reviewRepository;
 
   @Autowired
-  public LocationService(LocationRepository locationRepository, UserRepository userRepository) {
+  public LocationService(
+      LocationRepository locationRepository,
+      UserRepository userRepository,
+      ReviewRepository reviewRepository) {
     this.locationRepository = locationRepository;
     this.userRepository = userRepository;
+    this.reviewRepository = reviewRepository;
   }
 
   /**
@@ -153,6 +160,25 @@ public class LocationService {
     LocationEntity location = verifyLocation(name);
     locationRepository.delete(location);
     return location;
+  }
+
+  /**
+   * Returns the average rating of a Location. Returns zero if Location has no ratings.
+   *
+   * @param name Name of Location
+   * @return Average rating
+   * @throws NoSuchElementException If Location not found
+   */
+  public long averageRating(String name) throws NoSuchElementException {
+    verifyLocation(name);
+    List<Integer> ratings =
+        reviewRepository.findByLocation_NameIgnoreCase(name).stream()
+            .map(ReviewEntity::getRating)
+            .toList();
+
+    int sum = ratings.stream().reduce(0, Integer::sum);
+
+    return sum == 0 ? 0 : sum / ratings.size();
   }
 
   /**
