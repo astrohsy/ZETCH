@@ -7,10 +7,12 @@ import static io.zetch.app.TestConstants.REPLY_ID_1;
 import static io.zetch.app.TestConstants.REPLY_ID_2;
 import static io.zetch.app.TestConstants.REVIEW_ID_1;
 import static io.zetch.app.TestConstants.USER_ID_1;
+import static io.zetch.app.TestConstants.USERNAME_1;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -29,6 +31,7 @@ import com.c4_soft.springaddons.security.oauth2.test.annotations.WithMockJwtAuth
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.zetch.app.domain.reply.ReplyEntity;
 import io.zetch.app.domain.reply.ReplyPostDto;
+import io.zetch.app.security.SecurityService;
 import io.zetch.app.service.ReplyService;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -62,6 +65,7 @@ class ReplyControllerTest {
   private MockMvc mockMvc;
   @Autowired private WebApplicationContext context;
   @MockBean private ReplyService replyServiceMock;
+  @MockBean private SecurityService securityServiceMock;
 
   @BeforeEach
   void setup() {
@@ -69,23 +73,28 @@ class ReplyControllerTest {
   }
 
   @Test
+  @WithMockJwtAuth(
+      claims =
+          @OpenIdClaims(
+              otherClaims =
+                  @Claims(stringClaims = @StringClaim(name = "username", value = USERNAME_1))))
   void addNewReply_createsSuccessfully() throws Exception {
     // Arrange
     ReplyEntity expected = REPLY_1;
+    ReplyPostDto reply =
+        new ReplyPostDto(
+            expected.getReplyComment(),
+            expected.getReplyUser().getId(),
+            expected.getReview().getId());
+
+    when(securityServiceMock.isSelfPostReply(any(), any())).thenReturn(true);
     when(replyServiceMock.createNew(
             expected.getReplyComment(),
             expected.getReplyUser().getId(),
             expected.getReview().getId()))
         .thenReturn(expected);
 
-    String requestBody =
-        mapper.writeValueAsString(
-            ReplyPostDto.builder()
-                .replyComment(expected.getReplyComment())
-                .replyUserId(expected.getReplyUser().getId())
-                .reviewId(expected.getReview().getId())
-                .createdAt(expected.getCreatedAt())
-                .build());
+    String requestBody = mapper.writeValueAsString(reply);
 
     MockHttpServletRequestBuilder mockRequest =
         post(REPLIES_ENDPOINT)
@@ -99,9 +108,9 @@ class ReplyControllerTest {
         .andExpect(status().isOk())
         .andExpect(jsonPath("*", notNullValue()))
         .andExpect(jsonPath("$.id", is(expected.getId())))
-        .andExpect(jsonPath("$.replyComment", is(expected.getReplyComment())))
-        .andExpect(jsonPath("$.createdAt", is(expected.getCreatedAt())))
-        .andExpect(jsonPath("$.replyUser.username", is(expected.getReplyUser().getUsername())))
+        .andExpect(jsonPath("$.reply_comment", is(expected.getReplyComment())))
+        .andExpect(jsonPath("$.created_at", is(expected.getCreatedAt())))
+        .andExpect(jsonPath("$.reply_user.username", is(expected.getReplyUser().getUsername())))
         .andExpect(jsonPath("$.review.comment", is(expected.getReview().getComment())));
 
     verify(replyServiceMock, times(1)).createNew(any(), any(), any());
@@ -116,6 +125,7 @@ class ReplyControllerTest {
             expected.getReplyUser().getId(),
             expected.getReview().getId()))
         .thenThrow(NoSuchElementException.class);
+    when(securityServiceMock.isSelfPostReply(any(), any())).thenReturn(true);
 
     String requestBody =
         mapper.writeValueAsString(
@@ -123,7 +133,6 @@ class ReplyControllerTest {
                 .replyComment(expected.getReplyComment())
                 .replyUserId(expected.getReplyUser().getId())
                 .reviewId(expected.getReview().getId())
-                .createdAt(expected.getCreatedAt())
                 .build());
 
     MockHttpServletRequestBuilder mockRequest =
@@ -153,9 +162,9 @@ class ReplyControllerTest {
         .andExpect(status().isOk())
         .andExpect(jsonPath("*", notNullValue()))
         .andExpect(jsonPath("$.id", is(expected.getId())))
-        .andExpect(jsonPath("$.replyComment", is(expected.getReplyComment())))
-        .andExpect(jsonPath("$.createdAt", is(expected.getCreatedAt())))
-        .andExpect(jsonPath("$.replyUser.username", is(expected.getReplyUser().getUsername())))
+        .andExpect(jsonPath("$.reply_comment", is(expected.getReplyComment())))
+        .andExpect(jsonPath("$.created_at", is(expected.getCreatedAt())))
+        .andExpect(jsonPath("$.reply_user.username", is(expected.getReplyUser().getUsername())))
         .andExpect(jsonPath("$.review.comment", is(expected.getReview().getComment())));
 
     verify(replyServiceMock, times(1)).getOne(any());
