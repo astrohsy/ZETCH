@@ -34,4 +34,9 @@ public class ReplyEntity extends BaseEntity {
   ReviewEntity review;
 
   Long createdAt;
+
+  public ReplyGetDto toGetDto() {
+    return new ReplyGetDto(
+        super.getId(), replyComment, createdAt, replyUser.toGetDto(), review.toGetDto());
+  }
 }
