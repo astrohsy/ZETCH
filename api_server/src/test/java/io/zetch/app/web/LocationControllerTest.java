@@ -354,4 +354,37 @@ class LocationControllerTest {
         .andExpect(jsonPath("$.address", is(deleted.getAddress())))
         .andExpect(jsonPath("$.type", is(TYPE_1)));
   }
+
+  @Test
+  void avgRating() throws Exception {
+
+    when(locationServiceMock.averageRating(NAME_1)).thenReturn(4.0);
+
+    MockHttpServletRequestBuilder mockRequest =
+        get(LOCATION_ENDPOINT + "/averageRating/" + NAME_1)
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON);
+
+    mockMvc
+        .perform(mockRequest)
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("*", notNullValue()))
+        .andExpect(jsonPath("$.average_rating", is("4.0")));
+  }
+
+  @Test
+  void avgRating_Fraction() throws Exception {
+    when(locationServiceMock.averageRating(NAME_1)).thenReturn(4.333);
+
+    MockHttpServletRequestBuilder mockRequest =
+        get(LOCATION_ENDPOINT + "/averageRating/" + NAME_1)
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON);
+
+    mockMvc
+        .perform(mockRequest)
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("*", notNullValue()))
+        .andExpect(jsonPath("$.average_rating", is("4.3")));
+  }
 }

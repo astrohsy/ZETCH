@@ -206,7 +206,7 @@ class LocationServiceTest {
 
     assertThat(
         locationService.averageRating(location.getName()),
-        is((long) ((r1.getRating() + r2.getRating()) / 2)));
+        is((double) ((r1.getRating() + r2.getRating()) / 2)));
   }
 
   @Test
@@ -222,7 +222,7 @@ class LocationServiceTest {
     when(locationRepositoryMock.findByName(location.getName())).thenReturn(Optional.of(location));
     when(reviewRepository.findByLocation_NameIgnoreCase(location.getName())).thenReturn(List.of());
 
-    assertThat(locationService.averageRating(location.getName()), is(0L));
+    assertThat(locationService.averageRating(location.getName()), is(0.0));
   }
 
   @Test

@@ -169,14 +169,14 @@ public class LocationService {
    * @return Average rating
    * @throws NoSuchElementException If Location not found
    */
-  public long averageRating(String name) throws NoSuchElementException {
+  public double averageRating(String name) throws NoSuchElementException {
     verifyLocation(name);
     List<Integer> ratings =
         reviewRepository.findByLocation_NameIgnoreCase(name).stream()
             .map(ReviewEntity::getRating)
             .toList();
 
-    int sum = ratings.stream().reduce(0, Integer::sum);
+    double sum = ratings.stream().reduce(0, Integer::sum);
 
     return sum == 0 ? 0 : sum / ratings.size();
   }
