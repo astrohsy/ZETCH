@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+/** Controller for the Reply endpoints. */
 @RestController
 @RequestMapping(path = "/replies")
 @Tag(name = "Replies")

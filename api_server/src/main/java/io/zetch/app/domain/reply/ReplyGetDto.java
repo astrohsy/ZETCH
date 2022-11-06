@@ -11,6 +11,7 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
+/** GET DTO for the Reply entity. */
 @Getter
 @Setter
 @SuperBuilder

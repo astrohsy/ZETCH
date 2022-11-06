@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+/** POST DTO for the Reply entity. */
 @Getter
 @Setter
 @SuperBuilder
