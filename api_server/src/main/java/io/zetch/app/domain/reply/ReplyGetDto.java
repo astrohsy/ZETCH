@@ -1,7 +1,6 @@
 package io.zetch.app.domain.reply;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.zetch.app.domain.location.LocationEntity;
 import io.zetch.app.domain.review.ReviewGetDto;
 import io.zetch.app.domain.user.UserGetDto;
 import java.io.Serializable;
