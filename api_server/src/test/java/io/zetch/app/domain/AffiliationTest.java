@@ -15,7 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class AffiliationTest {
 
   @ParameterizedTest
-  @CsvSource({"student, STUDENT", "faculty, FACULTY", "other, OTHER", "admin, ADMIN"})
+  @CsvSource({"other, OTHER", "admin, ADMIN"})
   void fromString(String text, Affiliation affiliation) {
     assertThat(Affiliation.fromString(text), is(affiliation));
   }

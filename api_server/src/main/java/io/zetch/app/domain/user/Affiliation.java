@@ -5,8 +5,6 @@ import lombok.AllArgsConstructor;
 /** Enum for all possible user affiliations. */
 @AllArgsConstructor
 public enum Affiliation {
-  STUDENT("student"),
-  FACULTY("faculty"),
   OTHER("other"),
   ADMIN("admin");
 

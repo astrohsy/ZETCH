@@ -29,7 +29,7 @@ class SecurityServiceTest {
   private final String CLIENT_1 = "some_client";
   private final String CLIENT_2 = "another_client";
 
-  UserEntity bob = new UserEntity(USERNAME_1, Affiliation.STUDENT, "", "");
+  UserEntity bob = new UserEntity(USERNAME_1, Affiliation.OTHER, "", "");
   UserEntity admin = new UserEntity(USERNAME_2, Affiliation.ADMIN, "", "");
 
   @Mock private UserRepository userRepository;

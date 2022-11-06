@@ -21,21 +21,21 @@ public class SeedUsers {
   public static final UserEntity USER_2 =
       UserEntity.builder()
           .username("bob")
-          .affiliation(Affiliation.STUDENT)
+          .affiliation(Affiliation.OTHER)
           .displayName("Bob R.")
           .email("bob@me.com")
           .build();
   public static final UserEntity USER_3 =
       UserEntity.builder()
           .username("cat")
-          .affiliation(Affiliation.STUDENT)
+          .affiliation(Affiliation.OTHER)
           .displayName("Kat F.")
           .email("kat@kat.com")
           .build();
   public static final UserEntity USER_4 =
       UserEntity.builder()
           .username("amy")
-          .affiliation(Affiliation.FACULTY)
+          .affiliation(Affiliation.OTHER)
           .displayName("Amy T.")
           .email("amy@dog.com")
           .build();

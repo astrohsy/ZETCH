@@ -34,7 +34,7 @@ public class TestConstants {
           .username(USERNAME_1)
           .displayName(DISPLAY_NAME_1)
           .email(EMAIL_1)
-          .affiliation(Affiliation.STUDENT)
+          .affiliation(Affiliation.OTHER)
           .build();
 
   public static UserEntity USER_2 =
@@ -42,7 +42,7 @@ public class TestConstants {
           .username(USERNAME_2)
           .displayName(DISPLAY_NAME_2)
           .email(EMAIL_2)
-          .affiliation(Affiliation.STUDENT)
+          .affiliation(Affiliation.OTHER)
           .build();
 
   public static LocationEntity LOCATION_1 =

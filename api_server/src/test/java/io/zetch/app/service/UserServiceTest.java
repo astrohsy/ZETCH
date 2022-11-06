@@ -25,7 +25,7 @@ class UserServiceTest {
   private static final String USERNAME = "bob";
   private static final String NAME = "Bob";
   private static final String EMAIL = "bob@example.com";
-  private static final String AFFILIATION_STUDENT = "student";
+  private static final String AFFILIATION = "other";
 
   @Mock private UserRepository userRepositoryMock;
   @Mock private UserEntity userMock;
@@ -52,7 +52,7 @@ class UserServiceTest {
   @Test
   void update() {
     when(userRepositoryMock.findByUsernameIgnoreCase(USERNAME)).thenReturn(Optional.of(userMock));
-    service.update(USERNAME, NAME, EMAIL, AFFILIATION_STUDENT);
+    service.update(USERNAME, NAME, EMAIL, AFFILIATION);
 
     // Verify save() invoked
     verify(userRepositoryMock).save(any(UserEntity.class));
@@ -60,7 +60,7 @@ class UserServiceTest {
     // Verify setter methods invoked
     verify(userMock).setDisplayName(NAME);
     verify(userMock).setEmail(EMAIL);
-    verify(userMock).setAffiliation(Affiliation.STUDENT);
+    verify(userMock).setAffiliation(Affiliation.OTHER);
   }
 
   @Test
@@ -79,7 +79,7 @@ class UserServiceTest {
     // Prepare to capture a User object
     ArgumentCaptor<UserEntity> userCaptor = ArgumentCaptor.forClass(UserEntity.class);
 
-    service.createNew(USERNAME, NAME, EMAIL, AFFILIATION_STUDENT);
+    service.createNew(USERNAME, NAME, EMAIL, AFFILIATION);
 
     // Verify save() invoked
     verify(userRepositoryMock).save(userCaptor.capture());
@@ -90,7 +90,7 @@ class UserServiceTest {
     assertThat(value.getUsername(), is(USERNAME));
     assertThat(value.getDisplayName(), is(NAME));
     assertThat(value.getEmail(), is(EMAIL));
-    assertThat(value.getAffiliation(), is(Affiliation.STUDENT));
+    assertThat(value.getAffiliation(), is(Affiliation.OTHER));
     assertThat(value.getOwnedLocations().isEmpty(), is(true));
   }
 }
