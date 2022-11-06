@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import io.zetch.app.domain.location.LocationDto;
 import io.zetch.app.domain.location.LocationEntity;
 import io.zetch.app.domain.location.LocationGetDto;
+import io.zetch.app.domain.location.LocationRatingHistogramDto;
 import io.zetch.app.service.LocationService;
 import java.util.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -144,6 +145,21 @@ public class LocationController {
   @ResponseBody
   LocationDto deleteLocation(@PathVariable String name, JwtAuthenticationToken token) {
     return locationService.delete(name).toDto();
+  }
+
+  /**
+   * Get location's rating histogram.
+   *
+   * @param name Name of Location to delete
+   * @return Location's rating histogram.
+   */
+  @DeleteMapping(path = "/{name}/ratingHistogram")
+  @Operation(summary = "Get location's rating histogram.")
+  @SecurityRequirement(name = "OAuth2")
+  @ResponseBody
+  LocationRatingHistogramDto getRatingHistogram(
+      @PathVariable String name, JwtAuthenticationToken token) {
+    return new LocationRatingHistogramDto(locationService.getRatingHistogram(name));
   }
 
   /**
