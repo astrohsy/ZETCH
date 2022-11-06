@@ -361,7 +361,7 @@ class LocationControllerTest {
     when(locationServiceMock.averageRating(NAME_1)).thenReturn(4.0);
 
     MockHttpServletRequestBuilder mockRequest =
-        get(LOCATION_ENDPOINT + "/averageRating/" + NAME_1)
+        get(LOCATION_ENDPOINT + NAME_1 + "/averageRating/")
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON);
 

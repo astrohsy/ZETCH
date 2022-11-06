@@ -153,7 +153,7 @@ public class LocationController {
    * @param name Location's name
    * @return Location's average rating.
    */
-  @GetMapping("/averageRating/{name}")
+  @GetMapping("/{name}/averageRating")
   @Operation(summary = "Retrieve the average rating of a location.")
   @SecurityRequirement(name = "OAuth2")
   LocationAvgRatingDto getAverageRating(@PathVariable String name, JwtAuthenticationToken token) {
