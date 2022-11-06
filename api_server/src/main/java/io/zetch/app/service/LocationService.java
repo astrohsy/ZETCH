@@ -136,11 +136,16 @@ public class LocationService {
     verifyLocation(name);
 
     Map<String, String> histogram = new HashMap<>();
-    histogram.put("1", Long.toString(reviewRepository.countByLocation_NameIgnoreCaseAndRating(name, 1)));
-    histogram.put("2", Long.toString(reviewRepository.countByLocation_NameIgnoreCaseAndRating(name, 2)));
-    histogram.put("3", Long.toString(reviewRepository.countByLocation_NameIgnoreCaseAndRating(name, 3)));
-    histogram.put("4", Long.toString(reviewRepository.countByLocation_NameIgnoreCaseAndRating(name, 4)));
-    histogram.put("5", Long.toString(reviewRepository.countByLocation_NameIgnoreCaseAndRating(name, 5)));
+    histogram.put(
+        "1", Long.toString(reviewRepository.countByLocation_NameIgnoreCaseAndRating(name, 1)));
+    histogram.put(
+        "2", Long.toString(reviewRepository.countByLocation_NameIgnoreCaseAndRating(name, 2)));
+    histogram.put(
+        "3", Long.toString(reviewRepository.countByLocation_NameIgnoreCaseAndRating(name, 3)));
+    histogram.put(
+        "4", Long.toString(reviewRepository.countByLocation_NameIgnoreCaseAndRating(name, 4)));
+    histogram.put(
+        "5", Long.toString(reviewRepository.countByLocation_NameIgnoreCaseAndRating(name, 5)));
 
     return histogram;
   }
