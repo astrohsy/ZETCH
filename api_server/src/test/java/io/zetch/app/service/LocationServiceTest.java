@@ -9,7 +9,6 @@ import static org.mockito.Mockito.when;
 
 import io.zetch.app.domain.location.LocationEntity;
 import io.zetch.app.domain.location.Type;
-import io.zetch.app.domain.review.ReviewEntity;
 import io.zetch.app.domain.user.UserEntity;
 import io.zetch.app.repo.LocationRepository;
 import io.zetch.app.repo.ReviewRepository;
