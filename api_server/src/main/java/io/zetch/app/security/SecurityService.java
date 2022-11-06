@@ -1,5 +1,6 @@
 package io.zetch.app.security;
 
+import io.zetch.app.domain.reply.ReplyPostDto;
 import io.zetch.app.domain.user.Affiliation;
 import io.zetch.app.domain.user.UserEntity;
 import io.zetch.app.repo.UserRepository;
@@ -49,6 +50,16 @@ public class SecurityService {
     }
 
     return Objects.equals(getClientIdFromToken(token), clientId);
+  }
+
+  /** Returns True if the user from the provided token is the same user who posted the reply. */
+  public boolean isSelfPostReply(JwtAuthenticationToken token, ReplyPostDto newReply) {
+    if (token == null) {
+      return false;
+    }
+
+    UserEntity caller = userRepository.getReferenceById(newReply.getReplyUserId());
+    return Objects.equals(getUsernameFromToken(token), caller.getUsername().toLowerCase());
   }
 
   /** Returns the UserEntity corresponding to the provided token. */

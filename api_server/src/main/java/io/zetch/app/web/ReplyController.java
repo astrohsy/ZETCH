@@ -1,8 +1,5 @@
 package io.zetch.app.web;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -10,11 +7,12 @@ import io.zetch.app.domain.reply.ReplyEntity;
 import io.zetch.app.domain.reply.ReplyGetDto;
 import io.zetch.app.domain.reply.ReplyPostDto;
 import io.zetch.app.service.ReplyService;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -33,8 +31,6 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(origins = "*") // NOSONAR
 public class ReplyController {
   private final ReplyService replyService;
-  private final ObjectMapper mapper =
-      new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
   @Autowired
   public ReplyController(ReplyService replyService) {
@@ -44,61 +40,68 @@ public class ReplyController {
   @PostMapping(path = "/")
   @Operation(summary = "Create a new reply")
   @SecurityRequirement(name = "OAuth2")
+  @PreAuthorize("@securityService.isSelfPostReply(#token, #newReply)")
   @ResponseBody
-  ReplyGetDto addNewReply(@RequestBody ReplyPostDto newReply) throws JsonProcessingException {
+  ReplyGetDto addNewReply(@RequestBody ReplyPostDto newReply, JwtAuthenticationToken token) {
     ReplyEntity reply =
         replyService.createNew(
             newReply.getReplyComment(), newReply.getReplyUserId(), newReply.getReviewId());
-    String serialized = mapper.writeValueAsString(reply);
-    return mapper.readValue(serialized, ReplyGetDto.class);
+
+    return reply.toGetDto();
   }
 
   @GetMapping("/{replyId}")
   @Operation(summary = "Retrieve a reply with replyId")
   @SecurityRequirement(name = "OAuth2")
-  ReplyGetDto getReply(@PathVariable Long replyId) throws JsonProcessingException {
-    ReplyEntity reply = replyService.getOne(replyId);
-    String serialized = mapper.writeValueAsString(reply);
-    return mapper.readValue(serialized, ReplyGetDto.class);
+  ReplyGetDto getReply(@PathVariable Long replyId, JwtAuthenticationToken token) {
+    return replyService.getOne(replyId).toGetDto();
   }
 
   @GetMapping("/user/{userId}")
   @Operation(summary = "Retrieve a reply with UserId")
   @SecurityRequirement(name = "OAuth2")
-  Iterable<ReplyGetDto> getRepliesByUserId(@PathVariable Long userId)
-      throws JsonProcessingException {
-    List<ReplyEntity> replies = replyService.getRepliesByUser(userId).stream().toList();
-    var result = new ArrayList<ReplyGetDto>();
-    for (var reply : replies) {
-      result.add(mapper.readValue(mapper.writeValueAsString(reply), ReplyGetDto.class));
-    }
-    return result;
+  List<ReplyGetDto> getRepliesByUserId(@PathVariable Long userId, JwtAuthenticationToken token) {
+    return replyService.getRepliesByUser(userId).stream().map(ReplyEntity::toGetDto).toList();
   }
 
   @GetMapping("/review/{reviewId}")
   @Operation(summary = "Retrieve a reply with ReviewId")
   @SecurityRequirement(name = "OAuth2")
-  Iterable<ReplyGetDto> getRepliesByReviewId(@PathVariable Long reviewId)
-      throws JsonProcessingException {
-    List<ReplyEntity> replies = replyService.getRepliesByReview(reviewId).stream().toList();
-    var result = new ArrayList<ReplyGetDto>();
-    for (var reply : replies) {
-      result.add(mapper.readValue(mapper.writeValueAsString(reply), ReplyGetDto.class));
-    }
-    return result;
+  List<ReplyGetDto> getRepliesByReviewId(
+      @PathVariable Long reviewId, JwtAuthenticationToken token) {
+    return replyService.getRepliesByReview(reviewId).stream().map(ReplyEntity::toGetDto).toList();
   }
 
+  /** Deletes a reply with replyId. */
   @DeleteMapping("/{replyId}")
   @Operation(summary = "Delete a reply with replyId")
   @SecurityRequirement(name = "OAuth2")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  void deleteOneReply(@PathVariable Long replyId) {
+  void deleteOneReply(@PathVariable Long replyId, JwtAuthenticationToken token) {
     replyService.deleteOne(replyId);
   }
 
+  /**
+   * Exception handler if NoSuchElementException is thrown in this Controller.
+   *
+   * @param ex Exception
+   * @return Error message string
+   */
   @ResponseStatus(HttpStatus.NOT_FOUND)
   @ExceptionHandler(NoSuchElementException.class)
   String return404(NoSuchElementException ex) {
+    return ex.getMessage();
+  }
+
+  /**
+   * Return 400 Bad Request if IllegalArgumentException is thrown in this Controller.
+   *
+   * @param ex Exception
+   * @return Error message string
+   */
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  @ExceptionHandler(IllegalArgumentException.class)
+  String return404(IllegalArgumentException ex) {
     return ex.getMessage();
   }
 }

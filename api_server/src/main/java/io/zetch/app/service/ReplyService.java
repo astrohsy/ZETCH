@@ -68,6 +68,14 @@ public class ReplyService {
       throw new NoSuchElementException("Review does not exist: " + reviewId);
     }
 
+    List<String> owners =
+        review.getLocation().getOwners().stream().map(UserEntity::getUsername).toList();
+    String caller = user.getUsername();
+
+    if (!owners.contains(caller)) {
+      throw new IllegalArgumentException("User is not the owner of the reviewed location.");
+    }
+
     ReplyEntity newReply =
         ReplyEntity.builder()
             .replyComment(replyComment)
