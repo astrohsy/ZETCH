@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 
 import io.zetch.app.domain.location.LocationEntity;
 import io.zetch.app.domain.location.Type;
+import io.zetch.app.domain.review.ReviewEntity;
 import io.zetch.app.domain.user.UserEntity;
 import io.zetch.app.repo.LocationRepository;
 import io.zetch.app.repo.ReviewRepository;
@@ -185,7 +186,7 @@ class LocationServiceTest {
     assertThat(locationService.delete(NAME), is(deleted));
   }
 
-  @Test
+   @Test
   void ratingHistogram() {
     LocationEntity location =
         LocationEntity.builder()
@@ -212,5 +213,61 @@ class LocationServiceTest {
             entry("1", "1"), entry("2", "2"), entry("3", "3"), entry("4", "4"), entry("5", "5"));
 
     assertThat(locationService.getRatingHistogram(location.getName()), is(histogram));
+  }
+
+  @Test
+  void avgRating() {
+    LocationEntity location =
+        LocationEntity.builder()
+            .name("The Met")
+            .description("Art")
+            .address("Broadway")
+            .type(Type.MUSEUM)
+            .build();
+
+    ReviewEntity r1 =
+        ReviewEntity.builder().comment("Comment").rating(3).user(null).location(location).build();
+
+    ReviewEntity r2 =
+        ReviewEntity.builder().comment("Comment").rating(5).user(null).location(location).build();
+
+    when(locationRepositoryMock.findByName(location.getName())).thenReturn(Optional.of(location));
+    when(reviewRepository.findByLocation_NameIgnoreCase(location.getName()))
+        .thenReturn(List.of(r1, r2));
+
+    assertThat(
+        locationService.averageRating(location.getName()),
+        is((double) ((r1.getRating() + r2.getRating()) / 2)));
+  }
+
+  @Test
+  void avgRating_NoRatings() {
+    LocationEntity location =
+        LocationEntity.builder()
+            .name("The Met")
+            .description("Art")
+            .address("Broadway")
+            .type(Type.MUSEUM)
+            .build();
+
+    when(locationRepositoryMock.findByName(location.getName())).thenReturn(Optional.of(location));
+    when(reviewRepository.findByLocation_NameIgnoreCase(location.getName())).thenReturn(List.of());
+
+    assertThat(locationService.averageRating(location.getName()), is(0.0));
+  }
+
+  @Test
+  void avgRating_LocationNotFound() {
+    LocationEntity location =
+        LocationEntity.builder()
+            .name("The Met")
+            .description("Art")
+            .address("Broadway")
+            .type(Type.MUSEUM)
+            .build();
+
+    when(locationRepositoryMock.findByName(location.getName())).thenReturn(Optional.empty());
+    assertThrows(
+        NoSuchElementException.class, () -> locationService.averageRating(location.getName()));
   }
 }

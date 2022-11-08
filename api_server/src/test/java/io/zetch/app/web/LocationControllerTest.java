@@ -83,7 +83,7 @@ class LocationControllerTest {
           .username(USERNAME_1)
           .displayName(USERNAME_1)
           .email(null)
-          .affiliation(Affiliation.STUDENT)
+          .affiliation(Affiliation.OTHER)
           .build();
   private MockMvc mockMvc;
   @Autowired private WebApplicationContext context;
@@ -356,7 +356,7 @@ class LocationControllerTest {
         .andExpect(jsonPath("$.type", is(TYPE_1)));
   }
 
-  @Test
+    @Test
   void ratingHistogram() throws Exception {
     Map<String, String> histogram =
         Map.ofEntries(
@@ -379,5 +379,38 @@ class LocationControllerTest {
         .andExpect(jsonPath("$['rating_histogram']['3']", is("3")))
         .andExpect(jsonPath("$['rating_histogram']['4']", is("4")))
         .andExpect(jsonPath("$['rating_histogram']['5']", is("5")));
+  }
+
+  @Test
+  void avgRating() throws Exception {
+
+    when(locationServiceMock.averageRating(NAME_1)).thenReturn(4.0);
+
+    MockHttpServletRequestBuilder mockRequest =
+        get(LOCATION_ENDPOINT + NAME_1 + "/averageRating/")
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON);
+
+    mockMvc
+        .perform(mockRequest)
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("*", notNullValue()))
+        .andExpect(jsonPath("$.average_rating", is("4.0")));
+  }
+
+  @Test
+  void avgRating_Fraction() throws Exception {
+    when(locationServiceMock.averageRating(NAME_1)).thenReturn(4.333);
+
+    MockHttpServletRequestBuilder mockRequest =
+        get(LOCATION_ENDPOINT + NAME_1 + "/averageRating/")
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON);
+
+    mockMvc
+        .perform(mockRequest)
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("*", notNullValue()))
+        .andExpect(jsonPath("$.average_rating", is("4.3")));
   }
 }

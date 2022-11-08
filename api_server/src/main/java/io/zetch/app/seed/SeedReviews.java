@@ -3,6 +3,7 @@ package io.zetch.app.seed;
 import io.zetch.app.domain.review.ReviewEntity;
 import java.util.List;
 
+/** Helper class for adding sample reviews. */
 public class SeedReviews {
 
   public static ReviewEntity REVIEW_1 =

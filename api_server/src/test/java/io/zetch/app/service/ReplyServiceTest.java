@@ -3,6 +3,7 @@ package io.zetch.app.service;
 import static io.zetch.app.TestConstants.CREATED_BY;
 import static io.zetch.app.TestConstants.REPLY_ID_1;
 import static io.zetch.app.TestConstants.REVIEW_ID_1;
+import static io.zetch.app.TestConstants.USERNAME_1;
 import static io.zetch.app.TestConstants.USER_ID_1;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -15,6 +16,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import io.zetch.app.domain.location.LocationEntity;
 import io.zetch.app.domain.reply.ReplyEntity;
 import io.zetch.app.domain.review.ReviewEntity;
 import io.zetch.app.domain.user.UserEntity;
@@ -40,6 +42,7 @@ public class ReplyServiceTest {
   @Mock private ReplyEntity replyMock;
   @Mock private UserEntity userMock;
   @Mock private ReviewEntity reviewMock;
+  @Mock private LocationEntity locationMock;
 
   @Test
   public void getOne_ReturnsSuccessfully() {
@@ -133,6 +136,9 @@ public class ReplyServiceTest {
     when(userRepositoryMock.findById(eq(USER_ID_1))).thenReturn(Optional.of(userMock));
     when(reviewRepositoryMock.findById(eq(REVIEW_ID_1))).thenReturn(Optional.of(reviewMock));
     when(replyRepositoryMock.save(any(ReplyEntity.class))).thenReturn(expected);
+    when(reviewMock.getLocation()).thenReturn(locationMock);
+    when(locationMock.getOwners()).thenReturn(List.of(userMock));
+    when(userMock.getUsername()).thenReturn(USERNAME_1);
 
     // Act
     ReplyEntity output = replyService.createNew("This is a reply", USER_ID_1, REVIEW_ID_1);
