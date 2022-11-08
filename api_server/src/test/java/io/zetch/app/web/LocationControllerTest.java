@@ -82,7 +82,7 @@ class LocationControllerTest {
           .username(USERNAME_1)
           .displayName(USERNAME_1)
           .email(null)
-          .affiliation(Affiliation.STUDENT)
+          .affiliation(Affiliation.OTHER)
           .build();
   private MockMvc mockMvc;
   @Autowired private WebApplicationContext context;
