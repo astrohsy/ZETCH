@@ -1,5 +1,6 @@
 package io.zetch.app.service;
 
+import static java.util.Map.entry;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -15,6 +16,7 @@ import io.zetch.app.repo.ReviewRepository;
 import io.zetch.app.repo.UserRepository;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
@@ -182,6 +184,35 @@ class LocationServiceTest {
             .build();
     when(locationRepositoryMock.findByName(NAME)).thenReturn(Optional.of(deleted));
     assertThat(locationService.delete(NAME), is(deleted));
+  }
+
+  @Test
+  void ratingHistogram() {
+    LocationEntity location =
+        LocationEntity.builder()
+            .name("The Met")
+            .description("Art")
+            .address("Broadway")
+            .type(Type.MUSEUM)
+            .build();
+
+    when(locationRepositoryMock.findByName(location.getName())).thenReturn(Optional.of(location));
+    when(reviewRepository.countByLocation_NameIgnoreCaseAndRating(location.getName(), 1))
+        .thenReturn(1L);
+    when(reviewRepository.countByLocation_NameIgnoreCaseAndRating(location.getName(), 2))
+        .thenReturn(2L);
+    when(reviewRepository.countByLocation_NameIgnoreCaseAndRating(location.getName(), 3))
+        .thenReturn(3L);
+    when(reviewRepository.countByLocation_NameIgnoreCaseAndRating(location.getName(), 4))
+        .thenReturn(4L);
+    when(reviewRepository.countByLocation_NameIgnoreCaseAndRating(location.getName(), 5))
+        .thenReturn(5L);
+
+    Map<String, String> histogram =
+        Map.ofEntries(
+            entry("1", "1"), entry("2", "2"), entry("3", "3"), entry("4", "4"), entry("5", "5"));
+
+    assertThat(locationService.getRatingHistogram(location.getName()), is(histogram));
   }
 
   @Test

@@ -1,5 +1,6 @@
 package io.zetch.app.web;
 
+import static java.util.Map.entry;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.Is.is;
@@ -353,6 +354,31 @@ class LocationControllerTest {
         .andExpect(jsonPath("$.description", is(deleted.getDescription())))
         .andExpect(jsonPath("$.address", is(deleted.getAddress())))
         .andExpect(jsonPath("$.type", is(TYPE_1)));
+  }
+
+  @Test
+  void ratingHistogram() throws Exception {
+    Map<String, String> histogram =
+        Map.ofEntries(
+            entry("1", "1"), entry("2", "2"), entry("3", "3"), entry("4", "4"), entry("5", "5"));
+
+    when(locationServiceMock.getRatingHistogram(NAME_1)).thenReturn(histogram);
+
+    MockHttpServletRequestBuilder mockRequest =
+        delete(LOCATION_ENDPOINT + NAME_1 + "/ratingHistogram")
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON);
+
+    mockMvc
+        .perform(mockRequest)
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("*", notNullValue()))
+        .andExpect(jsonPath("$.rating_histogram", notNullValue()))
+        .andExpect(jsonPath("$['rating_histogram']['1']", is("1")))
+        .andExpect(jsonPath("$['rating_histogram']['2']", is("2")))
+        .andExpect(jsonPath("$['rating_histogram']['3']", is("3")))
+        .andExpect(jsonPath("$['rating_histogram']['4']", is("4")))
+        .andExpect(jsonPath("$['rating_histogram']['5']", is("5")));
   }
 
   @Test
