@@ -4,8 +4,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.when;
 
+import io.zetch.app.domain.reply.ReplyPostDto;
 import io.zetch.app.domain.user.Affiliation;
 import io.zetch.app.domain.user.UserEntity;
+import io.zetch.app.repo.ReviewRepository;
 import io.zetch.app.repo.UserRepository;
 import java.time.Instant;
 import java.util.HashMap;
@@ -33,6 +35,7 @@ class SecurityServiceTest {
   UserEntity admin = new UserEntity(USERNAME_2, Affiliation.ADMIN, "", "");
 
   @Mock private UserRepository userRepository;
+  @Mock private ReviewRepository reviewRepository;
   @InjectMocks private SecurityService securityService;
 
   @Test
@@ -58,41 +61,38 @@ class SecurityServiceTest {
     assertThat(securityService.isSelf(getJwtForTest(username1, CLIENT_1), username2), is(expected));
   }
 
-  //  @Test
-  //  void isSelf() {
-  //    assertThat(securityService.isSelf(getJwtForTest(USERNAME_1, CLIENT_1), USERNAME_1),
-  // is(true));
-  //  }
-  //
-  //  @Test
-  //  void isSelf_Failure() {
-  //    assertThat(securityService.isSelf(getJwtForTest(USERNAME_1, CLIENT_1), USERNAME_2),
-  // is(false));
-  //  }
-  //
-  //  @Test
-  //  void isSelf_Uppercase() {
-  //    assertThat(securityService.isSelf(getJwtForTest("Username", CLIENT_1), "Username"),
-  // is(true));
-  //  }
-  //
-  //  @Test
-  //  void isSelf_Uppercase_Failure() {
-  //    assertThat(securityService.isSelf(getJwtForTest("Username", CLIENT_1), "Another"),
-  // is(false));
-  //  }
-  //
-  //  @Test
-  //  void isSelf_Uppercase() {
-  //    assertThat(securityService.isSelf(getJwtForTest("Username", CLIENT_1), "Username"),
-  // is(true));
-  //  }
-  //
-  //  @Test
-  //  void isSelf_Uppercase_Failure() {
-  //    assertThat(securityService.isSelf(getJwtForTest("Username", CLIENT_1), "Another"),
-  // is(false));
-  //  }
+  @Test
+  void isOwnerOfReviewedLocation_NullToken() {
+    assertThat(securityService.isSelfPostReply(null, new ReplyPostDto("abc", 1L, 2L)), is(false));
+  }
+
+  @Test
+  void isOwnerOfReviewedLocation() {
+    UserEntity owner = UserEntity.builder().username(USERNAME_1).build();
+    //    LocationEntity location =
+    // LocationEntity.builder().name("abc").owners(List.of(owner)).build();
+    //    ReviewEntity review = ReviewEntity.builder().location(location).build();
+
+    //    when(reviewRepository.getReferenceById(2L)).thenReturn(review);
+    when(userRepository.getReferenceById(1L)).thenReturn(owner);
+
+    assertThat(
+        securityService.isSelfPostReply(
+            getJwtForTest(USERNAME_1, CLIENT_1), new ReplyPostDto("abc", 1L, 2L)),
+        is(true));
+  }
+
+  @Test
+  void isOwnerOfReviewedLocation_Failure() {
+    UserEntity owner = UserEntity.builder().username(USERNAME_2).build();
+
+    when(userRepository.getReferenceById(1L)).thenReturn(owner);
+
+    assertThat(
+        securityService.isSelfPostReply(
+            getJwtForTest(USERNAME_1, CLIENT_1), new ReplyPostDto("abc", 1L, 2L)),
+        is(false));
+  }
 
   @Test
   void isSelfClient() {

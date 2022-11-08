@@ -12,7 +12,7 @@ import java.util.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-/** Reply business logic */
+/** Reply business logic. */
 @Service
 public class ReplyService {
 
@@ -20,6 +20,7 @@ public class ReplyService {
   private final UserRepository userRepository;
   private final ReviewRepository reviewRepository;
 
+  /** Reply service constructor. */
   @Autowired
   public ReplyService(
       ReplyRepository replyRepository,
@@ -31,7 +32,7 @@ public class ReplyService {
   }
 
   /**
-   * Retrieve one reply
+   * Retrieve one reply.
    *
    * @param id Reply
    * @return Reply
@@ -52,7 +53,7 @@ public class ReplyService {
   }
 
   /**
-   * Create a new Reply in the database
+   * Create a new Reply in the database.
    *
    * @param replyComment Review comment
    */
@@ -68,6 +69,14 @@ public class ReplyService {
       throw new NoSuchElementException("Review does not exist: " + reviewId);
     }
 
+    List<String> owners =
+        review.getLocation().getOwners().stream().map(UserEntity::getUsername).toList();
+    String caller = user.getUsername();
+
+    if (!owners.contains(caller)) {
+      throw new IllegalArgumentException("User is not the owner of the reviewed location.");
+    }
+
     ReplyEntity newReply =
         ReplyEntity.builder()
             .replyComment(replyComment)
@@ -79,6 +88,7 @@ public class ReplyService {
     return replyRepository.save(newReply);
   }
 
+  /** Delete a reply by ID. */
   public void deleteOne(Long replyId) {
     if (!replyRepository.existsById(replyId)) {
       throw new NoSuchElementException("Reply does not exist: " + replyId);
