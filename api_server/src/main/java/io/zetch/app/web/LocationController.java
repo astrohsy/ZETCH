@@ -175,7 +175,6 @@ public class LocationController {
     return new LocationAvgRatingDto(locationService.averageRating(name));
   }
 
-
   /**
    * Exception handler if NoSuchElementException is thrown in this Controller.
    *

@@ -186,7 +186,7 @@ class LocationServiceTest {
     assertThat(locationService.delete(NAME), is(deleted));
   }
 
-   @Test
+  @Test
   void ratingHistogram() {
     LocationEntity location =
         LocationEntity.builder()

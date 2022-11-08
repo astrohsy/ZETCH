@@ -356,7 +356,7 @@ class LocationControllerTest {
         .andExpect(jsonPath("$.type", is(TYPE_1)));
   }
 
-    @Test
+  @Test
   void ratingHistogram() throws Exception {
     Map<String, String> histogram =
         Map.ofEntries(
