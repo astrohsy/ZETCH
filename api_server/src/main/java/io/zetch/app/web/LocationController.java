@@ -3,6 +3,7 @@ package io.zetch.app.web;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import io.zetch.app.domain.location.LocationAvgRatingDto;
 import io.zetch.app.domain.location.LocationDto;
 import io.zetch.app.domain.location.LocationEntity;
 import io.zetch.app.domain.location.LocationGetDto;
@@ -144,6 +145,19 @@ public class LocationController {
   @ResponseBody
   LocationDto deleteLocation(@PathVariable String name, JwtAuthenticationToken token) {
     return locationService.delete(name).toDto();
+  }
+
+  /**
+   * Returns an average rating for a location.
+   *
+   * @param name Location's name
+   * @return Location's average rating.
+   */
+  @GetMapping("/{name}/averageRating")
+  @Operation(summary = "Retrieve the average rating of a location.")
+  @SecurityRequirement(name = "OAuth2")
+  LocationAvgRatingDto getAverageRating(@PathVariable String name, JwtAuthenticationToken token) {
+    return new LocationAvgRatingDto(locationService.averageRating(name));
   }
 
   /**
