@@ -4,6 +4,7 @@ import io.zetch.app.domain.reply.ReplyEntity;
 import java.util.Date;
 import java.util.List;
 
+/** Helper class for adding sample replies. */
 public class SeedReplies {
   public static ReplyEntity REPLY_1 =
       ReplyEntity.builder()

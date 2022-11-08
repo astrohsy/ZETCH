@@ -17,6 +17,7 @@ public class SeedLocations {
           .description("Italian")
           .address("1100 Riverside Drive")
           .type(Type.RESTAURANT)
+          .owners(List.of(SeedUsers.USER_2))
           .build();
   public static final LocationEntity LOCATION_2 =
       LocationEntity.builder()
@@ -24,6 +25,7 @@ public class SeedLocations {
           .description("Caribbean")
           .address("3920 Broadway")
           .type(Type.MUSEUM)
+          .owners(List.of(SeedUsers.USER_3))
           .build();
   public static final LocationEntity LOCATION_3 =
       LocationEntity.builder()
@@ -31,6 +33,7 @@ public class SeedLocations {
           .description("Cuban")
           .address("4029 Morningside Drive")
           .type(Type.BUILDING)
+          .owners(List.of(SeedUsers.USER_4))
           .build();
   public static final LocationEntity LOCATION_4 =
       LocationEntity.builder()
@@ -45,6 +48,7 @@ public class SeedLocations {
           .description("Diner")
           .address("569th W 120 St")
           .type(Type.MUSEUM)
+          .owners(List.of(SeedUsers.USER_5))
           .build();
 
   public static final List<LocationEntity> LOCATIONS =
