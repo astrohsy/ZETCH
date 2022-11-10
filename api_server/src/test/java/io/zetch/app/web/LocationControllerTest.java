@@ -52,6 +52,7 @@ import org.springframework.web.context.WebApplicationContext;
 class LocationControllerTest {
 
   private static final String LOCATION_ENDPOINT = "/locations/";
+  private static final String SEARCH_ENDPOINT = "search";
   private static final String NAME_1 = "Bob's";
   private static final String DESCRIPTION_1 = "Italian";
   private static final String ADDRESS_1 = "1234 Broadway";
@@ -284,11 +285,18 @@ class LocationControllerTest {
 
   @Test
   void search() throws Exception {
-    when(locationServiceMock.search(NAME_1, TYPE_1)).thenReturn(Arrays.asList(r1));
+    when(locationServiceMock.search(NAME_1, DESCRIPTION_1, TYPE_1)).thenReturn(List.of(r1));
+
+    MockHttpServletRequestBuilder mockRequest =
+        get(LOCATION_ENDPOINT + SEARCH_ENDPOINT)
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON)
+            .queryParam("name", NAME_1)
+            .queryParam("description", DESCRIPTION_1)
+            .queryParam("type", TYPE_1);
 
     mockMvc
-        .perform(
-            get(LOCATION_ENDPOINT + NAME_1 + '/' + TYPE_1).contentType(MediaType.APPLICATION_JSON))
+        .perform(mockRequest)
         .andExpect(status().isOk())
         .andExpect(jsonPath("*", notNullValue()))
         .andExpect(jsonPath("$", hasSize(1)))

@@ -59,8 +59,16 @@ public class LocationService {
    * @param type Location type
    * @return List of locations
    */
-  public List<LocationEntity> search(String name, String type) {
-    return locationRepository.findByNameAndType(name, Type.fromString(type));
+  public List<LocationEntity> search(String name, String description, String type) {
+    Type search_type;
+
+    if (type == null) {
+      search_type = null;
+    } else {
+      search_type = Type.fromString(type);
+    }
+
+    return locationRepository.search(name, description, search_type);
   }
 
   /**
