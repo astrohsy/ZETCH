@@ -68,10 +68,11 @@ class LocationServiceTest {
 
   @Test
   void search() {
-    when(locationRepositoryMock.findByNameAndType(NAME, Type.fromString(TYPE)))
+    when(locationRepositoryMock.search(NAME, DESCRIPTION, Type.fromString(TYPE)))
         .thenReturn(List.of(locationMock, locationMock, locationMock));
-    assertThat(locationService.search(NAME, TYPE).size(), is(3));
-    assertThat(locationService.search(NAME, TYPE).get(0), is(locationMock));
+
+    assertThat(locationService.search(NAME, DESCRIPTION, TYPE).size(), is(3));
+    assertThat(locationService.search(NAME, DESCRIPTION, TYPE).get(0), is(locationMock));
   }
 
   // VERIFY INVOCATION OF DEPS + PARAMETERS
