@@ -2,6 +2,7 @@ package io.zetch.app.service;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -14,6 +15,8 @@ import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -32,8 +35,6 @@ class UserServiceTest {
   @Mock private CognitoService cognitoServiceMock;
   @InjectMocks private UserService service;
 
-  // VERIFY SERVICE RETURN VALUE
-
   @Test
   void getOne() {
     when(userRepositoryMock.findByUsernameIgnoreCase(USERNAME)).thenReturn(Optional.of(userMock));
@@ -47,20 +48,46 @@ class UserServiceTest {
     assertThat(service.getAll().get(0), is(userMock));
   }
 
-  // VERIFY INVOCATION OF DEPENDENCIES
+  @ParameterizedTest
+  @CsvSource(
+      value = {
+        "New Name, null, null",
+        "null, New Email, null",
+        "null, null, admin",
+        "New Name, New Email, admin",
+      },
+      nullValues = {"null"})
+  void update(String newName, String newEmail, String newAffiliation) {
+    UserEntity old =
+        UserEntity.builder()
+            .username(USERNAME)
+            .displayName(NAME)
+            .email(EMAIL)
+            .affiliation(Affiliation.fromString(AFFILIATION))
+            .build();
 
-  @Test
-  void update() {
-    when(userRepositoryMock.findByUsernameIgnoreCase(USERNAME)).thenReturn(Optional.of(userMock));
-    service.update(USERNAME, NAME, EMAIL, AFFILIATION);
+    UserEntity updated =
+        UserEntity.builder()
+            .username(USERNAME)
+            .displayName(newName != null ? newName : NAME)
+            .email(newEmail != null ? newEmail : EMAIL)
+            .affiliation(
+                newAffiliation != null
+                    ? Affiliation.fromString(newAffiliation)
+                    : Affiliation.fromString(AFFILIATION))
+            .build();
 
-    // Verify save() invoked
-    verify(userRepositoryMock).save(any(UserEntity.class));
+    when(userRepositoryMock.findByUsernameIgnoreCase(USERNAME)).thenReturn(Optional.of(old));
+    service.update(USERNAME, newName, newEmail, newAffiliation);
 
-    // Verify setter methods invoked
-    verify(userMock).setDisplayName(NAME);
-    verify(userMock).setEmail(EMAIL);
-    verify(userMock).setAffiliation(Affiliation.OTHER);
+    ArgumentCaptor<UserEntity> userCaptor = ArgumentCaptor.forClass(UserEntity.class);
+    verify(userRepositoryMock).save(userCaptor.capture());
+
+    UserEntity value = userCaptor.getValue();
+    assertThat(value.getUsername(), is(updated.getUsername()));
+    assertThat(value.getDisplayName(), is(updated.getDisplayName()));
+    assertThat(value.getEmail(), is(updated.getEmail()));
+    assertThat(value.getAffiliation(), is(updated.getAffiliation()));
   }
 
   @Test
@@ -71,8 +98,6 @@ class UserServiceTest {
     // Verify delete() invoked
     verify(userRepositoryMock).delete(any(UserEntity.class));
   }
-
-  // VERIFY INVOCATION OF DEPS + CAPTURE PARAMETER VALUES + VERIFY PARAMETERS
 
   @Test
   void createNew() {
@@ -92,5 +117,13 @@ class UserServiceTest {
     assertThat(value.getEmail(), is(EMAIL));
     assertThat(value.getAffiliation(), is(Affiliation.OTHER));
     assertThat(value.getOwnedLocations().isEmpty(), is(true));
+  }
+
+  @Test
+  void createNew_AlreadyExists() {
+    when(userRepositoryMock.existsByUsername(USERNAME)).thenReturn(true);
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> service.createNew(USERNAME, NAME, EMAIL, AFFILIATION));
   }
 }
