@@ -80,7 +80,7 @@ public class LocationService {
     LocationEntity currLocation = verifyLocation(name);
 
     if (newName != null) {
-      if (!name.equals(newName) && locationRepository.existsByName(newName)) {
+      if (name.equals(newName) || locationRepository.existsByName(newName)) {
         throw new IllegalArgumentException("Name unavailable: " + newName);
       }
       currLocation.setName(newName);

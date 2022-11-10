@@ -156,6 +156,14 @@ class LocationServiceTest {
   }
 
   @Test
+  void updateLocationUnavailable2() {
+    when(locationRepositoryMock.findByName(NAME)).thenReturn(Optional.of(locationMock));
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> locationService.update(NAME, NAME, DESCRIPTION, ADDRESS, TYPE));
+  }
+
+  @Test
   void assignOwner() {
 
     LocationEntity location = LocationEntity.builder().owners(new ArrayList<>()).name(NAME).build();
