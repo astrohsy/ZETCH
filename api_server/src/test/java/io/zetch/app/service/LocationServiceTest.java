@@ -267,7 +267,6 @@ class LocationServiceTest {
             .build();
 
     when(locationRepositoryMock.findByName(location.getName())).thenReturn(Optional.empty());
-    assertThrows(
-        NoSuchElementException.class, () -> locationService.averageRating(location.getName()));
+    assertThrows(NoSuchElementException.class, () -> locationService.averageRating("The Met"));
   }
 }
