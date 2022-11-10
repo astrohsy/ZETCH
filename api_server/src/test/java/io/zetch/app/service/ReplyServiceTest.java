@@ -182,6 +182,26 @@ public class ReplyServiceTest {
   }
 
   @Test
+  public void createNew_notOwner_ThrowsException() {
+    // Arrange
+    String expectedMessage = "User is not the owner of the reviewed location.";
+    when(userRepositoryMock.findById(eq(USER_ID_1))).thenReturn(Optional.of(userMock));
+    when(reviewRepositoryMock.findById(eq(REVIEW_ID_1))).thenReturn(Optional.of(reviewMock));
+    when(reviewMock.getLocation()).thenReturn(locationMock);
+    when(locationMock.getOwners()).thenReturn(List.of());
+    when(userMock.getUsername()).thenReturn(USERNAME_1);
+
+    // Act
+    Exception exception =
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> replyService.createNew("This is a reply", USER_ID_1, REVIEW_ID_1));
+
+    // Assert
+    assertEquals(exception.getMessage(), expectedMessage);
+  }
+
+  @Test
   public void deleteOne_deletesSuccessfully() {
     // Arrange
     when(replyRepositoryMock.existsById(eq(REPLY_ID_1))).thenReturn(true);
