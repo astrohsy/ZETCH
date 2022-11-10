@@ -8,6 +8,7 @@ import io.zetch.app.domain.location.LocationDto;
 import io.zetch.app.domain.location.LocationEntity;
 import io.zetch.app.domain.location.LocationGetDto;
 import io.zetch.app.domain.location.LocationRatingHistogramDto;
+import io.zetch.app.domain.location.LocationSearchDto;
 import io.zetch.app.service.LocationService;
 import java.util.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,18 +63,17 @@ public class LocationController {
     return locationService.getOne(name).toGetDto();
   }
 
-  /**
-   * Searches for a location.
-   *
-   * @param name Location's name
-   * @return A location by name
-   */
-  @GetMapping("/{name}/{type}")
-  @Operation(summary = "Search for locations. Work in progress. Do not call.")
+  /** Searches for a location. */
+  @GetMapping("/search")
+  @Operation(summary = "Search for locations.")
   @SecurityRequirement(name = "OAuth2")
   Iterable<LocationGetDto> searchLocation(
-      @PathVariable String name, @PathVariable String type, JwtAuthenticationToken token) {
-    return locationService.search(name, type).stream().map(LocationEntity::toGetDto).toList();
+      LocationSearchDto searchParams, JwtAuthenticationToken token) {
+    return locationService
+        .search(searchParams.name(), searchParams.description(), searchParams.type())
+        .stream()
+        .map(LocationEntity::toGetDto)
+        .toList();
   }
 
   /**
@@ -103,7 +103,7 @@ public class LocationController {
    * Assigns an owner to a location.
    *
    * @param name Location's name
-   * @param name Owner's name return Confirmation message if successful
+   * @param owner Owner's name
    */
   @PutMapping("/{name}/{owner}")
   @Operation(summary = "Assign owner to a location.")

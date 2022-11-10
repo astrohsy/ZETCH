@@ -22,6 +22,7 @@ public class LocationService {
   private final UserRepository userRepository;
   private final ReviewRepository reviewRepository;
 
+  /** LocationService constructor. */
   @Autowired
   public LocationService(
       LocationRepository locationRepository,
@@ -59,8 +60,16 @@ public class LocationService {
    * @param type Location type
    * @return List of locations
    */
-  public List<LocationEntity> search(String name, String type) {
-    return locationRepository.findByNameAndType(name, Type.fromString(type));
+  public List<LocationEntity> search(String name, String description, String type) {
+    Type searchType;
+
+    if (type == null) {
+      searchType = null;
+    } else {
+      searchType = Type.fromString(type);
+    }
+
+    return locationRepository.search(name, description, searchType);
   }
 
   /**
@@ -127,7 +136,7 @@ public class LocationService {
   }
 
   /**
-   * Returns Location's rating histogram
+   * Returns Location's rating histogram.
    *
    * @param name Name of Location
    * @return Location's rating histogram
