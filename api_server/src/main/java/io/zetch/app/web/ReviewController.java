@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 
 /** Controller for the review endpoints. */
@@ -92,23 +91,5 @@ public class ReviewController {
   @ResponseStatus(HttpStatus.NO_CONTENT)
   void deleteOneReview(@PathVariable Long reviewId) {
     reviewService.deleteOne(reviewId);
-  }
-
-  @ResponseStatus(HttpStatus.NOT_FOUND)
-  @ExceptionHandler(NoSuchElementException.class)
-  String return404(NoSuchElementException ex) {
-    return ex.getMessage();
-  }
-
-  @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-  @ExceptionHandler(RuntimeException.class)
-  String return500(NoSuchElementException ex) {
-    return ex.getMessage();
-  }
-
-  @ResponseStatus(HttpStatus.BAD_REQUEST)
-  @ExceptionHandler(ConstraintViolationException.class)
-  String handleConstraintViolationException(ConstraintViolationException ex) {
-    return ex.getMessage();
   }
 }
