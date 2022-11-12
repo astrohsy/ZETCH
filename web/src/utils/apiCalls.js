@@ -54,6 +54,8 @@ export async function getMuseumByName(name) {
 }
 
 export async function updateMuseum(body) {
+    const name = body.name;
+    delete body.name
 
     const requestOptions = {
         method: 'PUT',
@@ -61,7 +63,7 @@ export async function updateMuseum(body) {
         headers: getJsonHeaders()
     };
 
-    const url = `locations/${encodeURI(body.name)}`;
+    const url = `locations/${encodeURI(name)}`;
 
     return request(url, requestOptions);
 }
@@ -80,10 +82,49 @@ export async function getAverageRatingOfMuseum(museum) {
 export async function getRatingHistogramOfMuseum(museum) {
 
     const requestOptions = {
-        method: 'DELETE'
+        method: 'GET'
     };
 
     const url = `locations/${encodeURI(museum)}/ratingHistogram`;
+
+    return request(url, requestOptions);
+}
+
+export async function getReviewsForMuseum(museumId) {
+
+    const requestOptions = {
+        method: 'GET'
+    };
+
+    const url = `reviews?locationId=${museumId}`;
+
+    return request(url, requestOptions);
+}
+
+export async function replyToReview(reviewId, userId, comment) {
+    const body = {
+        review_id: reviewId,
+        user_id: userId, 
+        reply_comment: comment
+    }
+    const requestOptions = {
+        method: 'POST',
+        body: JSON.stringify(body),
+        headers: getJsonHeaders()
+    };
+
+    const url = `replies/`;
+
+    return request(url, requestOptions);
+}
+
+export async function getRepliesToReview(reviewId) {
+
+    const requestOptions = {
+        method: 'GET'
+    };
+
+    const url = `replies/review/${reviewId}`;
 
     return request(url, requestOptions);
 }
