@@ -65,3 +65,25 @@ export async function updateMuseum(body) {
 
     return request(url, requestOptions);
 }
+
+export async function getAverageRatingOfMuseum(museum) {
+
+    const requestOptions = {
+        method: 'GET'
+    };
+
+    const url = `locations/${encodeURI(museum)}/averageRating`;
+
+    return request(url, requestOptions);
+}
+
+export async function getRatingHistogramOfMuseum(museum) {
+
+    const requestOptions = {
+        method: 'DELETE'
+    };
+
+    const url = `locations/${encodeURI(museum)}/ratingHistogram`;
+
+    return request(url, requestOptions);
+}
