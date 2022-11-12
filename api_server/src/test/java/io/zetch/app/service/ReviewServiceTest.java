@@ -63,7 +63,6 @@ public class ReviewServiceTest {
     verify(reviewRepositoryMock, times(1)).findByUserIdAndLocationId(anyLong(), anyLong());
   }
 
-
   // VERIFY INVOCATION OF DEPS + PARAMETERS
 
   @Test
