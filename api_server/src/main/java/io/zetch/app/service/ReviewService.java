@@ -13,7 +13,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
 /** Review business logic. */
 @Service
 public class ReviewService {
@@ -43,15 +42,6 @@ public class ReviewService {
     else if (locationId.isPresent()) return reviewRepository.findByLocationId(locationId.get());
     else if (userId.isPresent()) return reviewRepository.findByUserId(userId.get());
     return reviewRepository.findAll();
-  }
-
-  /**
-   * Retrieve all Reviews.
-   *
-   * @return List of all Reviews
-   */
-  public List<ReviewEntity> getAll(Long locationId) {
-    return reviewRepository.findByLocationId(locationId);
   }
 
   /**
