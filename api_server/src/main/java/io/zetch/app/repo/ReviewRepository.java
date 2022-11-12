@@ -9,5 +9,11 @@ public interface ReviewRepository extends JpaRepository<ReviewEntity, Long> {
 
   long countByLocation_NameIgnoreCaseAndRating(String name, Integer rating);
 
+  List<ReviewEntity> findByLocationId(Long locationId);
+
+  List<ReviewEntity> findByUserId(Long userId);
+
+  List<ReviewEntity> findByUserIdAndLocationId(Long userId, Long locationId);
+
   List<ReviewEntity> findByLocation_NameIgnoreCase(String name);
 }
