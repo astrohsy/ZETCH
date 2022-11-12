@@ -24,6 +24,7 @@ import io.zetch.app.service.ReviewService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -113,7 +114,7 @@ class ReviewControllerTest {
 
   @Test
   void getAllReviews() throws Exception {
-    when(reviewServiceMock.getAll()).thenReturn(reviews);
+    when(reviewServiceMock.getAll(Optional.empty(), Optional.empty())).thenReturn(reviews);
     mockMvc
         .perform(get(REVIEWS_ENDPOINT).contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
@@ -123,7 +124,8 @@ class ReviewControllerTest {
 
   @Test
   void getAllReviews_withLocationId() throws Exception {
-    when(reviewServiceMock.getAll(anyLong())).thenReturn(reviews.subList(1, 2));
+    when(reviewServiceMock.getAll(Optional.of(1L), Optional.empty()))
+        .thenReturn(reviews.subList(1, 2));
     mockMvc
         .perform(
             get(REVIEWS_ENDPOINT)

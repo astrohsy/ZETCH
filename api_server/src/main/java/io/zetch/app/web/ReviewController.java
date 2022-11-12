@@ -7,7 +7,6 @@ import io.zetch.app.domain.review.ReviewEntity;
 import io.zetch.app.domain.review.ReviewGetDto;
 import io.zetch.app.domain.review.ReviewPostDto;
 import io.zetch.app.service.ReviewService;
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,12 +47,9 @@ public class ReviewController {
   @Operation(summary = "Retrieve all reviews.")
   @SecurityRequirement(name = "OAuth2")
   @ResponseBody
-  Iterable<ReviewGetDto> getAllReviews(@RequestParam Optional<Long> locationId) {
-    List<ReviewEntity> resultStream;
-    if (locationId.isPresent()) resultStream = reviewService.getAll(locationId.get());
-    else resultStream = reviewService.getAll();
-
-    return resultStream.stream().map(ReviewEntity::toGetDto).toList();
+  Iterable<ReviewGetDto> getAllReviews(
+      @RequestParam Optional<Long> locationId, @RequestParam Optional<Long> userId) {
+    return reviewService.getAll(locationId, userId).stream().map(ReviewEntity::toGetDto).toList();
   }
 
   /**
