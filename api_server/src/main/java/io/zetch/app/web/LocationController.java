@@ -154,7 +154,7 @@ public class LocationController {
    * @param name Name of Location to delete
    * @return Location's rating histogram.
    */
-  @DeleteMapping(path = "/{name}/ratingHistogram")
+  @GetMapping(path = "/{name}/ratingHistogram")
   @Operation(summary = "Get location's rating histogram.")
   @SecurityRequirement(name = "OAuth2")
   @ResponseBody
