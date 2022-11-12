@@ -40,6 +40,7 @@ public class SeedLocations {
           .name("Wimpy's")
           .description("American")
           .address("1323 St. Nicholas Ave")
+          .owners(List.of(SeedUsers.USER2))
           .type(Type.RESTAURANT)
           .build();
   public static final LocationEntity LOCATION5 =
