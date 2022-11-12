@@ -68,10 +68,11 @@ class LocationServiceTest {
 
   @Test
   void search() {
-    when(locationRepositoryMock.findByNameAndType(NAME, Type.fromString(TYPE)))
+    when(locationRepositoryMock.search(NAME, DESCRIPTION, Type.fromString(TYPE)))
         .thenReturn(List.of(locationMock, locationMock, locationMock));
-    assertThat(locationService.search(NAME, TYPE).size(), is(3));
-    assertThat(locationService.search(NAME, TYPE).get(0), is(locationMock));
+
+    assertThat(locationService.search(NAME, DESCRIPTION, TYPE).size(), is(3));
+    assertThat(locationService.search(NAME, DESCRIPTION, TYPE).get(0), is(locationMock));
   }
 
   // VERIFY INVOCATION OF DEPS + PARAMETERS
@@ -153,6 +154,14 @@ class LocationServiceTest {
     assertThrows(
         IllegalArgumentException.class,
         () -> locationService.update(NAME, NAME_2, DESCRIPTION, ADDRESS, TYPE));
+  }
+
+  @Test
+  void updateLocationUnavailable2() {
+    when(locationRepositoryMock.findByName(NAME)).thenReturn(Optional.of(locationMock));
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> locationService.update(NAME, NAME, DESCRIPTION, ADDRESS, TYPE));
   }
 
   @Test
@@ -267,7 +276,6 @@ class LocationServiceTest {
             .build();
 
     when(locationRepositoryMock.findByName(location.getName())).thenReturn(Optional.empty());
-    assertThrows(
-        NoSuchElementException.class, () -> locationService.averageRating(location.getName()));
+    assertThrows(NoSuchElementException.class, () -> locationService.averageRating("The Met"));
   }
 }

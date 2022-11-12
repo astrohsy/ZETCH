@@ -22,6 +22,7 @@ public class LocationService {
   private final UserRepository userRepository;
   private final ReviewRepository reviewRepository;
 
+  /** LocationService constructor. */
   @Autowired
   public LocationService(
       LocationRepository locationRepository,
@@ -59,8 +60,16 @@ public class LocationService {
    * @param type Location type
    * @return List of locations
    */
-  public List<LocationEntity> search(String name, String type) {
-    return locationRepository.findByNameAndType(name, Type.fromString(type));
+  public List<LocationEntity> search(String name, String description, String type) {
+    Type searchType;
+
+    if (type == null) {
+      searchType = null;
+    } else {
+      searchType = Type.fromString(type);
+    }
+
+    return locationRepository.search(name, description, searchType);
   }
 
   /**
@@ -80,7 +89,7 @@ public class LocationService {
     LocationEntity currLocation = verifyLocation(name);
 
     if (newName != null) {
-      if (!name.equals(newName) && locationRepository.existsByName(newName)) {
+      if (name.equals(newName) || locationRepository.existsByName(newName)) {
         throw new IllegalArgumentException("Name unavailable: " + newName);
       }
       currLocation.setName(newName);
@@ -127,7 +136,7 @@ public class LocationService {
   }
 
   /**
-   * Returns Location's rating histogram
+   * Returns Location's rating histogram.
    *
    * @param name Name of Location
    * @return Location's rating histogram
@@ -206,6 +215,10 @@ public class LocationService {
     double sum = ratings.stream().reduce(0, Integer::sum);
 
     return sum == 0 ? 0 : sum / ratings.size();
+  }
+
+  public List<LocationEntity> getLocationsByOwner(String username) {
+    return locationRepository.findByOwners_UsernameIgnoreCase(username);
   }
 
   /**
