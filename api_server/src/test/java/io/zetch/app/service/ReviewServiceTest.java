@@ -42,8 +42,25 @@ class ReviewServiceTest {
   @Test
   void getAll() {
     when(reviewRepositoryMock.findAll()).thenReturn(List.of(reviewMock, reviewMock, reviewMock));
-    assertThat(reviewService.getAll().size(), is(3));
-    assertThat(reviewService.getAll().get(0), is(reviewMock));
+    assertThat(reviewService.getAll(Optional.empty(), Optional.empty()).size(), is(3));
+  }
+
+  @Test
+  public void getAll_withLocationId() {
+    reviewService.getAll(Optional.of(1L), Optional.empty());
+    verify(reviewRepositoryMock, times(1)).findByLocationId(anyLong());
+  }
+
+  @Test
+  public void getAll_withUserId() {
+    reviewService.getAll(Optional.empty(), Optional.of(1L));
+    verify(reviewRepositoryMock, times(1)).findByUserId(anyLong());
+  }
+
+  @Test
+  public void getAll_withUserIdAnLocationId() {
+    reviewService.getAll(Optional.of(1L), Optional.of(1L));
+    verify(reviewRepositoryMock, times(1)).findByUserIdAndLocationId(anyLong(), anyLong());
   }
 
   // VERIFY INVOCATION OF DEPS + PARAMETERS

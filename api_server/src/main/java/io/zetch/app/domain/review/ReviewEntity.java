@@ -7,6 +7,9 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,6 +28,9 @@ import lombok.ToString;
 @Table
 public class ReviewEntity extends BaseEntity {
   private String comment;
+
+  @Min(1)
+  @Max(5)
   private Integer rating;
 
   @ManyToOne
