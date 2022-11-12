@@ -11,7 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -33,7 +32,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class ReplyServiceTest {
+class ReplyServiceTest {
 
   @Mock private ReplyRepository replyRepositoryMock;
   @Mock private UserRepository userRepositoryMock;
@@ -45,7 +44,7 @@ public class ReplyServiceTest {
   @Mock private LocationEntity locationMock;
 
   @Test
-  public void getOne_ReturnsSuccessfully() {
+  void getOne_ReturnsSuccessfully() {
     // Arrange
     when(replyRepositoryMock.findById(1L)).thenReturn(Optional.of(replyMock));
 
@@ -57,7 +56,7 @@ public class ReplyServiceTest {
   }
 
   @Test
-  public void getOne_ThrowsElementException() {
+  void getOne_ThrowsElementException() {
     // Arrange
     String expectedMessage = "Reply does not exist: " + REPLY_ID_1;
     when(replyRepositoryMock.findById(REPLY_ID_1)).thenReturn(Optional.empty());
@@ -71,7 +70,7 @@ public class ReplyServiceTest {
   }
 
   @Test
-  public void getRepliesByUser_ReturnsList() {
+  void getRepliesByUser_ReturnsList() {
     // Arrange
     when(replyRepositoryMock.findByReplyUserId(USER_ID_1))
         .thenReturn(List.of(replyMock, replyMock, replyMock));
@@ -85,7 +84,7 @@ public class ReplyServiceTest {
   }
 
   @Test
-  public void getRepliesByUser_ReturnsEmpty() {
+  void getRepliesByUser_ReturnsEmpty() {
     // Arrange
     when(replyRepositoryMock.findByReplyUserId(USER_ID_1)).thenReturn(List.of());
 
@@ -97,7 +96,7 @@ public class ReplyServiceTest {
   }
 
   @Test
-  public void getRepliesByReview_returnsList() {
+  void getRepliesByReview_returnsList() {
     // Arrange
     when(replyRepositoryMock.findByReviewId(REVIEW_ID_1))
         .thenReturn(List.of(replyMock, replyMock, replyMock));
@@ -111,7 +110,7 @@ public class ReplyServiceTest {
   }
 
   @Test
-  public void getRepliesByReview_ReturnsEmpty() {
+  void getRepliesByReview_ReturnsEmpty() {
     // Arrange
     when(replyRepositoryMock.findByReviewId(REVIEW_ID_1)).thenReturn(List.of());
 
@@ -123,7 +122,7 @@ public class ReplyServiceTest {
   }
 
   @Test
-  public void createNew_createsSuccessfully() {
+  void createNew_createsSuccessfully() {
     // Arrange
     ReplyEntity expected =
         ReplyEntity.builder()
@@ -133,8 +132,8 @@ public class ReplyServiceTest {
             .createdAt(CREATED_BY)
             .build();
 
-    when(userRepositoryMock.findById(eq(USER_ID_1))).thenReturn(Optional.of(userMock));
-    when(reviewRepositoryMock.findById(eq(REVIEW_ID_1))).thenReturn(Optional.of(reviewMock));
+    when(userRepositoryMock.findById(USER_ID_1)).thenReturn(Optional.of(userMock));
+    when(reviewRepositoryMock.findById(REVIEW_ID_1)).thenReturn(Optional.of(reviewMock));
     when(replyRepositoryMock.save(any(ReplyEntity.class))).thenReturn(expected);
     when(reviewMock.getLocation()).thenReturn(locationMock);
     when(locationMock.getOwners()).thenReturn(List.of(userMock));
@@ -148,11 +147,11 @@ public class ReplyServiceTest {
   }
 
   @Test
-  public void createNew_noUser_ThrowsException() {
+  void createNew_noUser_ThrowsException() {
     // Arrange
     String expectedMessage = "User does not exist: " + USER_ID_1;
     when(userRepositoryMock.findById(anyLong())).thenReturn(Optional.empty());
-    when(reviewRepositoryMock.findById(eq(REVIEW_ID_1))).thenReturn(Optional.of(reviewMock));
+    when(reviewRepositoryMock.findById(REVIEW_ID_1)).thenReturn(Optional.of(reviewMock));
 
     // Act
     Exception exception =
@@ -165,11 +164,11 @@ public class ReplyServiceTest {
   }
 
   @Test
-  public void createNew_noReview_ThrowsException() {
+  void createNew_noReview_ThrowsException() {
     // Arrange
     String expectedMessage = "Review does not exist: " + REVIEW_ID_1;
     when(reviewRepositoryMock.findById(anyLong())).thenReturn(Optional.empty());
-    when(userRepositoryMock.findById(eq(USER_ID_1))).thenReturn(Optional.of(userMock));
+    when(userRepositoryMock.findById(USER_ID_1)).thenReturn(Optional.of(userMock));
 
     // Act
     Exception exception =
@@ -182,9 +181,9 @@ public class ReplyServiceTest {
   }
 
   @Test
-  public void deleteOne_deletesSuccessfully() {
+  void deleteOne_deletesSuccessfully() {
     // Arrange
-    when(replyRepositoryMock.existsById(eq(REPLY_ID_1))).thenReturn(true);
+    when(replyRepositoryMock.existsById(REPLY_ID_1)).thenReturn(true);
 
     // Act
     replyService.deleteOne(REPLY_ID_1);
@@ -194,9 +193,9 @@ public class ReplyServiceTest {
   }
 
   @Test
-  public void deleteOne_throwsException() {
+  void deleteOne_throwsException() {
     // Arrange
-    when(replyRepositoryMock.existsById(eq(REPLY_ID_1))).thenReturn(false);
+    when(replyRepositoryMock.existsById(REPLY_ID_1)).thenReturn(false);
     String expectedMessage = "Reply does not exist: " + REPLY_ID_1;
 
     // Act
