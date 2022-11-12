@@ -39,6 +39,15 @@ public class ReviewService {
   }
 
   /**
+   * Retrieve all Reviews.
+   *
+   * @return List of all Reviews
+   */
+  public List<ReviewEntity> getAll(Long locationId) {
+    return reviewRepository.findByLocationId(locationId);
+  }
+
+  /**
    * Retrieve one Review.
    *
    * @param id Review id

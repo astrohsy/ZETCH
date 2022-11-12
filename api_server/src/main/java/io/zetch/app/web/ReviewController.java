@@ -7,19 +7,12 @@ import io.zetch.app.domain.review.ReviewEntity;
 import io.zetch.app.domain.review.ReviewGetDto;
 import io.zetch.app.domain.review.ReviewPostDto;
 import io.zetch.app.service.ReviewService;
-import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -36,7 +29,7 @@ public class ReviewController {
     this.reviewService = reviewService;
   }
 
-  @PostMapping(path = "/")
+  @PostMapping()
   @Operation(summary = "Create a new review.")
   @SecurityRequirement(name = "OAuth2")
   @ResponseBody
@@ -50,17 +43,17 @@ public class ReviewController {
     return r.toGetDto();
   }
 
-  /** Returns a list of all restraurants. */
-  @GetMapping(path = "/")
+  /** Returns a list of all reviews. */
+  @GetMapping()
   @Operation(summary = "Retrieve all reviews.")
   @SecurityRequirement(name = "OAuth2")
   @ResponseBody
-  Iterable<ReviewGetDto> getAllReviews() {
-    var result = new ArrayList<ReviewGetDto>();
-    for (var x : reviewService.getAll().stream().toList()) {
-      result.add(x.toGetDto());
-    }
-    return result;
+  Iterable<ReviewGetDto> getAllReviews(@RequestParam Optional<Long> locationId) {
+    List<ReviewEntity> resultStream;
+    if (locationId.isPresent()) resultStream = reviewService.getAll(locationId.get());
+    else resultStream = reviewService.getAll();
+
+    return resultStream.stream().map(ReviewEntity::toGetDto).toList();
   }
 
   /**

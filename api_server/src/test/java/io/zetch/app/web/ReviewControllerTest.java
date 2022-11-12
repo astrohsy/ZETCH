@@ -28,6 +28,7 @@ import java.util.NoSuchElementException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.internal.matchers.Any;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -74,7 +75,7 @@ class ReviewControllerTest {
         """
                       {
                         "id": 1, "rating": 1, "comment": "Terrible service.",
-                        location: { id: 0, "name": "Bob's", "description": "Italian", "address": "1234 Broadway", "type": "museum" },
+                        location: { id: 1, "name": "Tom's", "description": "Italian", "address": "1234 Broadway", "type": "museum" },
                         user: { id: 1, "username": "joe", "name": "Job", "email": "joe@example.com", "affiliation": "other" }
                        }
                     """);
@@ -119,6 +120,19 @@ class ReviewControllerTest {
         .andExpect(status().isOk())
         .andExpect(jsonPath("*", notNullValue()))
         .andExpect(jsonPath("$", hasSize(2)));
+  }
+
+  @Test
+  void getAllReviews_withLocationId() throws Exception {
+    when(reviewServiceMock.getAll(anyLong())).thenReturn(reviews.subList(1, 2));
+    mockMvc
+        .perform(
+            get(REVIEWS_ENDPOINT)
+                .queryParam("locationId", "1")
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("*", notNullValue()))
+        .andExpect(jsonPath("$", hasSize(1)));
   }
 
   @Test
