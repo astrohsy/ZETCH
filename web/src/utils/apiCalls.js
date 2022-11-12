@@ -40,3 +40,28 @@ export async function getAuthToken(code) {
 
     return request(`https://zetch-app-4.auth.us-east-1.amazoncognito.com/oauth2/token?grant_type=authorization_code&client_id=${clientId}&redirect_uri=http%3A%2F%2Flocalhost%3A8080&code=${code}`, requestOptions, true);
 }
+
+export async function getMuseumByName(name) {
+
+
+    const requestOptions = {
+        method: 'GET',
+    };
+
+    const url = `locations/${encodeURI(name)}`;
+
+    return request(url, requestOptions);
+}
+
+export async function updateMuseum(body) {
+
+    const requestOptions = {
+        method: 'PUT',
+        body: JSON.stringify(body),
+        headers: getJsonHeaders()
+    };
+
+    const url = `locations/${encodeURI(body.name)}`;
+
+    return request(url, requestOptions);
+}
