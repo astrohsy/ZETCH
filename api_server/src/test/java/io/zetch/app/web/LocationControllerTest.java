@@ -373,7 +373,7 @@ class LocationControllerTest {
     when(locationServiceMock.getRatingHistogram(NAME_1)).thenReturn(histogram);
 
     MockHttpServletRequestBuilder mockRequest =
-        delete(LOCATION_ENDPOINT + NAME_1 + "/ratingHistogram")
+        get(LOCATION_ENDPOINT + NAME_1 + "/ratingHistogram")
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON);
 

@@ -7,7 +7,6 @@ import static org.mockito.Mockito.when;
 import io.zetch.app.domain.reply.ReplyPostDto;
 import io.zetch.app.domain.user.Affiliation;
 import io.zetch.app.domain.user.UserEntity;
-import io.zetch.app.repo.ReviewRepository;
 import io.zetch.app.repo.UserRepository;
 import java.time.Instant;
 import java.util.HashMap;
@@ -29,13 +28,11 @@ class SecurityServiceTest {
   private final String USERNAME_1 = "bob";
   private final String USERNAME_2 = "admin";
   private final String CLIENT_1 = "some_client";
-  private final String CLIENT_2 = "another_client";
 
   UserEntity bob = new UserEntity(USERNAME_1, Affiliation.OTHER, "", "");
   UserEntity admin = new UserEntity(USERNAME_2, Affiliation.ADMIN, "", "");
 
   @Mock private UserRepository userRepository;
-  @Mock private ReviewRepository reviewRepository;
   @InjectMocks private SecurityService securityService;
 
   @Test
@@ -45,7 +42,7 @@ class SecurityServiceTest {
 
   @Test
   void isAdmin_NullToken() {
-    assertThat(securityService.isSelf(null, USERNAME_1), is(false));
+    assertThat(securityService.isAdmin(null), is(false));
   }
 
   @ParameterizedTest
@@ -102,8 +99,14 @@ class SecurityServiceTest {
 
   @Test
   void isSelfClient_Failure() {
+    String CLIENT_2 = "another_client";
     assertThat(
         securityService.isSelfClient(getJwtForTest(USERNAME_1, CLIENT_2), CLIENT_1), is(false));
+  }
+
+  @Test
+  void isSelfClient_NullToken() {
+    assertThat(securityService.isSelfClient(null, CLIENT_1), is(false));
   }
 
   @Test
