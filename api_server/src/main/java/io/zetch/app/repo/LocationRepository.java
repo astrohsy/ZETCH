@@ -10,6 +10,9 @@ import org.springframework.lang.Nullable;
 
 /** Backend for the Location data. */
 public interface LocationRepository extends JpaRepository<LocationEntity, Long> {
+
+  List<LocationEntity> findByOwners_UsernameIgnoreCase(String username);
+
   boolean existsByName(String name);
 
   Optional<LocationEntity> findByName(String name);

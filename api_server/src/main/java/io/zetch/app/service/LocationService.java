@@ -217,6 +217,10 @@ public class LocationService {
     return sum == 0 ? 0 : sum / ratings.size();
   }
 
+  public List<LocationEntity> getLocationsByOwner(String username) {
+    return locationRepository.findByOwners_UsernameIgnoreCase(username);
+  }
+
   /**
    * Verify and return Location for a particular id.
    *

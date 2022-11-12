@@ -10,6 +10,7 @@ import io.zetch.app.domain.location.LocationGetDto;
 import io.zetch.app.domain.location.LocationRatingHistogramDto;
 import io.zetch.app.domain.location.LocationSearchDto;
 import io.zetch.app.service.LocationService;
+import java.util.List;
 import java.util.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -173,6 +174,17 @@ public class LocationController {
   @SecurityRequirement(name = "OAuth2")
   LocationAvgRatingDto getAverageRating(@PathVariable String name, JwtAuthenticationToken token) {
     return new LocationAvgRatingDto(locationService.averageRating(name));
+  }
+
+  /* Returns locations that the caller owns. */
+  @GetMapping("/mine")
+  @Operation(summary = "Retrieve the location(s) that the caller owns.")
+  @SecurityRequirement(name = "OAuth2")
+  List<LocationGetDto> getOwnedLocations(JwtAuthenticationToken token) {
+    String username = token.getToken().getClaimAsString("username").toLowerCase();
+    return locationService.getLocationsByOwner(username).stream()
+        .map(LocationEntity::toGetDto)
+        .toList();
   }
 
   /**
