@@ -2,8 +2,8 @@ package io.zetch.app.service;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
@@ -23,7 +23,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class ReviewServiceTest {
+class ReviewServiceTest {
 
   @Mock private UserRepository userRepositoryMock;
   @Mock private ReviewRepository reviewRepositoryMock;
@@ -34,13 +34,13 @@ public class ReviewServiceTest {
   // VERIFY SERVICE RETURN VALUE
 
   @Test
-  public void getOne() {
+  void getOne() {
     when(reviewRepositoryMock.findById(1L)).thenReturn(Optional.of(reviewMock));
     assertThat(reviewService.getOne(1L), is(reviewMock));
   }
 
   @Test
-  public void getAll() {
+  void getAll() {
     when(reviewRepositoryMock.findAll()).thenReturn(List.of(reviewMock, reviewMock, reviewMock));
     assertThat(reviewService.getAll(Optional.empty(), Optional.empty()).size(), is(3));
   }
@@ -66,7 +66,7 @@ public class ReviewServiceTest {
   // VERIFY INVOCATION OF DEPS + PARAMETERS
 
   @Test
-  public void createNew() {
+  void createNew() {
     Long validUserId = 1L;
     Long validLocationId = 1L;
 
@@ -81,10 +81,9 @@ public class ReviewServiceTest {
             .location(testLocation)
             .build();
     when(userRepositoryMock.findById(anyLong())).thenReturn(Optional.empty());
-    when(userRepositoryMock.findById(eq(validUserId))).thenReturn(Optional.of(testUser));
+    when(userRepositoryMock.findById(validUserId)).thenReturn(Optional.of(testUser));
     when(locationRepositoryMock.findById(anyLong())).thenReturn(Optional.empty());
-    when(locationRepositoryMock.findById(eq(validLocationId)))
-        .thenReturn(Optional.of(testLocation));
+    when(locationRepositoryMock.findById(validLocationId)).thenReturn(Optional.of(testLocation));
     when(reviewRepositoryMock.save(any(ReviewEntity.class))).thenReturn(testReview);
 
     ReviewEntity r = reviewService.createNew("test review", 3, validUserId, validLocationId);
@@ -93,32 +92,24 @@ public class ReviewServiceTest {
     Exception exceptionWhenNoUser =
         assertThrows(
             NoSuchElementException.class,
-            () -> {
-              reviewService.createNew("test review", 3, 123L, validLocationId);
-            });
+            () -> reviewService.createNew("test review", 3, 123L, validLocationId));
 
     Exception exceptionWhenNoLocation =
         assertThrows(
             NoSuchElementException.class,
-            () -> {
-              reviewService.createNew("test review", 3, validUserId, 123L);
-            });
+            () -> reviewService.createNew("test review", 3, validUserId, 123L));
     String expectedMessage = "User or Location is not exist";
 
-    assertTrue(exceptionWhenNoUser.getMessage().equals(expectedMessage));
-    assertTrue(exceptionWhenNoLocation.getMessage().equals(expectedMessage));
+    assertEquals(exceptionWhenNoUser.getMessage(), expectedMessage);
+    assertEquals(exceptionWhenNoLocation.getMessage(), expectedMessage);
   }
 
   @Test
-  public void deleteOne() {
+  void deleteOne() {
     doReturn(true).when(reviewRepositoryMock).existsById(1L);
     reviewService.deleteOne(1L);
 
     doReturn(false).when(reviewRepositoryMock).existsById(2L);
-    assertThrows(
-        NoSuchElementException.class,
-        () -> {
-          reviewService.deleteOne(2L);
-        });
+    assertThrows(NoSuchElementException.class, () -> reviewService.deleteOne(2L));
   }
 }

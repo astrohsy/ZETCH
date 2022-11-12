@@ -16,5 +16,5 @@ import lombok.Setter;
 @NoArgsConstructor
 public class LocationRatingHistogramDto implements Serializable {
   @JsonProperty("rating_histogram")
-  Map<String, String> ratingHistogram;
+  private Map<String, String> ratingHistogram;
 }
