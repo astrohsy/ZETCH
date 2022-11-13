@@ -22,19 +22,19 @@ class UserServiceIntegrationTest {
   private static final String NAME_1 = "cat";
   private static final String NAME_2 = "dog";
   UserEntity u1 =
-          UserEntity.builder()
-                  .username(NAME_1)
-                  .displayName("Cat")
-                  .email("cat@cat.cat")
-                  .affiliation(Affiliation.OTHER)
-                  .build();
+      UserEntity.builder()
+          .username(NAME_1)
+          .displayName("Cat")
+          .email("cat@cat.cat")
+          .affiliation(Affiliation.OTHER)
+          .build();
   UserEntity u2 =
-          UserEntity.builder()
-                  .username(NAME_2)
-                  .displayName("Dog")
-                  .email("dog@dog.dog")
-                  .affiliation(Affiliation.OTHER)
-                  .build();
+      UserEntity.builder()
+          .username(NAME_2)
+          .displayName("Dog")
+          .email("dog@dog.dog")
+          .affiliation(Affiliation.OTHER)
+          .build();
   @Autowired private UserService userService;
   @Autowired private UserRepository userRepository;
 
@@ -79,8 +79,9 @@ class UserServiceIntegrationTest {
   @Test
   void createNewFails() {
     userRepository.save(u1);
-    assertThrows(IllegalArgumentException.class,
-            () -> userService.createNew(NAME_1, "Bob", "bob@me.com", "other"));
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> userService.createNew(NAME_1, "Bob", "bob@me.com", "other"));
   }
 
   @Test
@@ -96,7 +97,9 @@ class UserServiceIntegrationTest {
 
   @Test
   void updateFails() {
-    assertThrows(NoSuchElementException.class, () -> userService.update(NAME_1, "Bob", "bob@me.com", "other"));
+    assertThrows(
+        NoSuchElementException.class,
+        () -> userService.update(NAME_1, "Bob", "bob@me.com", "other"));
   }
 
   @Test
