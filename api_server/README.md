@@ -75,7 +75,7 @@ Checkstyle report is in `api_server/reports/checkstyle.html`.
 ZETCH/api_server$ ./mvnw pmd:pmd
 ```
 
-PMD report is generated in `api_server/target/site/jacoco/index.html`.
+PMD report is generated in `api_server/target/site/pmd.html`.
 
 In addition, we are utilizing SonarCloud:
 
