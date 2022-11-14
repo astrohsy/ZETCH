@@ -45,13 +45,31 @@ public class SeedLocations {
           .build();
   public static final LocationEntity LOCATION5 =
       LocationEntity.builder()
-          .name("Wahi's Diner")
-          .description("Diner")
+          .name("Eugene Museum of Music")
+          .description(
+              "A museum dedicated to preservation and celebration of "
+                  + "the history of all good music, this idea for the "
+                  + "museum was conceived in 1995 by generous philanthropist Eugene Kim."
+          )
+          .address("263th E 103 St")
+          .type(Type.MUSEUM)
+          .owners(List.of(SeedUsers.USER2))
+          .build();
+
+  public static final LocationEntity LOCATION6 =
+      LocationEntity.builder()
+          .name("Columbia Museum")
+          .description(
+              "Located on the campus of Columbia University, this museum plays "
+                  + "a major role in developing and collecting modern art, and is "
+                  + "often identified as one of the largest and most influential "
+                  + "museums of modern art in the world. "
+          )
           .address("569th W 120 St")
           .type(Type.MUSEUM)
-          .owners(List.of(SeedUsers.USER5))
+          .owners(List.of(SeedUsers.USER2))
           .build();
 
   public static final List<LocationEntity> LOCATIONS =
-      List.of(LOCATION1, LOCATION2, LOCATION3, LOCATION4, LOCATION5);
+      List.of(LOCATION1, LOCATION2, LOCATION3, LOCATION4, LOCATION5, LOCATION6);
 }
