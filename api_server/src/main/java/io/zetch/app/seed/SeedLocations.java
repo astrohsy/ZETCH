@@ -49,8 +49,7 @@ public class SeedLocations {
           .description(
               "A museum dedicated to preservation and celebration of "
                   + "the history of all good music, this idea for the "
-                  + "museum was conceived in 1995 by generous philanthropist Eugene Kim."
-          )
+                  + "museum was conceived in 1995 by generous philanthropist Eugene Kim.")
           .address("263th E 103 St")
           .type(Type.MUSEUM)
           .owners(List.of(SeedUsers.USER2))
@@ -63,8 +62,7 @@ public class SeedLocations {
               "Located on the campus of Columbia University, this museum plays "
                   + "a major role in developing and collecting modern art, and is "
                   + "often identified as one of the largest and most influential "
-                  + "museums of modern art in the world. "
-          )
+                  + "museums of modern art in the world. ")
           .address("569th W 120 St")
           .type(Type.MUSEUM)
           .owners(List.of(SeedUsers.USER2))
