@@ -9,9 +9,12 @@ import io.zetch.app.repo.UserRepository;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.validation.*;
 
 /** Review business logic. */
 @Service
@@ -19,6 +22,7 @@ public class ReviewService {
   private final ReviewRepository reviewRepository;
   private final UserRepository userRepository;
   private final LocationRepository locationRepository;
+  private Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
   /** Review service constructor. */
   @Autowired
@@ -41,6 +45,10 @@ public class ReviewService {
       return reviewRepository.findByUserIdAndLocationId(userId.get(), locationId.get());
     else if (locationId.isPresent()) return reviewRepository.findByLocationId(locationId.get());
     else if (userId.isPresent()) return reviewRepository.findByUserId(userId.get());
+    return reviewRepository.findAll();
+  }
+
+  public List<ReviewEntity> getAll() {
     return reviewRepository.findAll();
   }
 
@@ -72,6 +80,11 @@ public class ReviewService {
 
     ReviewEntity newReview =
         ReviewEntity.builder().comment(comment).rating(rating).user(u).location(l).build();
+
+    Set<ConstraintViolation<ReviewEntity>> violations = validator.validate(newReview);
+    if (!violations.isEmpty()) {
+      throw new ConstraintViolationException(violations);
+    }
     return reviewRepository.save(newReview);
   }
 
