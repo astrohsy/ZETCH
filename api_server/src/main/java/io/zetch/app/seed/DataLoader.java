@@ -5,6 +5,7 @@ import io.zetch.app.repo.ReplyRepository;
 import io.zetch.app.repo.ReviewRepository;
 import io.zetch.app.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -17,12 +18,17 @@ public class DataLoader implements CommandLineRunner {
   @Autowired ReviewRepository reviewRepository;
   @Autowired ReplyRepository replyRepository;
 
+  @Value("${seed-generation-flag}")
+  Boolean seedGenerationFlag;
+
   @Override
   public void run(String... args) throws Exception {
-    seedUserData();
-    seedLocationData();
-    seedReviewData();
-    seedReplyData();
+    if (seedGenerationFlag) {
+      seedUserData();
+      seedLocationData();
+      seedReviewData();
+      seedReplyData();
+    }
   }
 
   private void seedUserData() {
