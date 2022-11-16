@@ -78,7 +78,8 @@ class ReviewServiceIntegrationTest {
           .user(u1)
           .rating(3)
           .comment(
-              "This museum is absolutely awesome if you are interested in history, space, animals, and rocks.")
+              "This museum is absolutely awesome if you are interested in history, space, animals,"
+                  + " and rocks.")
           .build();
 
   ReviewEntity r2 =
