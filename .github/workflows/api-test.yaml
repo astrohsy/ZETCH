@@ -15,6 +15,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: "curl -H \"Content-type: application/json\" -H \"X-API-Key: ${POSTMAN_API_KEY}\": \"$collectionId\""
+      - name: Add mask
+        run: |
+          echo "::add-mask::${{ secrets.POSTMAN_API_KEY }}"
+      - run: "curl -H \"Content-type: application/json\" -H \"X-API-Key: \": $collectionId"
         env:
           collectionId: https://api.getpostman.com/collections/23680701-9829f32b-1694-4065-b6b9-93cbc808c454
