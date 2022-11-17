@@ -18,6 +18,6 @@ jobs:
       - name: Add mask
         run: |
           echo "::add-mask::${{ secrets.POSTMAN_API_KEY }}"
-      - run: "curl -H \"Content-type: application/json\" -H \"X-API-Key: \": $collectionId"
+      - run: "curl -H \"Content-type: application/json\" -H \"X-API-Key: \" $collection_id"
         env:
-          collectionId: https://api.getpostman.com/collections/23680701-9829f32b-1694-4065-b6b9-93cbc808c454
+          collection_id: https://api.getpostman.com/collections/23680701-9829f32b-1694-4065-b6b9-93cbc808c454
