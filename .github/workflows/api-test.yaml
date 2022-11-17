@@ -1,0 +1,20 @@
+name: ZETCH API Test
+
+env:
+  API_SERVER_PROJECT: api_server
+
+on:
+  push:
+    branches:
+      - main
+      - 127-integrate-newman-with-github-actions
+
+
+jobs:
+  api-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: "curl -H \"Content-type: application/json\" -H \"X-API-Key: ${POSTMAN_API_KEY}\": \"$collectionId\""
+        env:
+          collectionId: https://api.getpostman.com/collections/23680701-9829f32b-1694-4065-b6b9-93cbc808c454
