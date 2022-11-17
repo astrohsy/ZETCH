@@ -87,6 +87,34 @@ public class ReviewService {
     }
     return reviewRepository.save(newReview);
   }
+  /**
+   * Update existing Review with any non-null attributes.
+   *
+   * @param id id of Location to be updated
+   * @param newComment New comment
+   * @param newRating New rating
+   * @return Updated Review object
+   * @throws NoSuchElementException If Review not found
+   */
+  public ReviewEntity update(Long id, String newComment, Integer newRating)
+      throws IllegalArgumentException, NoSuchElementException {
+    ReviewEntity currReview = reviewRepository.findById(id).get();
+
+    if (newComment != null) {
+      currReview.setComment(newComment);
+    }
+
+    if (newRating != null) {
+      currReview.setRating(newRating);
+    }
+
+    Set<ConstraintViolation<ReviewEntity>> violations = validator.validate(currReview);
+    if (!violations.isEmpty()) {
+      throw new ConstraintViolationException(violations);
+    }
+
+    return reviewRepository.save(currReview);
+  }
 
   /** Deletes one review. */
   public void deleteOne(Long reviewId) {

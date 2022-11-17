@@ -152,6 +152,27 @@ class ReviewServiceIntegrationTest {
   }
 
   @Test
+  void update() {
+    reviewRepository.save(r1);
+    ReviewEntity newReview = reviewService.update(r1.getId(), "updated", 5);
+    assertThat(reviewService.getAll().size(), is(1));
+    assertThat(newReview.getComment(), is("updated"));
+    assertThat(newReview.getRating(), is(5));
+  }
+
+  @Test
+  void updateFails() {
+    assertThrows(NoSuchElementException.class, () -> reviewService.update(123L, "Bob", 4));
+  }
+
+  @Test
+  void updateFails_wrongRating() {
+    reviewRepository.save(r1);
+    assertThrows(
+        ConstraintViolationException.class, () -> reviewService.update(r1.getId(), "Bob", 10));
+  }
+
+  @Test
   void delete() {
     reviewRepository.save(r1);
     assertThat(reviewRepository.findAll().size(), is(1));
