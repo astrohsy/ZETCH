@@ -5,8 +5,10 @@ import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.when;
 
 import io.zetch.app.domain.reply.ReplyPostDto;
+import io.zetch.app.domain.review.ReviewEntity;
 import io.zetch.app.domain.user.Affiliation;
 import io.zetch.app.domain.user.UserEntity;
+import io.zetch.app.repo.ReviewRepository;
 import io.zetch.app.repo.UserRepository;
 import java.time.Instant;
 import java.util.HashMap;
@@ -33,6 +35,7 @@ class SecurityServiceTest {
   UserEntity admin = new UserEntity(USERNAME_2, Affiliation.ADMIN, "", "");
 
   @Mock private UserRepository userRepository;
+  @Mock private ReviewRepository reviewRepository;
   @InjectMocks private SecurityService securityService;
 
   @Test
@@ -120,6 +123,34 @@ class SecurityServiceTest {
   void isAdmin_Failure() {
     when(userRepository.findByUsernameIgnoreCase(USERNAME_1)).thenReturn(Optional.ofNullable(bob));
     assertThat(securityService.isAdmin(getJwtForTest(USERNAME_1, CLIENT_1)), is(false));
+  }
+
+  @Test
+  void isOwnedReview() {
+    Long reviewId = 1L;
+    UserEntity owner = UserEntity.builder().username(USERNAME_1).build();
+
+    ReviewEntity r = ReviewEntity.builder().comment("123").rating(2).user(owner).build();
+    when(reviewRepository.findById(reviewId)).thenReturn(Optional.of(r));
+
+    assertThat(
+        securityService.isOwnedReview(getJwtForTest(USERNAME_1, CLIENT_1), reviewId), is(true));
+  }
+
+  @Test
+  void isOwnedReview_Failure() {
+    Long reviewId = 1L;
+    Long wrongReviewId = 2L;
+    UserEntity wrongOwner = UserEntity.builder().username(USERNAME_2).build();
+
+    ReviewEntity r = ReviewEntity.builder().comment("123").rating(2).user(wrongOwner).build();
+    when(reviewRepository.findById(reviewId)).thenReturn(Optional.of(r));
+
+    assertThat(
+        securityService.isOwnedReview(getJwtForTest(USERNAME_1, CLIENT_1), reviewId), is(false));
+    assertThat(
+        securityService.isOwnedReview(getJwtForTest(USERNAME_1, CLIENT_1), wrongReviewId),
+        is(false));
   }
 
   private JwtAuthenticationToken getJwtForTest(String username, String clientId) {
