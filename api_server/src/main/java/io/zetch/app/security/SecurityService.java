@@ -2,7 +2,6 @@ package io.zetch.app.security;
 
 import io.zetch.app.domain.reply.ReplyPostDto;
 import io.zetch.app.domain.review.ReviewEntity;
-import io.zetch.app.domain.review.ReviewGetDto;
 import io.zetch.app.domain.user.Affiliation;
 import io.zetch.app.domain.user.UserEntity;
 import io.zetch.app.repo.ReviewRepository;
@@ -16,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 
 /** Service providing authorization business logic. */
 @Service
