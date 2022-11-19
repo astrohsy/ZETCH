@@ -18,7 +18,7 @@ import { useEffect, useState } from 'react';
 
 
 const clientId = process.env.REACT_APP_COGNITO_CLIENT_ID;
-const redirect_uri = "http%3A%2F%2Flocalhost%3A8080"
+const redirect_uri = "http%3A%2F%2Flocalhost%3A3000"
 const authorize_url = `https://zetch-app-4.auth.us-east-1.amazoncognito.com/login?response_type=code&client_id=${clientId}&redirect_uri=${redirect_uri}`;
 
 function App() {
@@ -38,7 +38,7 @@ function App() {
 
         if (res.access_token) {
           sessionStorage.setItem("access_token", res.access_token);
-          window.location.href = "http://localhost:8080";
+          window.location.href = "http://localhost:3000";
         }
 
 

@@ -38,7 +38,7 @@ export async function getAuthToken(code) {
         headers
     };
 
-    return request(`https://zetch-app-4.auth.us-east-1.amazoncognito.com/oauth2/token?grant_type=authorization_code&client_id=${clientId}&redirect_uri=http%3A%2F%2Flocalhost%3A8080&code=${code}`, requestOptions, true);
+    return request(`https://zetch-app-4.auth.us-east-1.amazoncognito.com/oauth2/token?grant_type=authorization_code&client_id=${clientId}&redirect_uri=http%3A%2F%2Flocalhost%3A3000&code=${code}`, requestOptions, true);
 }
 
 export async function getCognitoUser(accessToken) {
