@@ -40,11 +40,6 @@ public class ReviewEntity extends BaseEntity {
   @JoinColumn(name = "location_id")
   private LocationEntity location;
 
-  @Override
-  public boolean equals(Object o) {
-    return super.equals(o);
-  }
-
   public ReviewGetDto toGetDto() {
     return new ReviewGetDto(super.getId(), comment, rating, user.toGetDto(), location.toGetDto());
   }
