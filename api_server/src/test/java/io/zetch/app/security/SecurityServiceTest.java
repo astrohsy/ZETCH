@@ -153,6 +153,11 @@ class SecurityServiceTest {
         is(false));
   }
 
+  @Test
+  void isOwnedReview_NullToken() {
+    assertThat(securityService.isOwnedReview(null, 1L), is(false));
+  }
+
   private JwtAuthenticationToken getJwtForTest(String username, String clientId) {
     Map<String, Object> claims = new HashMap<>();
     claims.put("username", username); // Only this matter, everything else is a placeholder
