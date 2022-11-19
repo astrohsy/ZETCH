@@ -70,7 +70,6 @@ public class ReviewController {
    * Deletes a review.
    *
    * @param reviewId Review's id
-   * @return Nothing if successful
    */
   @DeleteMapping("/{reviewId}")
   @Operation(summary = "Delete a review with reviewId.")

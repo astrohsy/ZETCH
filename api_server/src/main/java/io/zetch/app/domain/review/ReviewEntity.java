@@ -45,11 +45,6 @@ public class ReviewEntity extends BaseEntity {
     return super.equals(o);
   }
 
-  @Override
-  public int hashCode() {
-    return super.hashCode();
-  }
-
   public ReviewGetDto toGetDto() {
     return new ReviewGetDto(super.getId(), comment, rating, user.toGetDto(), location.toGetDto());
   }

@@ -23,7 +23,7 @@ public class ReviewService {
   private final ReviewRepository reviewRepository;
   private final UserRepository userRepository;
   private final LocationRepository locationRepository;
-  private Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+  private final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
   /** Review service constructor. */
   @Autowired
