@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SeedReplies.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Zetch Reviews App</a> &gt; <a href="index.source.html" class="el_package">io.zetch.app.seed</a> &gt; <span class="el_source">SeedReplies.java</span></div><h1>SeedReplies.java</h1><pre class="source lang-java linenums">package io.zetch.app.seed;
+
+import io.zetch.app.domain.reply.ReplyEntity;
+import java.util.Date;
+import java.util.List;
+
+/** Helper class for adding sample replies. */
+public class SeedReplies {
+
+  public static final ReplyEntity REPLY1 =
+<span class="nc" id="L11">      ReplyEntity.builder()</span>
+<span class="nc" id="L12">          .replyUser(SeedUsers.USER5)</span>
+<span class="nc" id="L13">          .replyComment(&quot;Thanks for visiting our location!&quot;)</span>
+<span class="nc" id="L14">          .createdAt(new Date(&quot;09/05/2022&quot;).getTime())</span>
+<span class="nc" id="L15">          .review(SeedReviews.REVIEW1)</span>
+<span class="nc" id="L16">          .build();</span>
+  public static final ReplyEntity REPLY2 =
+<span class="nc" id="L18">      ReplyEntity.builder()</span>
+<span class="nc" id="L19">          .replyUser(SeedUsers.USER4)</span>
+<span class="nc" id="L20">          .replyComment(&quot;Glad you enjoyed your meal!&quot;)</span>
+<span class="nc" id="L21">          .createdAt(new Date(&quot;08/05/2021&quot;).getTime())</span>
+<span class="nc" id="L22">          .review(SeedReviews.REVIEW2)</span>
+<span class="nc" id="L23">          .build();</span>
+  public static final ReplyEntity REPLY3 =
+<span class="nc" id="L25">      ReplyEntity.builder()</span>
+<span class="nc" id="L26">          .replyUser(SeedUsers.USER4)</span>
+<span class="nc" id="L27">          .replyComment(&quot;Please let us know what we can do to improve your next experience.&quot;)</span>
+<span class="nc" id="L28">          .createdAt(new Date(&quot;07/13/2021&quot;).getTime())</span>
+<span class="nc" id="L29">          .review(SeedReviews.REVIEW3)</span>
+<span class="nc" id="L30">          .build();</span>
+  public static final ReplyEntity REPLY4 =
+<span class="nc" id="L32">      ReplyEntity.builder()</span>
+<span class="nc" id="L33">          .replyUser(SeedUsers.USER3)</span>
+<span class="nc" id="L34">          .replyComment(&quot;We loved having you at our museum.&quot;)</span>
+<span class="nc" id="L35">          .createdAt(new Date(&quot;11/22/2020&quot;).getTime())</span>
+<span class="nc" id="L36">          .review(SeedReviews.REVIEW4)</span>
+<span class="nc" id="L37">          .build();</span>
+  public static final ReplyEntity REPLY5 =
+<span class="nc" id="L39">      ReplyEntity.builder()</span>
+<span class="nc" id="L40">          .replyUser(SeedUsers.USER1)</span>
+<span class="nc" id="L41">          .replyComment(&quot;Hope you had a great time!&quot;)</span>
+<span class="nc" id="L42">          .createdAt(new Date(&quot;01/02/2021&quot;).getTime())</span>
+<span class="nc" id="L43">          .review(SeedReviews.REVIEW5)</span>
+<span class="nc" id="L44">          .build();</span>
+  // Demo Replies
+  public static final ReplyEntity REPLY6 =
+<span class="nc" id="L47">      ReplyEntity.builder()</span>
+<span class="nc" id="L48">          .replyUser(SeedUsers.USER2)</span>
+<span class="nc" id="L49">          .replyComment(&quot;Thanks for visiting our locations!&quot;)</span>
+<span class="nc" id="L50">          .createdAt(new Date(&quot;01/02/2021&quot;).getTime())</span>
+<span class="nc" id="L51">          .review(SeedReviews.REVIEW6)</span>
+<span class="nc" id="L52">          .build();</span>
+  public static final ReplyEntity REPLY7 =
+<span class="nc" id="L54">      ReplyEntity.builder()</span>
+<span class="nc" id="L55">          .replyUser(SeedUsers.USER2)</span>
+<span class="nc" id="L56">          .replyComment(&quot;Please let us know how we could improve!&quot;)</span>
+<span class="nc" id="L57">          .createdAt(new Date(&quot;05/12/2019&quot;).getTime())</span>
+<span class="nc" id="L58">          .review(SeedReviews.REVIEW9)</span>
+<span class="nc" id="L59">          .build();</span>
+  public static final ReplyEntity REPLY8 =
+<span class="nc" id="L61">      ReplyEntity.builder()</span>
+<span class="nc" id="L62">          .replyUser(SeedUsers.USER2)</span>
+<span class="nc" id="L63">          .replyComment(&quot;Hope to see you again soon!&quot;)</span>
+<span class="nc" id="L64">          .createdAt(new Date(&quot;01/06/2021&quot;).getTime())</span>
+<span class="nc" id="L65">          .review(SeedReviews.REVIEW15)</span>
+<span class="nc" id="L66">          .build();</span>
+  public static final ReplyEntity REPLY9 =
+<span class="nc" id="L68">      ReplyEntity.builder()</span>
+<span class="nc" id="L69">          .replyUser(SeedUsers.USER2)</span>
+<span class="nc" id="L70">          .replyComment(&quot;We are sorry you did not enjoy our location.&quot;)</span>
+<span class="nc" id="L71">          .createdAt(new Date(&quot;10/01/2020&quot;).getTime())</span>
+<span class="nc" id="L72">          .review(SeedReviews.REVIEW19)</span>
+<span class="nc" id="L73">          .build();</span>
+<span class="nc" id="L74">  public static final List&lt;ReplyEntity&gt; REPLIES =</span>
+<span class="nc" id="L75">      List.of(REPLY1, REPLY2, REPLY3, REPLY4, REPLY5, REPLY6, REPLY7, REPLY8, REPLY9);</span>
+
+<span class="nc" id="L77">  private SeedReplies() {</span>
+<span class="nc" id="L78">    throw new IllegalStateException(&quot;Utility class&quot;);</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
