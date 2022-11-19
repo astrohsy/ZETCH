@@ -1,5 +1,6 @@
 package io.zetch.app.service;
 
+import static java.util.Map.entry;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -8,11 +9,14 @@ import static org.mockito.Mockito.when;
 
 import io.zetch.app.domain.location.LocationEntity;
 import io.zetch.app.domain.location.Type;
+import io.zetch.app.domain.review.ReviewEntity;
 import io.zetch.app.domain.user.UserEntity;
 import io.zetch.app.repo.LocationRepository;
+import io.zetch.app.repo.ReviewRepository;
 import io.zetch.app.repo.UserRepository;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
@@ -34,10 +38,11 @@ class LocationServiceTest {
   private static final String ADDRESS = "1234 Broadway";
   private static final String TYPE = "restaurant";
 
+  @Mock private LocationEntity locationMock;
   @Mock private LocationRepository locationRepositoryMock;
   @Mock private UserRepository userRepositoryMock;
+  @Mock private ReviewRepository reviewRepository;
   @InjectMocks private LocationService locationService;
-  @Mock private LocationEntity locationMock;
 
   // VERIFY SERVICE RETURN VALUE
 
@@ -63,10 +68,11 @@ class LocationServiceTest {
 
   @Test
   void search() {
-    when(locationRepositoryMock.findByNameAndType(NAME, Type.fromString(TYPE)))
+    when(locationRepositoryMock.search(NAME, DESCRIPTION, Type.fromString(TYPE)))
         .thenReturn(List.of(locationMock, locationMock, locationMock));
-    assertThat(locationService.search(NAME, TYPE).size(), is(3));
-    assertThat(locationService.search(NAME, TYPE).get(0), is(locationMock));
+
+    assertThat(locationService.search(NAME, DESCRIPTION, TYPE).size(), is(3));
+    assertThat(locationService.search(NAME, DESCRIPTION, TYPE).get(0), is(locationMock));
   }
 
   // VERIFY INVOCATION OF DEPS + PARAMETERS
@@ -151,6 +157,14 @@ class LocationServiceTest {
   }
 
   @Test
+  void updateLocationUnavailable2() {
+    when(locationRepositoryMock.findByName(NAME)).thenReturn(Optional.of(locationMock));
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> locationService.update(NAME, NAME, DESCRIPTION, ADDRESS, TYPE));
+  }
+
+  @Test
   void assignOwner() {
 
     LocationEntity location = LocationEntity.builder().owners(new ArrayList<>()).name(NAME).build();
@@ -179,5 +193,89 @@ class LocationServiceTest {
             .build();
     when(locationRepositoryMock.findByName(NAME)).thenReturn(Optional.of(deleted));
     assertThat(locationService.delete(NAME), is(deleted));
+  }
+
+  @Test
+  void ratingHistogram() {
+    LocationEntity location =
+        LocationEntity.builder()
+            .name("The Met")
+            .description("Art")
+            .address("Broadway")
+            .type(Type.MUSEUM)
+            .build();
+
+    when(locationRepositoryMock.findByName(location.getName())).thenReturn(Optional.of(location));
+    when(reviewRepository.countByLocation_NameIgnoreCaseAndRating(location.getName(), 1))
+        .thenReturn(1L);
+    when(reviewRepository.countByLocation_NameIgnoreCaseAndRating(location.getName(), 2))
+        .thenReturn(2L);
+    when(reviewRepository.countByLocation_NameIgnoreCaseAndRating(location.getName(), 3))
+        .thenReturn(3L);
+    when(reviewRepository.countByLocation_NameIgnoreCaseAndRating(location.getName(), 4))
+        .thenReturn(4L);
+    when(reviewRepository.countByLocation_NameIgnoreCaseAndRating(location.getName(), 5))
+        .thenReturn(5L);
+
+    Map<String, String> histogram =
+        Map.ofEntries(
+            entry("1", "1"), entry("2", "2"), entry("3", "3"), entry("4", "4"), entry("5", "5"));
+
+    assertThat(locationService.getRatingHistogram(location.getName()), is(histogram));
+  }
+
+  @Test
+  void avgRating() {
+    LocationEntity location =
+        LocationEntity.builder()
+            .name("The Met")
+            .description("Art")
+            .address("Broadway")
+            .type(Type.MUSEUM)
+            .build();
+
+    ReviewEntity r1 =
+        ReviewEntity.builder().comment("Comment").rating(3).user(null).location(location).build();
+
+    ReviewEntity r2 =
+        ReviewEntity.builder().comment("Comment").rating(5).user(null).location(location).build();
+
+    when(locationRepositoryMock.findByName(location.getName())).thenReturn(Optional.of(location));
+    when(reviewRepository.findByLocation_NameIgnoreCase(location.getName()))
+        .thenReturn(List.of(r1, r2));
+
+    assertThat(
+        locationService.averageRating(location.getName()),
+        is((double) ((r1.getRating() + r2.getRating()) / 2)));
+  }
+
+  @Test
+  void avgRating_NoRatings() {
+    LocationEntity location =
+        LocationEntity.builder()
+            .name("The Met")
+            .description("Art")
+            .address("Broadway")
+            .type(Type.MUSEUM)
+            .build();
+
+    when(locationRepositoryMock.findByName(location.getName())).thenReturn(Optional.of(location));
+    when(reviewRepository.findByLocation_NameIgnoreCase(location.getName())).thenReturn(List.of());
+
+    assertThat(locationService.averageRating(location.getName()), is(0.0));
+  }
+
+  @Test
+  void avgRating_LocationNotFound() {
+    LocationEntity location =
+        LocationEntity.builder()
+            .name("The Met")
+            .description("Art")
+            .address("Broadway")
+            .type(Type.MUSEUM)
+            .build();
+
+    when(locationRepositoryMock.findByName(location.getName())).thenReturn(Optional.empty());
+    assertThrows(NoSuchElementException.class, () -> locationService.averageRating("The Met"));
   }
 }

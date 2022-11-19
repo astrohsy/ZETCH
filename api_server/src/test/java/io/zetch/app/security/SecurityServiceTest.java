@@ -4,6 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.when;
 
+import io.zetch.app.domain.reply.ReplyPostDto;
 import io.zetch.app.domain.user.Affiliation;
 import io.zetch.app.domain.user.UserEntity;
 import io.zetch.app.repo.UserRepository;
@@ -27,9 +28,8 @@ class SecurityServiceTest {
   private final String USERNAME_1 = "bob";
   private final String USERNAME_2 = "admin";
   private final String CLIENT_1 = "some_client";
-  private final String CLIENT_2 = "another_client";
 
-  UserEntity bob = new UserEntity(USERNAME_1, Affiliation.STUDENT, "", "");
+  UserEntity bob = new UserEntity(USERNAME_1, Affiliation.OTHER, "", "");
   UserEntity admin = new UserEntity(USERNAME_2, Affiliation.ADMIN, "", "");
 
   @Mock private UserRepository userRepository;
@@ -42,7 +42,7 @@ class SecurityServiceTest {
 
   @Test
   void isAdmin_NullToken() {
-    assertThat(securityService.isSelf(null, USERNAME_1), is(false));
+    assertThat(securityService.isAdmin(null), is(false));
   }
 
   @ParameterizedTest
@@ -58,41 +58,38 @@ class SecurityServiceTest {
     assertThat(securityService.isSelf(getJwtForTest(username1, CLIENT_1), username2), is(expected));
   }
 
-  //  @Test
-  //  void isSelf() {
-  //    assertThat(securityService.isSelf(getJwtForTest(USERNAME_1, CLIENT_1), USERNAME_1),
-  // is(true));
-  //  }
-  //
-  //  @Test
-  //  void isSelf_Failure() {
-  //    assertThat(securityService.isSelf(getJwtForTest(USERNAME_1, CLIENT_1), USERNAME_2),
-  // is(false));
-  //  }
-  //
-  //  @Test
-  //  void isSelf_Uppercase() {
-  //    assertThat(securityService.isSelf(getJwtForTest("Username", CLIENT_1), "Username"),
-  // is(true));
-  //  }
-  //
-  //  @Test
-  //  void isSelf_Uppercase_Failure() {
-  //    assertThat(securityService.isSelf(getJwtForTest("Username", CLIENT_1), "Another"),
-  // is(false));
-  //  }
-  //
-  //  @Test
-  //  void isSelf_Uppercase() {
-  //    assertThat(securityService.isSelf(getJwtForTest("Username", CLIENT_1), "Username"),
-  // is(true));
-  //  }
-  //
-  //  @Test
-  //  void isSelf_Uppercase_Failure() {
-  //    assertThat(securityService.isSelf(getJwtForTest("Username", CLIENT_1), "Another"),
-  // is(false));
-  //  }
+  @Test
+  void isOwnerOfReviewedLocation_NullToken() {
+    assertThat(securityService.isSelfPostReply(null, new ReplyPostDto("abc", 1L, 2L)), is(false));
+  }
+
+  @Test
+  void isOwnerOfReviewedLocation() {
+    UserEntity owner = UserEntity.builder().username(USERNAME_1).build();
+    //    LocationEntity location =
+    // LocationEntity.builder().name("abc").owners(List.of(owner)).build();
+    //    ReviewEntity review = ReviewEntity.builder().location(location).build();
+
+    //    when(reviewRepository.getReferenceById(2L)).thenReturn(review);
+    when(userRepository.getReferenceById(1L)).thenReturn(owner);
+
+    assertThat(
+        securityService.isSelfPostReply(
+            getJwtForTest(USERNAME_1, CLIENT_1), new ReplyPostDto("abc", 1L, 2L)),
+        is(true));
+  }
+
+  @Test
+  void isOwnerOfReviewedLocation_Failure() {
+    UserEntity owner = UserEntity.builder().username(USERNAME_2).build();
+
+    when(userRepository.getReferenceById(1L)).thenReturn(owner);
+
+    assertThat(
+        securityService.isSelfPostReply(
+            getJwtForTest(USERNAME_1, CLIENT_1), new ReplyPostDto("abc", 1L, 2L)),
+        is(false));
+  }
 
   @Test
   void isSelfClient() {
@@ -102,8 +99,14 @@ class SecurityServiceTest {
 
   @Test
   void isSelfClient_Failure() {
+    String CLIENT_2 = "another_client";
     assertThat(
         securityService.isSelfClient(getJwtForTest(USERNAME_1, CLIENT_2), CLIENT_1), is(false));
+  }
+
+  @Test
+  void isSelfClient_NullToken() {
+    assertThat(securityService.isSelfClient(null, CLIENT_1), is(false));
   }
 
   @Test

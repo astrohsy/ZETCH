@@ -1,5 +1,6 @@
 package io.zetch.app.web;
 
+import static java.util.Map.entry;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.Is.is;
@@ -51,6 +52,7 @@ import org.springframework.web.context.WebApplicationContext;
 class LocationControllerTest {
 
   private static final String LOCATION_ENDPOINT = "/locations/";
+  private static final String SEARCH_ENDPOINT = "search";
   private static final String NAME_1 = "Bob's";
   private static final String DESCRIPTION_1 = "Italian";
   private static final String ADDRESS_1 = "1234 Broadway";
@@ -82,7 +84,7 @@ class LocationControllerTest {
           .username(USERNAME_1)
           .displayName(USERNAME_1)
           .email(null)
-          .affiliation(Affiliation.STUDENT)
+          .affiliation(Affiliation.OTHER)
           .build();
   private MockMvc mockMvc;
   @Autowired private WebApplicationContext context;
@@ -283,11 +285,18 @@ class LocationControllerTest {
 
   @Test
   void search() throws Exception {
-    when(locationServiceMock.search(NAME_1, TYPE_1)).thenReturn(Arrays.asList(r1));
+    when(locationServiceMock.search(NAME_1, DESCRIPTION_1, TYPE_1)).thenReturn(List.of(r1));
+
+    MockHttpServletRequestBuilder mockRequest =
+        get(LOCATION_ENDPOINT + SEARCH_ENDPOINT)
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON)
+            .queryParam("name", NAME_1)
+            .queryParam("description", DESCRIPTION_1)
+            .queryParam("type", TYPE_1);
 
     mockMvc
-        .perform(
-            get(LOCATION_ENDPOINT + NAME_1 + '/' + TYPE_1).contentType(MediaType.APPLICATION_JSON))
+        .perform(mockRequest)
         .andExpect(status().isOk())
         .andExpect(jsonPath("*", notNullValue()))
         .andExpect(jsonPath("$", hasSize(1)))
@@ -353,5 +362,63 @@ class LocationControllerTest {
         .andExpect(jsonPath("$.description", is(deleted.getDescription())))
         .andExpect(jsonPath("$.address", is(deleted.getAddress())))
         .andExpect(jsonPath("$.type", is(TYPE_1)));
+  }
+
+  @Test
+  void ratingHistogram() throws Exception {
+    Map<String, String> histogram =
+        Map.ofEntries(
+            entry("1", "1"), entry("2", "2"), entry("3", "3"), entry("4", "4"), entry("5", "5"));
+
+    when(locationServiceMock.getRatingHistogram(NAME_1)).thenReturn(histogram);
+
+    MockHttpServletRequestBuilder mockRequest =
+        get(LOCATION_ENDPOINT + NAME_1 + "/ratingHistogram")
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON);
+
+    mockMvc
+        .perform(mockRequest)
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("*", notNullValue()))
+        .andExpect(jsonPath("$.rating_histogram", notNullValue()))
+        .andExpect(jsonPath("$['rating_histogram']['1']", is("1")))
+        .andExpect(jsonPath("$['rating_histogram']['2']", is("2")))
+        .andExpect(jsonPath("$['rating_histogram']['3']", is("3")))
+        .andExpect(jsonPath("$['rating_histogram']['4']", is("4")))
+        .andExpect(jsonPath("$['rating_histogram']['5']", is("5")));
+  }
+
+  @Test
+  void avgRating() throws Exception {
+
+    when(locationServiceMock.averageRating(NAME_1)).thenReturn(4.0);
+
+    MockHttpServletRequestBuilder mockRequest =
+        get(LOCATION_ENDPOINT + NAME_1 + "/averageRating/")
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON);
+
+    mockMvc
+        .perform(mockRequest)
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("*", notNullValue()))
+        .andExpect(jsonPath("$.average_rating", is("4.0")));
+  }
+
+  @Test
+  void avgRating_Fraction() throws Exception {
+    when(locationServiceMock.averageRating(NAME_1)).thenReturn(4.333);
+
+    MockHttpServletRequestBuilder mockRequest =
+        get(LOCATION_ENDPOINT + NAME_1 + "/averageRating/")
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON);
+
+    mockMvc
+        .perform(mockRequest)
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("*", notNullValue()))
+        .andExpect(jsonPath("$.average_rating", is("4.3")));
   }
 }

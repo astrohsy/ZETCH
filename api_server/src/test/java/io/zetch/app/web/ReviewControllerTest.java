@@ -24,6 +24,7 @@ import io.zetch.app.service.ReviewService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -67,15 +68,15 @@ class ReviewControllerTest {
                    {
                       "id": 0, "rating": 4, "comment": "Very tasty!",
                       location: { id: 0, "name": "Bob's", "description": "Italian", "address": "1234 Broadway", "type": "museum" },
-                      user: { id: 0, "username": "bob", "name": "Bob", "email": "bob@example.com", "affiliation": "student" }
+                      user: { id: 0, "username": "bob", "name": "Bob", "email": "bob@example.com", "affiliation": "other" }
                    }
                 """);
     jsonReviews.add(
         """
                       {
                         "id": 1, "rating": 1, "comment": "Terrible service.",
-                        location: { id: 0, "name": "Bob's", "description": "Italian", "address": "1234 Broadway", "type": "museum" },
-                        user: { id: 1, "username": "joe", "name": "Job", "email": "joe@example.com", "affiliation": "student" }
+                        location: { id: 1, "name": "Tom's", "description": "Italian", "address": "1234 Broadway", "type": "museum" },
+                        user: { id: 1, "username": "joe", "name": "Job", "email": "joe@example.com", "affiliation": "other" }
                        }
                     """);
     reviews = jsonReviews.stream().map(x -> gson.fromJson(x, ReviewEntity.class)).toList();
@@ -113,12 +114,26 @@ class ReviewControllerTest {
 
   @Test
   void getAllReviews() throws Exception {
-    when(reviewServiceMock.getAll()).thenReturn(reviews);
+    when(reviewServiceMock.getAll(Optional.empty(), Optional.empty())).thenReturn(reviews);
     mockMvc
         .perform(get(REVIEWS_ENDPOINT).contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(jsonPath("*", notNullValue()))
         .andExpect(jsonPath("$", hasSize(2)));
+  }
+
+  @Test
+  void getAllReviews_withLocationId() throws Exception {
+    when(reviewServiceMock.getAll(Optional.of(1L), Optional.empty()))
+        .thenReturn(reviews.subList(1, 2));
+    mockMvc
+        .perform(
+            get(REVIEWS_ENDPOINT)
+                .queryParam("locationId", "1")
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("*", notNullValue()))
+        .andExpect(jsonPath("$", hasSize(1)));
   }
 
   @Test
@@ -136,11 +151,42 @@ class ReviewControllerTest {
   void deleteOneReview() throws Exception {
     doThrow(NoSuchElementException.class).when(reviewServiceMock).deleteOne(2L);
     mockMvc
-        .perform(delete(REVIEWS_ENDPOINT + 1l).contentType(MediaType.APPLICATION_JSON))
+        .perform(delete(REVIEWS_ENDPOINT + 1L).contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isNoContent());
 
     mockMvc
         .perform(delete(REVIEWS_ENDPOINT + 2L).contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isNotFound());
+  }
+
+  @Test
+  void crate_raise_badRequest_when_invalid_rating() throws Exception {
+    ReviewEntity r1 = reviews.get(0);
+
+    when(reviewServiceMock.createNew(
+            r1.getComment(), r1.getRating(), r1.getUser().getId(), r1.getLocation().getId()))
+        .thenReturn(r1);
+
+    MockHttpServletRequestBuilder mockRequestWithRatingBiggerThan5 =
+        post(REVIEWS_ENDPOINT)
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON)
+            .content(
+                mapper.writeValueAsString(
+                    new ReviewPostDto(
+                        r1.getComment(), 6, r1.getUser().getId(), r1.getLocation().getId())));
+
+    mockMvc.perform(mockRequestWithRatingBiggerThan5).andExpect(status().isBadRequest());
+
+    MockHttpServletRequestBuilder mockRequestWithRatingSmallerThan1 =
+        post(REVIEWS_ENDPOINT)
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON)
+            .content(
+                mapper.writeValueAsString(
+                    new ReviewPostDto(
+                        r1.getComment(), 0, r1.getUser().getId(), r1.getLocation().getId())));
+
+    mockMvc.perform(mockRequestWithRatingSmallerThan1).andExpect(status().isBadRequest());
   }
 }

@@ -8,6 +8,8 @@ import io.zetch.app.repo.ReviewRepository;
 import io.zetch.app.repo.UserRepository;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +36,11 @@ public class ReviewService {
    *
    * @return List of all Reviews
    */
-  public List<ReviewEntity> getAll() {
+  public List<ReviewEntity> getAll(Optional<Long> locationId, Optional<Long> userId) {
+    if (locationId.isPresent() && userId.isPresent())
+      return reviewRepository.findByUserIdAndLocationId(userId.get(), locationId.get());
+    else if (locationId.isPresent()) return reviewRepository.findByLocationId(locationId.get());
+    else if (userId.isPresent()) return reviewRepository.findByUserId(userId.get());
     return reviewRepository.findAll();
   }
 

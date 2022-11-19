@@ -2,11 +2,15 @@ package io.zetch.app.service;
 
 import io.zetch.app.domain.location.LocationEntity;
 import io.zetch.app.domain.location.Type;
+import io.zetch.app.domain.review.ReviewEntity;
 import io.zetch.app.domain.user.UserEntity;
 import io.zetch.app.repo.LocationRepository;
+import io.zetch.app.repo.ReviewRepository;
 import io.zetch.app.repo.UserRepository;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,11 +20,17 @@ import org.springframework.stereotype.Service;
 public class LocationService {
   private final LocationRepository locationRepository;
   private final UserRepository userRepository;
+  private final ReviewRepository reviewRepository;
 
+  /** LocationService constructor. */
   @Autowired
-  public LocationService(LocationRepository locationRepository, UserRepository userRepository) {
+  public LocationService(
+      LocationRepository locationRepository,
+      UserRepository userRepository,
+      ReviewRepository reviewRepository) {
     this.locationRepository = locationRepository;
     this.userRepository = userRepository;
+    this.reviewRepository = reviewRepository;
   }
 
   /**
@@ -50,8 +60,16 @@ public class LocationService {
    * @param type Location type
    * @return List of locations
    */
-  public List<LocationEntity> search(String name, String type) {
-    return locationRepository.findByNameAndType(name, Type.fromString(type));
+  public List<LocationEntity> search(String name, String description, String type) {
+    Type searchType;
+
+    if (type == null) {
+      searchType = null;
+    } else {
+      searchType = Type.fromString(type);
+    }
+
+    return locationRepository.search(name, description, searchType);
   }
 
   /**
@@ -71,7 +89,7 @@ public class LocationService {
     LocationEntity currLocation = verifyLocation(name);
 
     if (newName != null) {
-      if (!name.equals(newName) && locationRepository.existsByName(newName)) {
+      if (name.equals(newName) || locationRepository.existsByName(newName)) {
         throw new IllegalArgumentException("Name unavailable: " + newName);
       }
       currLocation.setName(newName);
@@ -118,6 +136,31 @@ public class LocationService {
   }
 
   /**
+   * Returns Location's rating histogram.
+   *
+   * @param name Name of Location
+   * @return Location's rating histogram
+   * @throws NoSuchElementException If Location not found
+   */
+  public Map<String, String> getRatingHistogram(String name) throws NoSuchElementException {
+    verifyLocation(name);
+
+    Map<String, String> histogram = new HashMap<>();
+    histogram.put(
+        "1", Long.toString(reviewRepository.countByLocation_NameIgnoreCaseAndRating(name, 1)));
+    histogram.put(
+        "2", Long.toString(reviewRepository.countByLocation_NameIgnoreCaseAndRating(name, 2)));
+    histogram.put(
+        "3", Long.toString(reviewRepository.countByLocation_NameIgnoreCaseAndRating(name, 3)));
+    histogram.put(
+        "4", Long.toString(reviewRepository.countByLocation_NameIgnoreCaseAndRating(name, 4)));
+    histogram.put(
+        "5", Long.toString(reviewRepository.countByLocation_NameIgnoreCaseAndRating(name, 5)));
+
+    return histogram;
+  }
+
+  /**
    * Create a new Location in the database.
    *
    * @param name Location name
@@ -153,6 +196,29 @@ public class LocationService {
     LocationEntity location = verifyLocation(name);
     locationRepository.delete(location);
     return location;
+  }
+
+  /**
+   * Returns the average rating of a Location. Returns zero if Location has no ratings.
+   *
+   * @param name Name of Location
+   * @return Average rating
+   * @throws NoSuchElementException If Location not found
+   */
+  public double averageRating(String name) throws NoSuchElementException {
+    verifyLocation(name);
+    List<Integer> ratings =
+        reviewRepository.findByLocation_NameIgnoreCase(name).stream()
+            .map(ReviewEntity::getRating)
+            .toList();
+
+    double sum = ratings.stream().reduce(0, Integer::sum);
+
+    return sum == 0 ? 0 : sum / ratings.size();
+  }
+
+  public List<LocationEntity> getLocationsByOwner(String username) {
+    return locationRepository.findByOwners_UsernameIgnoreCase(username);
   }
 
   /**

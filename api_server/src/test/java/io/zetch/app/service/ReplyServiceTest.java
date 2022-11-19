@@ -3,6 +3,7 @@ package io.zetch.app.service;
 import static io.zetch.app.TestConstants.CREATED_BY;
 import static io.zetch.app.TestConstants.REPLY_ID_1;
 import static io.zetch.app.TestConstants.REVIEW_ID_1;
+import static io.zetch.app.TestConstants.USERNAME_1;
 import static io.zetch.app.TestConstants.USER_ID_1;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -10,11 +11,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import io.zetch.app.domain.location.LocationEntity;
 import io.zetch.app.domain.reply.ReplyEntity;
 import io.zetch.app.domain.review.ReviewEntity;
 import io.zetch.app.domain.user.UserEntity;
@@ -31,7 +32,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class ReplyServiceTest {
+class ReplyServiceTest {
 
   @Mock private ReplyRepository replyRepositoryMock;
   @Mock private UserRepository userRepositoryMock;
@@ -40,9 +41,10 @@ public class ReplyServiceTest {
   @Mock private ReplyEntity replyMock;
   @Mock private UserEntity userMock;
   @Mock private ReviewEntity reviewMock;
+  @Mock private LocationEntity locationMock;
 
   @Test
-  public void getOne_ReturnsSuccessfully() {
+  void getOne_ReturnsSuccessfully() {
     // Arrange
     when(replyRepositoryMock.findById(1L)).thenReturn(Optional.of(replyMock));
 
@@ -54,7 +56,7 @@ public class ReplyServiceTest {
   }
 
   @Test
-  public void getOne_ThrowsElementException() {
+  void getOne_ThrowsElementException() {
     // Arrange
     String expectedMessage = "Reply does not exist: " + REPLY_ID_1;
     when(replyRepositoryMock.findById(REPLY_ID_1)).thenReturn(Optional.empty());
@@ -68,7 +70,7 @@ public class ReplyServiceTest {
   }
 
   @Test
-  public void getRepliesByUser_ReturnsList() {
+  void getRepliesByUser_ReturnsList() {
     // Arrange
     when(replyRepositoryMock.findByReplyUserId(USER_ID_1))
         .thenReturn(List.of(replyMock, replyMock, replyMock));
@@ -82,7 +84,7 @@ public class ReplyServiceTest {
   }
 
   @Test
-  public void getRepliesByUser_ReturnsEmpty() {
+  void getRepliesByUser_ReturnsEmpty() {
     // Arrange
     when(replyRepositoryMock.findByReplyUserId(USER_ID_1)).thenReturn(List.of());
 
@@ -94,7 +96,7 @@ public class ReplyServiceTest {
   }
 
   @Test
-  public void getRepliesByReview_returnsList() {
+  void getRepliesByReview_returnsList() {
     // Arrange
     when(replyRepositoryMock.findByReviewId(REVIEW_ID_1))
         .thenReturn(List.of(replyMock, replyMock, replyMock));
@@ -108,7 +110,7 @@ public class ReplyServiceTest {
   }
 
   @Test
-  public void getRepliesByReview_ReturnsEmpty() {
+  void getRepliesByReview_ReturnsEmpty() {
     // Arrange
     when(replyRepositoryMock.findByReviewId(REVIEW_ID_1)).thenReturn(List.of());
 
@@ -120,7 +122,7 @@ public class ReplyServiceTest {
   }
 
   @Test
-  public void createNew_createsSuccessfully() {
+  void createNew_createsSuccessfully() {
     // Arrange
     ReplyEntity expected =
         ReplyEntity.builder()
@@ -130,9 +132,12 @@ public class ReplyServiceTest {
             .createdAt(CREATED_BY)
             .build();
 
-    when(userRepositoryMock.findById(eq(USER_ID_1))).thenReturn(Optional.of(userMock));
-    when(reviewRepositoryMock.findById(eq(REVIEW_ID_1))).thenReturn(Optional.of(reviewMock));
+    when(userRepositoryMock.findById(USER_ID_1)).thenReturn(Optional.of(userMock));
+    when(reviewRepositoryMock.findById(REVIEW_ID_1)).thenReturn(Optional.of(reviewMock));
     when(replyRepositoryMock.save(any(ReplyEntity.class))).thenReturn(expected);
+    when(reviewMock.getLocation()).thenReturn(locationMock);
+    when(locationMock.getOwners()).thenReturn(List.of(userMock));
+    when(userMock.getUsername()).thenReturn(USERNAME_1);
 
     // Act
     ReplyEntity output = replyService.createNew("This is a reply", USER_ID_1, REVIEW_ID_1);
@@ -142,11 +147,11 @@ public class ReplyServiceTest {
   }
 
   @Test
-  public void createNew_noUser_ThrowsException() {
+  void createNew_noUser_ThrowsException() {
     // Arrange
     String expectedMessage = "User does not exist: " + USER_ID_1;
     when(userRepositoryMock.findById(anyLong())).thenReturn(Optional.empty());
-    when(reviewRepositoryMock.findById(eq(REVIEW_ID_1))).thenReturn(Optional.of(reviewMock));
+    when(reviewRepositoryMock.findById(REVIEW_ID_1)).thenReturn(Optional.of(reviewMock));
 
     // Act
     Exception exception =
@@ -159,16 +164,36 @@ public class ReplyServiceTest {
   }
 
   @Test
-  public void createNew_noReview_ThrowsException() {
+  void createNew_noReview_ThrowsException() {
     // Arrange
     String expectedMessage = "Review does not exist: " + REVIEW_ID_1;
     when(reviewRepositoryMock.findById(anyLong())).thenReturn(Optional.empty());
-    when(userRepositoryMock.findById(eq(USER_ID_1))).thenReturn(Optional.of(userMock));
+    when(userRepositoryMock.findById(USER_ID_1)).thenReturn(Optional.of(userMock));
 
     // Act
     Exception exception =
         assertThrows(
             NoSuchElementException.class,
+            () -> replyService.createNew("This is a reply", USER_ID_1, REVIEW_ID_1));
+
+    // Assert
+    assertEquals(exception.getMessage(), expectedMessage);
+  }
+
+  @Test
+  public void createNew_notOwner_ThrowsException() {
+    // Arrange
+    String expectedMessage = "User is not the owner of the reviewed location.";
+    when(userRepositoryMock.findById(USER_ID_1)).thenReturn(Optional.of(userMock));
+    when(reviewRepositoryMock.findById(REVIEW_ID_1)).thenReturn(Optional.of(reviewMock));
+    when(reviewMock.getLocation()).thenReturn(locationMock);
+    when(locationMock.getOwners()).thenReturn(List.of());
+    when(userMock.getUsername()).thenReturn(USERNAME_1);
+
+    // Act
+    Exception exception =
+        assertThrows(
+            IllegalArgumentException.class,
             () -> replyService.createNew("This is a reply", USER_ID_1, REVIEW_ID_1));
 
     // Assert
@@ -178,7 +203,7 @@ public class ReplyServiceTest {
   @Test
   public void deleteOne_deletesSuccessfully() {
     // Arrange
-    when(replyRepositoryMock.existsById(eq(REPLY_ID_1))).thenReturn(true);
+    when(replyRepositoryMock.existsById(REPLY_ID_1)).thenReturn(true);
 
     // Act
     replyService.deleteOne(REPLY_ID_1);
@@ -188,9 +213,9 @@ public class ReplyServiceTest {
   }
 
   @Test
-  public void deleteOne_throwsException() {
+  void deleteOne_throwsException() {
     // Arrange
-    when(replyRepositoryMock.existsById(eq(REPLY_ID_1))).thenReturn(false);
+    when(replyRepositoryMock.existsById(REPLY_ID_1)).thenReturn(false);
     String expectedMessage = "Reply does not exist: " + REPLY_ID_1;
 
     // Act
