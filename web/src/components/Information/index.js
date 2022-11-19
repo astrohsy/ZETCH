@@ -10,18 +10,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
 const Information = (props) => {
-    const [information, setInformation] = useState({});
-
-    const init = async () => {
-        const res = await getMuseumByName("Columbia Museum");
-        if (res) {
-            setInformation(res);
-        }
-    };
-
-    useEffect(() => {
-        init();
-    }, [])
+    const { location: information, onEditLocation, editable } = props;
 
     return (
         <Box>
@@ -34,7 +23,7 @@ const Information = (props) => {
             <Typography variant="body1" gutterBottom>
                 Address: {information.address}
             </Typography>
-            <EditInformationDialog information={information} onEdit={() => init()} variant="contained">Edit</EditInformationDialog>
+            {editable ? <EditInformationDialog information={information} onEdit={() => onEditLocation(information.name)} variant="contained">Edit</EditInformationDialog> : null}
         </Box>
     );
 }

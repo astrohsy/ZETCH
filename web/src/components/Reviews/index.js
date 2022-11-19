@@ -11,19 +11,21 @@ import DialogTitle from '@mui/material/DialogTitle';
 
 
 const Reviews = (props) => {
+    const { location, user, editable } = props;
 
     const [reviews, setReviews] = useState([]);
 
-    const init = async () => {
-        const reviewsRes = await getReviewsForMuseum(21);
-        if (reviewsRes) {
-            setReviews(reviewsRes);
-        }
-    };
+
 
     useEffect(() => {
+        const init = async () => {
+            const reviewsRes = await getReviewsForMuseum(location.id);
+            if (reviewsRes) {
+                setReviews(reviewsRes);
+            }
+        };
         init();
-    }, [])
+    }, [location.id])
 
     const renderReviews = () => {
         return reviews.map(review => {
@@ -31,7 +33,7 @@ const Reviews = (props) => {
                 <div>Comment: {review.comment}</div>
                 <div>Rating: {review.rating}</div>
                 <div style={{ paddingBottom: 10 }}>User: {review.user.display_name}</div>
-                <ViewRepliesDialog key={`reply_dialog_${review.id}`} review={review} />
+                <ViewRepliesDialog key={`reply_dialog_${review.id}`} review={review} user={user} editable={editable}/>
                 <hr />
             </div>
         })
@@ -48,7 +50,7 @@ const Reviews = (props) => {
 }
 
 const ViewRepliesDialog = (props) => {
-    const { review } = props;
+    const { review, user, editable } = props;
 
     const [open, setOpen] = useState(false);
     const [replies, setReplies] = useState([]);
@@ -96,7 +98,7 @@ const ViewRepliesDialog = (props) => {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>Close</Button>
-                    <PostReplyDialog key={`post_reply_${review.id}`} review={review} onPostReply={onPostReply}>Add Reply</PostReplyDialog>
+                    {editable ? <PostReplyDialog key={`post_reply_${review.id}`} review={review} onPostReply={onPostReply} user={user}>Add Reply</PostReplyDialog> : null}
                 </DialogActions>
             </Dialog>
         </div>
@@ -104,7 +106,7 @@ const ViewRepliesDialog = (props) => {
 }
 
 const PostReplyDialog = (props) => {
-    const { review, onPostReply } = props;
+    const { review, user, onPostReply } = props;
 
     const [open, setOpen] = useState(false);
     const [reply, setReply] = useState('');
@@ -118,10 +120,10 @@ const PostReplyDialog = (props) => {
     };
 
     const handleSubmit = useCallback(async () => {
-        await replyToReview(review.id, 1, reply)
+        await replyToReview(review.id, user.id, reply)
         onPostReply();
         handleClose();
-    }, [onPostReply, reply, review.id])
+    }, [onPostReply, reply, review.id, user.id])
 
 
     return (

@@ -12,10 +12,10 @@ const request = async (url, requestOptions, isRawUrl = false) => {
         url = "https://zetch.tech/" + url;
 
         if (requestOptions.headers) {
-            requestOptions.headers.append("Authorization", `Bearer ${sessionStorage.getItem("token")}`);
+            requestOptions.headers.append("Authorization", `Bearer ${sessionStorage.getItem("access_token")}`);
         } else {
             const headers = new Headers();
-            headers.append("Authorization", `Bearer ${sessionStorage.getItem("token")}`);
+            headers.append("Authorization", `Bearer ${sessionStorage.getItem("access_token")}`);
             requestOptions.headers = headers;
         }
     }
@@ -39,6 +39,51 @@ export async function getAuthToken(code) {
     };
 
     return request(`https://zetch-app-4.auth.us-east-1.amazoncognito.com/oauth2/token?grant_type=authorization_code&client_id=${clientId}&redirect_uri=http%3A%2F%2Flocalhost%3A8080&code=${code}`, requestOptions, true);
+}
+
+export async function getCognitoUser(accessToken) {
+    const headers = new Headers();
+    headers.append("Content-Type", "application/x-amz-json-1.1");
+    headers.append("X-Amz-Target", "AWSCognitoIdentityProviderService.GetUser");
+    headers.append("Content-Length", "1162");
+    const body = { "AccessToken": accessToken }
+    const requestOptions = {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(body)
+    };
+
+    return request(`https://cognito-idp.us-east-1.amazonaws.com/`, requestOptions, true);
+}
+
+export async function getUser(username) {
+    const requestOptions = {
+        method: 'GET',
+    };
+
+    const url = `users/${encodeURI(username)}`;
+
+    return request(url, requestOptions);
+}
+
+export async function getMyLocations() {
+    const requestOptions = {
+        method: 'GET',
+    };
+
+    const url = `locations/mine`;
+
+    return request(url, requestOptions);
+}
+
+export async function getMuseums() {
+    const requestOptions = {
+        method: 'GET',
+    };
+
+    const url = `locations/search?type=museum`;
+
+    return request(url, requestOptions);
 }
 
 export async function getMuseumByName(name) {
@@ -104,7 +149,7 @@ export async function getReviewsForMuseum(museumId) {
 export async function replyToReview(reviewId, userId, comment) {
     const body = {
         review_id: reviewId,
-        user_id: userId, 
+        user_id: userId,
         reply_comment: comment
     }
     const requestOptions = {
