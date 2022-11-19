@@ -32,7 +32,7 @@ public class ReviewController {
   @Operation(summary = "Create a new review.")
   @SecurityRequirement(name = "OAuth2")
   @ResponseBody
-  ReviewGetDto addNewUser(@Valid @RequestBody ReviewPostDto newReviewDto) {
+  ReviewGetDto addNewReview(@Valid @RequestBody ReviewPostDto newReviewDto) {
     ReviewEntity r =
         reviewService.createNew(
             newReviewDto.comment(),
