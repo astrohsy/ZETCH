@@ -1,10 +1,9 @@
 package io.zetch.app.domain.review;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
+import java.io.Serializable;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import java.io.Serializable;
 
 /** DTO for posting reviews. */
 public record ReviewPostDto(

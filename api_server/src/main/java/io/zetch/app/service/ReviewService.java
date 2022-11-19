@@ -10,11 +10,12 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
-
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import javax.validation.Validation;
+import javax.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.validation.*;
 
 /** Review business logic. */
 @Service
@@ -41,10 +42,13 @@ public class ReviewService {
    * @return List of all Reviews
    */
   public List<ReviewEntity> getAll(Optional<Long> locationId, Optional<Long> userId) {
-    if (locationId.isPresent() && userId.isPresent())
+    if (locationId.isPresent() && userId.isPresent()) {
       return reviewRepository.findByUserIdAndLocationId(userId.get(), locationId.get());
-    else if (locationId.isPresent()) return reviewRepository.findByLocationId(locationId.get());
-    else if (userId.isPresent()) return reviewRepository.findByUserId(userId.get());
+    } else if (locationId.isPresent()) {
+      return reviewRepository.findByLocationId(locationId.get());
+    } else if (userId.isPresent()) {
+      return reviewRepository.findByUserId(userId.get());
+    }
     return reviewRepository.findAll();
   }
 
@@ -87,6 +91,7 @@ public class ReviewService {
     }
     return reviewRepository.save(newReview);
   }
+
   /**
    * Update existing Review with any non-null attributes.
    *
