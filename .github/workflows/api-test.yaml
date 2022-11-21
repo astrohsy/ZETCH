@@ -18,7 +18,9 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16
-      - run: npm install -g newman
+      - run: |
+          npm install -g newman
+          npm install -g newman-reporter-html
       - name: Fetching CI Test Collection from Postman
         run: |
           curl -H "Content-type: application/json" \
@@ -26,4 +28,9 @@ jobs:
              $COLLECTION_ID -o $COLLECTION_FILENAME
       - run: ls -l
       - name: Run CI Tests
-        run: newman run $COLLECTION_FILENAME
+        run: newman run $COLLECTION_FILENAME -r html
+      - name: Upload CI Tests Result
+        uses: actions/upload-artifact@v3
+        with:
+          name: ci-test-report
+          path: newman/
