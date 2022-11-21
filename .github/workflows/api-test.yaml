@@ -1,7 +1,8 @@
 name: ZETCH API Test
 
 env:
-  API_SERVER_PROJECT: api_server
+  COLLECTION_FILENAME: zetch.collection.json
+  COLLECTION_ID: https://api.getpostman.com/collections/23680701-9829f32b-1694-4065-b6b9-93cbc808c454
 
 on:
   push:
@@ -9,17 +10,20 @@ on:
       - main
       - 127-integrate-newman-with-github-actions
 
-
 jobs:
   api-test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: |
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - run: npm install -g newman
+      - name: Fetching CI Test Collection from Postman
+        run: |
           curl -H "Content-type: application/json" \
             -H "X-API-Key: ${{ secrets.POSTMAN_API_KEY }}" \
-             $collection_id -o $collection_filename
-        env:
-          collection_filename: zetch.collection.json
-          collection_id: https://api.getpostman.com/collections/23680701-9829f32b-1694-4065-b6b9-93cbc808c454
+             $COLLECTION_ID -o COLLECTION_FILENAME
       - run: ls -l
+      - name: Run CI Tests
+        run: newman run $COLLECTION_FILENAME
