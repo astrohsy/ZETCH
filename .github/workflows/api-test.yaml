@@ -42,4 +42,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: Reports
-          files: ["${{ env.REPORT_FILENAME }}"]
+          path: ${{ env.REPORT_FILENAME }}
