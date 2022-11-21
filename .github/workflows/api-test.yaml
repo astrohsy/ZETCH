@@ -3,6 +3,7 @@ name: ZETCH API Test
 env:
   COLLECTION_FILENAME: zetch.collection.json
   COLLECTION_ID: https://api.getpostman.com/collections/23680701-9829f32b-1694-4065-b6b9-93cbc808c454
+  REPORT_FILENAME: zetch-ci-test-report.html
 
 on:
   push:
@@ -21,6 +22,10 @@ jobs:
       - run: |
           npm install -g newman
           npm install -g newman-reporter-html
+          
+          # Reference: https://github.com/MarcosEllys/awesome-newman-html-template
+          curl https://raw.githubusercontent.com/MarcosEllys/awesome-newman-html-template/master/templates/htmlreqres.hbs \
+            -o template.html
       - name: Fetching CI Test Collection from Postman
         run: |
           curl -H "Content-type: application/json" \
@@ -28,9 +33,13 @@ jobs:
              $COLLECTION_ID -o $COLLECTION_FILENAME
       - run: ls -l
       - name: Run CI Tests
-        run: newman run $COLLECTION_FILENAME -r html
+        run: |
+          newman run $COLLECTION_FILENAME \
+            -r html \
+            --reporter-html-export $REPORT_FILENAME \
+            --reporter-html-template template.html
       - name: Upload CI Tests Result
         uses: actions/upload-artifact@v3
         with:
-          name: ci-test-report
-          path: newman/
+          name: Reports
+          files: ["$REPORT_FILENAME"]
