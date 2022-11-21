@@ -1,0 +1,2573 @@
+{
+  "info": {
+    "_postman_id": "9829f32b-1694-4065-b6b9-93cbc808c454",
+    "name": "CI Tests",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "23690080"
+  },
+  "item": [
+    {
+      "name": "REFRESH CLIENT2 ADMIN TOKEN",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "var jsonData = JSON.parse(responseBody);",
+              "pm.collectionVariables.set(\"CLIENT2_ADMIN_TOKEN\", jsonData.AuthenticationResult.AccessToken);"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "X-Amz-Target",
+            "value": "AWSCognitoIdentityProviderService.InitiateAuth"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/x-amz-json-1.1"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"AuthFlow\": \"REFRESH_TOKEN_AUTH\",\n    \"AuthParameters\": {\n        \"REFRESH_TOKEN\": \"{{CLIENT2_ADMIN_REFRESH_TOKEN}}\"\n    },\n    \"ClientId\": \"{{CLIENT_ID_2}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://cognito-idp.us-east-1.amazonaws.com/",
+          "protocol": "https",
+          "host": [
+            "cognito-idp",
+            "us-east-1",
+            "amazonaws",
+            "com"
+          ],
+          "path": [
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "REFRESH CLIENT1 CITEST TOKEN",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "var jsonData = JSON.parse(responseBody);",
+              "pm.collectionVariables.set(\"CI_USER_TOKEN\", jsonData.AuthenticationResult.AccessToken);"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "X-Amz-Target",
+            "value": "AWSCognitoIdentityProviderService.InitiateAuth"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/x-amz-json-1.1"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"AuthFlow\": \"REFRESH_TOKEN_AUTH\",\n    \"AuthParameters\": {\n        \"REFRESH_TOKEN\": \"{{CLIENT1_CITEST_REFRESH_TOKEN}}\"\n    },\n    \"ClientId\": \"{{CLIENT_ID}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://cognito-idp.us-east-1.amazonaws.com/",
+          "protocol": "https",
+          "host": [
+            "cognito-idp",
+            "us-east-1",
+            "amazonaws",
+            "com"
+          ],
+          "path": [
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "REFRESH CLIENT1 ADMIN TOKEN",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "var jsonData = JSON.parse(responseBody);",
+              "pm.collectionVariables.set(\"CLIENT1_ADMIN_TOKEN\", jsonData.AuthenticationResult.AccessToken);"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "X-Amz-Target",
+            "value": "AWSCognitoIdentityProviderService.InitiateAuth"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/x-amz-json-1.1"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"AuthFlow\": \"REFRESH_TOKEN_AUTH\",\n    \"AuthParameters\": {\n        \"REFRESH_TOKEN\": \"{{CLIENT1_ADMIN_REFRESH_TOKEN}}\"\n    },\n    \"ClientId\": \"{{CLIENT_ID}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://cognito-idp.us-east-1.amazonaws.com/",
+          "protocol": "https",
+          "host": [
+            "cognito-idp",
+            "us-east-1",
+            "amazonaws",
+            "com"
+          ],
+          "path": [
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "DELETE LOGS OF restaurant_review_app",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{CI_USER_TOKEN}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{SERVER_ENDPOINT}}/logs/{{CLIENT_ID}}",
+          "host": [
+            "{{SERVER_ENDPOINT}}"
+          ],
+          "path": [
+            "logs",
+            "{{CLIENT_ID}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "DELETE LOGS OF museum_manager_app",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{CLIENT2_ADMIN_TOKEN}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{SERVER_ENDPOINT}}/logs/{{CLIENT_ID_2}}",
+          "host": [
+            "{{SERVER_ENDPOINT}}"
+          ],
+          "path": [
+            "logs",
+            "{{CLIENT_ID_2}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET ALL USERS",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Valid json response\", function () {",
+              "    pm.response.to.not.be.error;",
+              "    pm.response.to.not.have.jsonBody(\"error\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{CLIENT1_ADMIN_TOKEN}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{SERVER_ENDPOINT}}/users/",
+          "host": [
+            "{{SERVER_ENDPOINT}}"
+          ],
+          "path": [
+            "users",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "CREATE USER",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Valid json response\", function () {",
+              "    pm.response.to.not.be.error;",
+              "    pm.response.to.not.have.jsonBody(\"error\");",
+              "});",
+              "",
+              "pm.test(\"The response has all properties\", () => {",
+              "    const responseJson = pm.response.json();",
+              "    pm.expect(responseJson.username).to.eql('citestuser');",
+              "    pm.expect(responseJson.email).to.be.eql(\"citestuser@zetch.io\");",
+              "    pm.expect(responseJson.affiliation).to.be.eql(\"other\");",
+              "});",
+              "",
+              "var jsonData = JSON.parse(responseBody);",
+              "pm.collectionVariables.set(\"citest_user_id\", jsonData.id);"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{CLIENT1_ADMIN_TOKEN}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"citestuser\",\n  \"name\": \"citestuser\",\n  \"email\": \"citestuser@zetch.io\",\n  \"affiliation\": \"other\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{SERVER_ENDPOINT}}/users/",
+          "host": [
+            "{{SERVER_ENDPOINT}}"
+          ],
+          "path": [
+            "users",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "VALIDATE CANNOT REPEAT USER USERNAME",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 400\", function () {",
+              "    pm.response.to.have.status(400);",
+              "});",
+              ""
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{CLIENT1_ADMIN_TOKEN}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"citestuser\",\n  \"name\": \"citestuser\",\n  \"email\": \"citestuser@zetch.io\",\n  \"affiliation\": \"other\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{SERVER_ENDPOINT}}/users/",
+          "host": [
+            "{{SERVER_ENDPOINT}}"
+          ],
+          "path": [
+            "users",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET NEWLY CREATED USER",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Valid json response\", function () {",
+              "    pm.response.to.not.be.error;",
+              "    pm.response.to.not.have.jsonBody(\"error\");",
+              "});",
+              "",
+              "pm.test(\"The response has all properties\", () => {",
+              "    const responseJson = pm.response.json();",
+              "    pm.expect(responseJson.username).to.eql('citestuser');",
+              "    pm.expect(responseJson.email).to.be.eql(\"citestuser@zetch.io\");",
+              "    pm.expect(responseJson.affiliation).to.be.eql(\"other\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{CI_USER_TOKEN}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{SERVER_ENDPOINT}}/users/citestuser",
+          "host": [
+            "{{SERVER_ENDPOINT}}"
+          ],
+          "path": [
+            "users",
+            "citestuser"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "UPDATE USER",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Valid json response\", function () {",
+              "    pm.response.to.not.be.error;",
+              "    pm.response.to.not.have.jsonBody(\"error\");",
+              "});",
+              "",
+              "pm.test(\"The response has all properties\", () => {",
+              "    const responseJson = pm.response.json();",
+              "    pm.expect(responseJson.username).to.eql('citestuser');",
+              "    pm.expect(responseJson.email).to.be.eql(\"citestuserUpdate@zetch.io\");",
+              "    pm.expect(responseJson.affiliation).to.be.eql(\"other\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{CI_USER_TOKEN}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"citestuserUpdate@zetch.io\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{SERVER_ENDPOINT}}/users/citestuser",
+          "host": [
+            "{{SERVER_ENDPOINT}}"
+          ],
+          "path": [
+            "users",
+            "citestuser"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "AUTH CHECK OF UPDATE USER",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 403\", function () {",
+              "    pm.response.to.have.status(403);",
+              "});",
+              ""
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{CLIENT1_ADMIN_TOKEN}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"citestuserUpdate@zetch.io\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{SERVER_ENDPOINT}}/users/citestuser",
+          "host": [
+            "{{SERVER_ENDPOINT}}"
+          ],
+          "path": [
+            "users",
+            "citestuser"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET UPDATED USER",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Valid json response\", function () {",
+              "    pm.response.to.not.be.error;",
+              "    pm.response.to.not.have.jsonBody(\"error\");",
+              "});",
+              "",
+              "pm.test(\"The response has all properties\", () => {",
+              "    const responseJson = pm.response.json();",
+              "    pm.expect(responseJson.username).to.eql('citestuser');",
+              "    pm.expect(responseJson.email).to.be.eql(\"citestuserUpdate@zetch.io\");",
+              "    pm.expect(responseJson.affiliation).to.be.eql(\"other\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{CI_USER_TOKEN}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{SERVER_ENDPOINT}}/users/citestuser",
+          "host": [
+            "{{SERVER_ENDPOINT}}"
+          ],
+          "path": [
+            "users",
+            "citestuser"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "AUTH CHECK OF GET ALL USERS",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 403\", function () {",
+              "    pm.response.to.have.status(403);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{CI_USER_TOKEN}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{SERVER_ENDPOINT}}/users/",
+          "host": [
+            "{{SERVER_ENDPOINT}}"
+          ],
+          "path": [
+            "users",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET ALL LOCATIONS",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Valid json response\", function () {",
+              "    pm.response.to.not.be.error;",
+              "    pm.response.to.not.have.jsonBody(\"error\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{CLIENT1_ADMIN_TOKEN}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{SERVER_ENDPOINT}}/locations/",
+          "host": [
+            "{{SERVER_ENDPOINT}}"
+          ],
+          "path": [
+            "locations",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "CREATE LOCATION",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Valid json response\", function () {",
+              "    pm.response.to.not.be.error;",
+              "    pm.response.to.not.have.jsonBody(\"error\");",
+              "});",
+              "",
+              "pm.test(\"The response has all properties\", () => {",
+              "    const responseJson = pm.response.json();",
+              "    pm.expect(responseJson.name).to.be.eql(\"citestlocation\");",
+              "    pm.expect(responseJson.description).to.be.eql(\"citest\");",
+              "    pm.expect(responseJson.address).to.be.eql(\"citest street\");",
+              "    pm.expect(responseJson.type).to.be.eql(\"restaurant\");",
+              "});",
+              "",
+              "var jsonData = JSON.parse(responseBody);",
+              "pm.collectionVariables.set(\"citest_location_id\", jsonData.id);"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{CLIENT1_ADMIN_TOKEN}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"citestlocation\",\n  \"description\": \"citest\",\n  \"address\": \"citest street\",\n  \"type\": \"restaurant\"\n}\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{SERVER_ENDPOINT}}/locations/",
+          "host": [
+            "{{SERVER_ENDPOINT}}"
+          ],
+          "path": [
+            "locations",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "VALIDATE CANNOT REPEAT LOCATION NAME",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 400\", function () {",
+              "    pm.response.to.have.status(400);",
+              "});",
+              ""
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{CLIENT1_ADMIN_TOKEN}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"citestlocation\",\n  \"description\": \"citest\",\n  \"address\": \"citest street\",\n  \"type\": \"restaurant\"\n}\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{SERVER_ENDPOINT}}/locations/",
+          "host": [
+            "{{SERVER_ENDPOINT}}"
+          ],
+          "path": [
+            "locations",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET NEWLY CREATED LOCATION",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Valid json response\", function () {",
+              "    pm.response.to.not.be.error;",
+              "    pm.response.to.not.have.jsonBody(\"error\");",
+              "});",
+              "",
+              "pm.test(\"The response has all properties\", () => {",
+              "    const responseJson = pm.response.json();",
+              "    pm.expect(responseJson.name).to.be.eql(\"citestlocation\");",
+              "    pm.expect(responseJson.description).to.be.eql(\"citest\");",
+              "    pm.expect(responseJson.address).to.be.eql(\"citest street\");",
+              "    pm.expect(responseJson.type).to.be.eql(\"restaurant\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{CI_USER_TOKEN}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{SERVER_ENDPOINT}}/locations/citestlocation",
+          "host": [
+            "{{SERVER_ENDPOINT}}"
+          ],
+          "path": [
+            "locations",
+            "citestlocation"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "UPDATE LOCATION",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Valid json response\", function () {",
+              "    pm.response.to.not.be.error;",
+              "    pm.response.to.not.have.jsonBody(\"error\");",
+              "});",
+              "",
+              "pm.test(\"The response has all properties\", () => {",
+              "    const responseJson = pm.response.json();",
+              "    pm.expect(responseJson.name).to.be.eql(\"citestlocation\");",
+              "    pm.expect(responseJson.description).to.be.eql(\"citest\");",
+              "    pm.expect(responseJson.address).to.be.eql(\"citest update street\");",
+              "    pm.expect(responseJson.type).to.be.eql(\"restaurant\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{CI_USER_TOKEN}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"address\": \"citest update street\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{SERVER_ENDPOINT}}/locations/citestlocation",
+          "host": [
+            "{{SERVER_ENDPOINT}}"
+          ],
+          "path": [
+            "locations",
+            "citestlocation"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET UPDATED LOCATION",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Valid json response\", function () {",
+              "    pm.response.to.not.be.error;",
+              "    pm.response.to.not.have.jsonBody(\"error\");",
+              "});",
+              "",
+              "pm.test(\"The response has all properties\", () => {",
+              "    const responseJson = pm.response.json();",
+              "    pm.expect(responseJson.name).to.be.eql(\"citestlocation\");",
+              "    pm.expect(responseJson.description).to.be.eql(\"citest\");",
+              "    pm.expect(responseJson.address).to.be.eql(\"citest update street\");",
+              "    pm.expect(responseJson.type).to.be.eql(\"restaurant\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{CI_USER_TOKEN}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{SERVER_ENDPOINT}}/locations/citestlocation",
+          "host": [
+            "{{SERVER_ENDPOINT}}"
+          ],
+          "path": [
+            "locations",
+            "citestlocation"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "VERIFY LOCATION SEARCH BY NAME",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Valid json response\", function () {\r",
+              "    pm.response.to.not.be.error;\r",
+              "    pm.response.to.not.have.jsonBody(\"error\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"The response has all properties\", () => {\r",
+              "    const responseJson = pm.response.json();\r",
+              "    pm.expect(responseJson[0].name).to.be.eql(\"citestlocation\");\r",
+              "    pm.expect(responseJson[0].description).to.be.eql(\"citest\");\r",
+              "    pm.expect(responseJson[0].address).to.be.eql(\"citest update street\");\r",
+              "    pm.expect(responseJson[0].type).to.be.eql(\"restaurant\");\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{CI_USER_TOKEN}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{SERVER_ENDPOINT}}/locations/search?name=test",
+          "host": [
+            "{{SERVER_ENDPOINT}}"
+          ],
+          "path": [
+            "locations",
+            "search"
+          ],
+          "query": [
+            {
+              "key": "name",
+              "value": "test"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "VERIFY LOCATION SEARCH BY DESCRIPTION",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Valid json response\", function () {\r",
+              "    pm.response.to.not.be.error;\r",
+              "    pm.response.to.not.have.jsonBody(\"error\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"The response has all properties\", () => {\r",
+              "    const responseJson = pm.response.json();\r",
+              "    pm.expect(responseJson[0].name).to.be.eql(\"citestlocation\");\r",
+              "    pm.expect(responseJson[0].description).to.be.eql(\"citest\");\r",
+              "    pm.expect(responseJson[0].address).to.be.eql(\"citest update street\");\r",
+              "    pm.expect(responseJson[0].type).to.be.eql(\"restaurant\");\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{CI_USER_TOKEN}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"name\": \"citestlocation\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{SERVER_ENDPOINT}}/locations/search?description=test",
+          "host": [
+            "{{SERVER_ENDPOINT}}"
+          ],
+          "path": [
+            "locations",
+            "search"
+          ],
+          "query": [
+            {
+              "key": "description",
+              "value": "test"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "VERIFY LOCATION SEARCH BY TYPE",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Valid json response\", function () {\r",
+              "    pm.response.to.not.be.error;\r",
+              "    pm.response.to.not.have.jsonBody(\"error\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"The response has all properties\", () => {\r",
+              "    const responseJson = pm.response.json();\r",
+              "    pm.expect(responseJson.length).to.be.eql(3);\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{CI_USER_TOKEN}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"name\": \"citestlocation\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{SERVER_ENDPOINT}}/locations/search?type=restaurant",
+          "host": [
+            "{{SERVER_ENDPOINT}}"
+          ],
+          "path": [
+            "locations",
+            "search"
+          ],
+          "query": [
+            {
+              "key": "type",
+              "value": "restaurant"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "VERIFY USER OWNS NO LOCATIONS",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Valid json response\", function () {\r",
+              "    pm.response.to.not.be.error;\r",
+              "    pm.response.to.not.have.jsonBody(\"error\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"The response is empty\", () => {\r",
+              "    const responseJson = pm.response.json();\r",
+              "    pm.expect(responseJson).to.be.empty;\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{CI_USER_TOKEN}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{SERVER_ENDPOINT}}/locations/mine",
+          "host": [
+            "{{SERVER_ENDPOINT}}"
+          ],
+          "path": [
+            "locations",
+            "mine"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "ASSIGN OWNER TO LOCATION",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Valid json response\", function () {",
+              "    pm.response.to.not.be.error;",
+              "    pm.response.to.not.have.jsonBody(\"error\");",
+              "});",
+              "",
+              "pm.test(\"The response has all properties\", () => {",
+              "    const responseJson = pm.response.json();",
+              "    pm.expect(responseJson.name).to.be.eql(\"citestlocation\");",
+              "    pm.expect(responseJson.description).to.be.eql(\"citest\");",
+              "    pm.expect(responseJson.address).to.be.eql(\"citest update street\");",
+              "    pm.expect(responseJson.type).to.be.eql(\"restaurant\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{CI_USER_TOKEN}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"address\": \"citest update street\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{SERVER_ENDPOINT}}/locations/citestlocation/citestuser",
+          "host": [
+            "{{SERVER_ENDPOINT}}"
+          ],
+          "path": [
+            "locations",
+            "citestlocation",
+            "citestuser"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "VERIFY USER OWNS A LOCATION",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Valid json response\", function () {\r",
+              "    pm.response.to.not.be.error;\r",
+              "    pm.response.to.not.have.jsonBody(\"error\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"The response has all properties\", () => {\r",
+              "    const responseJson = pm.response.json();\r",
+              "    pm.expect(responseJson[0].name).to.be.eql(\"citestlocation\");\r",
+              "    pm.expect(responseJson[0].description).to.be.eql(\"citest\");\r",
+              "    pm.expect(responseJson[0].address).to.be.eql(\"citest update street\");\r",
+              "    pm.expect(responseJson[0].type).to.be.eql(\"restaurant\");\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{CI_USER_TOKEN}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{SERVER_ENDPOINT}}/locations/mine",
+          "host": [
+            "{{SERVER_ENDPOINT}}"
+          ],
+          "path": [
+            "locations",
+            "mine"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "CREATE REVIEW",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Valid json response\", function () {",
+              "    pm.response.to.not.be.error;",
+              "    pm.response.to.not.have.jsonBody(\"error\");",
+              "});",
+              "",
+              "pm.test(\"The response has all properties\", () => {",
+              "    const responseJson = pm.response.json();",
+              "    pm.expect(responseJson.comment).to.be.eql(\"citest comment\");",
+              "    pm.expect(responseJson.rating).to.be.eql(4);",
+              "    pm.expect(responseJson.user.username).to.be.eql(\"citestuser\");",
+              "    pm.expect(responseJson.location.name).to.be.eql(\"citestlocation\");",
+              "});",
+              "",
+              "var jsonData = JSON.parse(responseBody);",
+              "pm.collectionVariables.set(\"citest_review_id\", jsonData.id);"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{CLIENT1_ADMIN_TOKEN}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"user_id\": {{citest_user_id}},\n    \"location_id\": {{citest_location_id}},\n    \"comment\": \"citest comment\",\n    \"rating\": 4\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{SERVER_ENDPOINT}}/reviews/",
+          "host": [
+            "{{SERVER_ENDPOINT}}"
+          ],
+          "path": [
+            "reviews",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET NEWLY CREATED REVIEW",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Valid json response\", function () {",
+              "    pm.response.to.not.be.error;",
+              "    pm.response.to.not.have.jsonBody(\"error\");",
+              "});",
+              "",
+              "pm.test(\"The response has all properties\", () => {",
+              "    const responseJson = pm.response.json();",
+              "    pm.expect(responseJson.comment).to.be.eql(\"citest comment\");",
+              "    pm.expect(responseJson.rating).to.be.eql(4);",
+              "    pm.expect(responseJson.user.username).to.be.eql(\"citestuser\");",
+              "    pm.expect(responseJson.location.name).to.be.eql(\"citestlocation\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{CLIENT1_ADMIN_TOKEN}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{SERVER_ENDPOINT}}/reviews/{{citest_review_id}}",
+          "host": [
+            "{{SERVER_ENDPOINT}}"
+          ],
+          "path": [
+            "reviews",
+            "{{citest_review_id}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET ALL REVIEWS",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"response should be okay to process\", function () {",
+              "    pm.response.to.not.be.error;",
+              "    pm.response.to.not.have.jsonBody(\"error\");",
+              "});",
+              "",
+              "pm.test(\"The response has correct review count\", () => {",
+              "    const responseJson = pm.response.json();",
+              "    pm.expect(responseJson).to.have.lengthOf(21);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{CLIENT1_ADMIN_TOKEN}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{SERVER_ENDPOINT}}/reviews/",
+          "host": [
+            "{{SERVER_ENDPOINT}}"
+          ],
+          "path": [
+            "reviews",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "VERIFY LOCATION RATING HISTOGRAM",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"response should be okay to process\", function () {",
+              "    pm.response.to.not.be.error;",
+              "    pm.response.to.not.have.jsonBody(\"error\");",
+              "});",
+              "",
+              "pm.test(\"The response is correct\", () => {",
+              "    const responseJson = pm.response.json();",
+              "    pm.expect(responseJson.rating_histogram['1']).to.be.eql(\"0\");",
+              "    pm.expect(responseJson.rating_histogram['2']).to.be.eql(\"0\");",
+              "    pm.expect(responseJson.rating_histogram['3']).to.be.eql(\"0\");",
+              "    pm.expect(responseJson.rating_histogram['4']).to.be.eql(\"1\");",
+              "    pm.expect(responseJson.rating_histogram['5']).to.be.eql(\"0\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{CLIENT1_ADMIN_TOKEN}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{SERVER_ENDPOINT}}/locations/citestlocation/ratingHistogram/",
+          "host": [
+            "{{SERVER_ENDPOINT}}"
+          ],
+          "path": [
+            "locations",
+            "citestlocation",
+            "ratingHistogram",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "VERIFY LOCATION AVERAGE RATING",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"response should be okay to process\", function () {",
+              "    pm.response.to.not.be.error;",
+              "    pm.response.to.not.have.jsonBody(\"error\");",
+              "});",
+              "",
+              "pm.test(\"The response is correct\", () => {",
+              "    const responseJson = pm.response.json();",
+              "    pm.expect(responseJson.average_rating).to.be.eql(\"4.0\");",
+              "",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{CLIENT1_ADMIN_TOKEN}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{SERVER_ENDPOINT}}/locations/citestlocation/averageRating/",
+          "host": [
+            "{{SERVER_ENDPOINT}}"
+          ],
+          "path": [
+            "locations",
+            "citestlocation",
+            "averageRating",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "CREATE REPLY",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Valid json response\", function () {",
+              "    pm.response.to.not.be.error;",
+              "    pm.response.to.not.have.jsonBody(\"error\");",
+              "});",
+              "",
+              "pm.test(\"The response has all properties\", () => {",
+              "    const responseJson = pm.response.json();",
+              "    pm.expect(responseJson.reply_comment).to.be.eql(\"citest reply\");",
+              "});",
+              "",
+              "var jsonData = JSON.parse(responseBody);",
+              "pm.collectionVariables.set(\"citest_reply_id\", jsonData.id);"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{CI_USER_TOKEN}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"reply_comment\": \"citest reply\",\r\n  \"user_id\": {{citest_user_id}},\r\n  \"review_id\": {{citest_review_id}}\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{SERVER_ENDPOINT}}/replies/",
+          "host": [
+            "{{SERVER_ENDPOINT}}"
+          ],
+          "path": [
+            "replies",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "AUTH CHECK OF CREATE REPLY",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code\", function () {",
+              "    pm.response.to.be.forbidden;",
+              "});",
+              ""
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{CLIENT1_ADMIN_TOKEN}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"reply_comment\": \"citest reply\",\r\n  \"user_id\": {{citest_user_id}},\r\n  \"review_id\": {{citest_review_id}}\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{SERVER_ENDPOINT}}/replies/",
+          "host": [
+            "{{SERVER_ENDPOINT}}"
+          ],
+          "path": [
+            "replies",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET NEWLY CREATED REPLY",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Valid json response\", function () {",
+              "    pm.response.to.not.be.error;",
+              "    pm.response.to.not.have.jsonBody(\"error\");",
+              "});",
+              "",
+              "pm.test(\"The response has all properties\", () => {",
+              "    const responseJson = pm.response.json();",
+              "    pm.expect(responseJson.reply_comment).to.be.eql(\"citest reply\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{CLIENT1_ADMIN_TOKEN}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{SERVER_ENDPOINT}}/replies/{{citest_reply_id}}",
+          "host": [
+            "{{SERVER_ENDPOINT}}"
+          ],
+          "path": [
+            "replies",
+            "{{citest_reply_id}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET REPLY BY USER",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Valid json response\", function () {",
+              "    pm.response.to.not.be.error;",
+              "    pm.response.to.not.have.jsonBody(\"error\");",
+              "});",
+              "",
+              "pm.test(\"The response has all properties\", () => {",
+              "    const responseJson = pm.response.json();",
+              "    pm.expect(responseJson[0].reply_comment).to.be.eql(\"citest reply\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{CLIENT1_ADMIN_TOKEN}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{SERVER_ENDPOINT}}/replies/user/{{citest_user_id}}",
+          "host": [
+            "{{SERVER_ENDPOINT}}"
+          ],
+          "path": [
+            "replies",
+            "user",
+            "{{citest_user_id}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET REPLY BY REVIEW",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Valid json response\", function () {",
+              "    pm.response.to.not.be.error;",
+              "    pm.response.to.not.have.jsonBody(\"error\");",
+              "});",
+              "",
+              "pm.test(\"The response has all properties\", () => {",
+              "    const responseJson = pm.response.json();",
+              "    pm.expect(responseJson[0].reply_comment).to.be.eql(\"citest reply\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{CLIENT1_ADMIN_TOKEN}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{SERVER_ENDPOINT}}/replies/review/{{citest_review_id}}",
+          "host": [
+            "{{SERVER_ENDPOINT}}"
+          ],
+          "path": [
+            "replies",
+            "review",
+            "{{citest_review_id}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "DELETE NEWLY CREATED REPLY",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(204);",
+              "});",
+              "",
+              "pm.test(\"Valid json response\", function () {",
+              "    pm.response.to.not.be.error;",
+              "    pm.response.to.not.have.jsonBody(\"error\");",
+              "});",
+              ""
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{CI_USER_TOKEN}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{SERVER_ENDPOINT}}/replies/{{citest_reply_id}}",
+          "host": [
+            "{{SERVER_ENDPOINT}}"
+          ],
+          "path": [
+            "replies",
+            "{{citest_reply_id}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "DELETE NEWLY CREATED REVIEW",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 204\", function () {",
+              "    pm.response.to.have.status(204);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{CI_USER_TOKEN}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{SERVER_ENDPOINT}}/reviews/{{citest_review_id}}",
+          "host": [
+            "{{SERVER_ENDPOINT}}"
+          ],
+          "path": [
+            "reviews",
+            "{{citest_review_id}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "DELETE NEWLY CREATED LOCATION",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Valid json response\", function () {",
+              "    pm.response.to.not.be.error;",
+              "    pm.response.to.not.have.jsonBody(\"error\");",
+              "});",
+              "",
+              "pm.test(\"The response has all properties\", () => {",
+              "    const responseJson = pm.response.json();",
+              "    pm.expect(responseJson.name).to.be.eql(\"citestlocation\");",
+              "    pm.expect(responseJson.description).to.be.eql(\"citest\");",
+              "    pm.expect(responseJson.address).to.be.eql(\"citest update street\");",
+              "    pm.expect(responseJson.type).to.be.eql(\"restaurant\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{CI_USER_TOKEN}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{SERVER_ENDPOINT}}/locations/citestlocation",
+          "host": [
+            "{{SERVER_ENDPOINT}}"
+          ],
+          "path": [
+            "locations",
+            "citestlocation"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "DELETE NEWLY CREATED USER",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Valid json response\", function () {",
+              "    pm.response.to.not.be.error;",
+              "    pm.response.to.not.have.jsonBody(\"error\");",
+              "});",
+              "",
+              "pm.test(\"The response has all properties\", () => {",
+              "    const responseJson = pm.response.json();",
+              "    pm.expect(responseJson.username).to.eql('citestuser');",
+              "    pm.expect(responseJson.email).to.be.eql(\"citestuserUpdate@zetch.io\");",
+              "    pm.expect(responseJson.affiliation).to.be.eql(\"other\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{CI_USER_TOKEN}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{SERVER_ENDPOINT}}/users/citestuser",
+          "host": [
+            "{{SERVER_ENDPOINT}}"
+          ],
+          "path": [
+            "users",
+            "citestuser"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "CHECK USER DELETED SUCCESSFULLY",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 404\", function () {",
+              "    pm.response.to.have.status(404);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{CI_USER_TOKEN}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{SERVER_ENDPOINT}}/users/citestuser",
+          "host": [
+            "{{SERVER_ENDPOINT}}"
+          ],
+          "path": [
+            "users",
+            "citestuser"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "CHECK LOCATION DELETED SUCCESSFULLY",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 404\", function () {",
+              "    pm.response.to.have.status(404);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{CI_USER_TOKEN}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{SERVER_ENDPOINT}}/locations/citestlocation",
+          "host": [
+            "{{SERVER_ENDPOINT}}"
+          ],
+          "path": [
+            "locations",
+            "citestlocation"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "CHECK REVIEW DELETED SUCCESSFULLY",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 404\", function () {",
+              "    pm.response.to.have.status(404);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{CI_USER_TOKEN}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{SERVER_ENDPOINT}}/reviews/{{citest_review_id}}",
+          "host": [
+            "{{SERVER_ENDPOINT}}"
+          ],
+          "path": [
+            "reviews",
+            "{{citest_review_id}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET ALL USERS WITH CLIENT2",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status test\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"response should be okay to process\", function () {",
+              "    pm.response.to.not.be.error;",
+              "    pm.response.to.not.have.jsonBody(\"error\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{CLIENT2_ADMIN_TOKEN}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{SERVER_ENDPOINT}}/users/",
+          "host": [
+            "{{SERVER_ENDPOINT}}"
+          ],
+          "path": [
+            "users",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET LOGS OF restaurant_review_app",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "var jsonData = JSON.parse(responseBody);",
+              "",
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Valid json response\", function () {",
+              "    pm.response.to.not.be.error;",
+              "    pm.response.to.not.have.jsonBody(\"error\");",
+              "});",
+              "",
+              "pm.test(\"Response should correct number of logs for client\", function () {",
+              "    const responseJson = pm.response.json();",
+              "    pm.expect(responseJson).to.have.lengthOf(30);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{CI_USER_TOKEN}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{SERVER_ENDPOINT}}/logs/{{CLIENT_ID}}",
+          "host": [
+            "{{SERVER_ENDPOINT}}"
+          ],
+          "path": [
+            "logs",
+            "{{CLIENT_ID}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET LOGS OF museum_manager_app",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Valid json response\", function () {",
+              "    pm.response.to.not.be.error;",
+              "    pm.response.to.not.have.jsonBody(\"error\");",
+              "});",
+              "",
+              "pm.test(\"Response should correct number of logs for client\", function () {",
+              "    pm.response.to.not.be.error;",
+              "    pm.response.to.not.have.jsonBody(\"error\");",
+              "    const responseJson = pm.response.json();",
+              "    pm.expect(responseJson).to.have.lengthOf(2);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{CLIENT2_ADMIN_TOKEN}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{SERVER_ENDPOINT}}/logs/{{CLIENT_ID_2}}",
+          "host": [
+            "{{SERVER_ENDPOINT}}"
+          ],
+          "path": [
+            "logs",
+            "{{CLIENT_ID_2}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "AUTH CHECK OF GET LOGS",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 403\", function () {",
+              "    pm.response.to.have.status(403);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{CLIENT1_ADMIN_TOKEN}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{SERVER_ENDPOINT}}/logs/{{CLIENT_ID_2}}",
+          "host": [
+            "{{SERVER_ENDPOINT}}"
+          ],
+          "path": [
+            "logs",
+            "{{CLIENT_ID_2}}"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "auth": {
+    "type": "oauth2",
+    "oauth2": [
+      {
+        "key": "clientId",
+        "value": "{{CLIENT_ID}}",
+        "type": "string"
+      },
+      {
+        "key": "tokenName",
+        "value": "client1 citest user",
+        "type": "string"
+      },
+      {
+        "key": "accessTokenUrl",
+        "value": "{{TOKEN_URL}}",
+        "type": "string"
+      },
+      {
+        "key": "authUrl",
+        "value": "{{AUTH_URL}}",
+        "type": "string"
+      },
+      {
+        "key": "redirect_uri",
+        "value": "https://oauth.pstmn.io/v1/browser-callback",
+        "type": "string"
+      },
+      {
+        "key": "client_authentication",
+        "value": "body",
+        "type": "string"
+      },
+      {
+        "key": "addTokenTo",
+        "value": "header",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "SERVER_ENDPOINT",
+      "value": ""
+    },
+    {
+      "key": "AUTH_URL",
+      "value": ""
+    },
+    {
+      "key": "TOKEN_URL",
+      "value": ""
+    },
+    {
+      "key": "CLIENT_ID",
+      "value": ""
+    },
+    {
+      "key": "ADMIN_TOKEN",
+      "value": ""
+    },
+    {
+      "key": "CI_USER_TOKEN",
+      "value": ""
+    },
+    {
+      "key": "citest_user_id",
+      "value": ""
+    },
+    {
+      "key": "citest_location_id",
+      "value": ""
+    },
+    {
+      "key": "citest_review_id",
+      "value": ""
+    },
+    {
+      "key": "citest_reply_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "CLIENT2_ADMIN_TOKEN",
+      "value": ""
+    },
+    {
+      "key": "CLIENT_ID_2",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "CLIENT2_ADMIN_REFRESH_TOKEN",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "CLIENT1_ADMIN_REFRESH_TOKEN",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "CLIENT1_ADMIN_TOKEN",
+      "value": ""
+    },
+    {
+      "key": "CLIENT1_CITEST_REFRESH_TOKEN",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}

@@ -6,6 +6,8 @@
 
 * [API Server README.md](https://github.com/astrohsy/ZETCH/tree/main/api_server)
 
+* [Web fronted README.md](https://github.com/astrohsy/ZETCH/tree/main/web)
+
 ## Links
 
 * [SonarQube](https://sonarcloud.io/project/overview?id=astrohsy_ZETCH)
