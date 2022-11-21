@@ -15,7 +15,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Add mask
       - run: |
           curl -H "Content-type: application/json" \
             -H "X-API-Key: ${{ secrets.POSTMAN_API_KEY }}" \
