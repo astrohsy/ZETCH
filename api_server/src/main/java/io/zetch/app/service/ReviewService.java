@@ -103,7 +103,10 @@ public class ReviewService {
    */
   public ReviewEntity update(Long id, String newComment, Integer newRating)
       throws IllegalArgumentException, NoSuchElementException {
-    ReviewEntity currReview = reviewRepository.findById(id).get();
+    ReviewEntity currReview =
+        reviewRepository
+            .findById(id)
+            .orElseThrow(() -> new NoSuchElementException("Review does not exist: " + id));
 
     if (newComment != null) {
       currReview.setComment(newComment);
