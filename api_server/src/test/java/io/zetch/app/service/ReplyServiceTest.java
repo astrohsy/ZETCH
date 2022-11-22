@@ -181,7 +181,7 @@ class ReplyServiceTest {
   }
 
   @Test
-  public void createNew_notOwner_ThrowsException() {
+  void createNew_notOwner_ThrowsException() {
     // Arrange
     String expectedMessage = "User is not the owner of the reviewed location.";
     when(userRepositoryMock.findById(USER_ID_1)).thenReturn(Optional.of(userMock));
@@ -201,7 +201,7 @@ class ReplyServiceTest {
   }
 
   @Test
-  public void deleteOne_deletesSuccessfully() {
+  void deleteOne_deletesSuccessfully() {
     // Arrange
     when(replyRepositoryMock.existsById(REPLY_ID_1)).thenReturn(true);
 
