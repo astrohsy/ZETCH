@@ -23,14 +23,14 @@ import lombok.Getter;
     }
 
 <span class="fc bfc" id="L25" title="All 2 branches covered.">    if (o instanceof BaseEntity that) {</span>
-<span class="pc bpc" id="L26" title="3 of 4 branches missed.">      return this.id != null &amp;&amp; Objects.equals(this.id, that.id);</span>
+<span class="pc bpc" id="L26" title="1 of 4 branches missed.">      return this.id != null &amp;&amp; Objects.equals(this.id, that.id);</span>
     }
 <span class="fc" id="L28">    return false;</span>
   }
 
   @Override
   public int hashCode() {
-<span class="nc" id="L33">    return getClass().hashCode();</span>
+<span class="fc" id="L33">    return getClass().hashCode();</span>
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

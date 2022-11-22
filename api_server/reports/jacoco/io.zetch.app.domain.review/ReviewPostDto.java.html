@@ -2,11 +2,13 @@
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 
 /** DTO for posting reviews. */
-<span class="fc" id="L7">public record ReviewPostDto(</span>
+<span class="fc" id="L9">public record ReviewPostDto(</span>
     String comment,
-    Integer rating,
+    @Min(1) @Max(5) Integer rating,
     @JsonProperty(&quot;user_id&quot;) Long userId,
     @JsonProperty(&quot;location_id&quot;) Long locationId)
     implements Serializable {}

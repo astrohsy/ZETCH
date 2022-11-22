@@ -52,8 +52,8 @@ public class UserService {
    */
   public UserEntity createNew(String username, String name, String email, String affiliation)
       throws IllegalArgumentException {
-<span class="pc bpc" id="L55" title="1 of 2 branches missed.">    if (userRepository.existsByUsername(username)) {</span>
-<span class="nc" id="L56">      throw new IllegalArgumentException(&quot;Username unavailable: &quot; + username);</span>
+<span class="fc bfc" id="L55" title="All 2 branches covered.">    if (userRepository.existsByUsername(username)) {</span>
+<span class="fc" id="L56">      throw new IllegalArgumentException(&quot;Username unavailable: &quot; + username);</span>
     }
 
     // Add user to Cognito
@@ -86,15 +86,15 @@ public class UserService {
       throws NoSuchElementException, IllegalArgumentException {
 <span class="fc" id="L87">    UserEntity currUser = verifyUser(currUsername);</span>
 
-<span class="pc bpc" id="L89" title="1 of 2 branches missed.">    if (newName != null) {</span>
+<span class="fc bfc" id="L89" title="All 2 branches covered.">    if (newName != null) {</span>
 <span class="fc" id="L90">      currUser.setDisplayName(newName);</span>
     }
 
-<span class="pc bpc" id="L93" title="1 of 2 branches missed.">    if (newEmail != null) {</span>
+<span class="fc bfc" id="L93" title="All 2 branches covered.">    if (newEmail != null) {</span>
 <span class="fc" id="L94">      currUser.setEmail(newEmail);</span>
     }
 
-<span class="pc bpc" id="L97" title="1 of 2 branches missed.">    if (affiliation != null) {</span>
+<span class="fc bfc" id="L97" title="All 2 branches covered.">    if (affiliation != null) {</span>
 <span class="fc" id="L98">      currUser.setAffiliation(Affiliation.fromString(affiliation));</span>
     }
 
@@ -126,7 +126,7 @@ public class UserService {
   public UserEntity verifyUser(String username) throws NoSuchElementException {
 <span class="fc" id="L127">    return userRepository</span>
 <span class="fc" id="L128">        .findByUsernameIgnoreCase(username)</span>
-<span class="pc" id="L129">        .orElseThrow(() -&gt; new NoSuchElementException(&quot;User does not exist: &quot; + username));</span>
+<span class="fc" id="L129">        .orElseThrow(() -&gt; new NoSuchElementException(&quot;User does not exist: &quot; + username));</span>
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

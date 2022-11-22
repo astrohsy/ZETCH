@@ -11,43 +11,64 @@ public class SeedLocations {
 <span class="nc" id="L11">    throw new IllegalStateException(&quot;Utility class&quot;);</span>
   }
 
-  private static final LocationEntity LOCATION_1 =
-<span class="fc" id="L15">      LocationEntity.builder()</span>
-<span class="fc" id="L16">          .name(&quot;Maggiano's Pizza&quot;)</span>
-<span class="fc" id="L17">          .description(&quot;Italian&quot;)</span>
-<span class="fc" id="L18">          .address(&quot;1100 Riverside Drive&quot;)</span>
-<span class="fc" id="L19">          .type(Type.RESTAURANT)</span>
-<span class="fc" id="L20">          .build();</span>
-  private static final LocationEntity LOCATION_2 =
-<span class="fc" id="L22">      LocationEntity.builder()</span>
-<span class="fc" id="L23">          .name(&quot;Fireball Restaurant&quot;)</span>
-<span class="fc" id="L24">          .description(&quot;Caribbean&quot;)</span>
-<span class="fc" id="L25">          .address(&quot;3920 Broadway&quot;)</span>
-<span class="fc" id="L26">          .type(Type.MUSEUM)</span>
-<span class="fc" id="L27">          .build();</span>
-  private static final LocationEntity LOCATION_3 =
-<span class="fc" id="L29">      LocationEntity.builder()</span>
-<span class="fc" id="L30">          .name(&quot;Havana Heights&quot;)</span>
-<span class="fc" id="L31">          .description(&quot;Cuban&quot;)</span>
-<span class="fc" id="L32">          .address(&quot;4029 Morningside Drive&quot;)</span>
-<span class="fc" id="L33">          .type(Type.BUILDING)</span>
-<span class="fc" id="L34">          .build();</span>
-  private static final LocationEntity LOCATION_4 =
-<span class="fc" id="L36">      LocationEntity.builder()</span>
-<span class="fc" id="L37">          .name(&quot;Wimpy's&quot;)</span>
-<span class="fc" id="L38">          .description(&quot;American&quot;)</span>
-<span class="fc" id="L39">          .address(&quot;1323 St. Nicholas Ave&quot;)</span>
-<span class="fc" id="L40">          .type(Type.RESTAURANT)</span>
-<span class="fc" id="L41">          .build();</span>
-  private static final LocationEntity LOCATION_5 =
-<span class="fc" id="L43">      LocationEntity.builder()</span>
-<span class="fc" id="L44">          .name(&quot;Wahi's Diner&quot;)</span>
-<span class="fc" id="L45">          .description(&quot;Diner&quot;)</span>
-<span class="fc" id="L46">          .address(&quot;569th W 120 St&quot;)</span>
-<span class="fc" id="L47">          .type(Type.MUSEUM)</span>
-<span class="fc" id="L48">          .build();</span>
+  public static final LocationEntity LOCATION1 =
+<span class="nc" id="L15">      LocationEntity.builder()</span>
+<span class="nc" id="L16">          .name(&quot;Maggiano's Pizza&quot;)</span>
+<span class="nc" id="L17">          .description(&quot;Italian&quot;)</span>
+<span class="nc" id="L18">          .address(&quot;1100 Riverside Drive&quot;)</span>
+<span class="nc" id="L19">          .type(Type.RESTAURANT)</span>
+<span class="nc" id="L20">          .owners(List.of(SeedUsers.USER2))</span>
+<span class="nc" id="L21">          .build();</span>
+  public static final LocationEntity LOCATION2 =
+<span class="nc" id="L23">      LocationEntity.builder()</span>
+<span class="nc" id="L24">          .name(&quot;Fireball Restaurant&quot;)</span>
+<span class="nc" id="L25">          .description(&quot;Caribbean&quot;)</span>
+<span class="nc" id="L26">          .address(&quot;3920 Broadway&quot;)</span>
+<span class="nc" id="L27">          .type(Type.MUSEUM)</span>
+<span class="nc" id="L28">          .owners(List.of(SeedUsers.USER3))</span>
+<span class="nc" id="L29">          .build();</span>
+  public static final LocationEntity LOCATION3 =
+<span class="nc" id="L31">      LocationEntity.builder()</span>
+<span class="nc" id="L32">          .name(&quot;Havana Heights&quot;)</span>
+<span class="nc" id="L33">          .description(&quot;Cuban&quot;)</span>
+<span class="nc" id="L34">          .address(&quot;4029 Morningside Drive&quot;)</span>
+<span class="nc" id="L35">          .type(Type.BUILDING)</span>
+<span class="nc" id="L36">          .owners(List.of(SeedUsers.USER4))</span>
+<span class="nc" id="L37">          .build();</span>
+  public static final LocationEntity LOCATION4 =
+<span class="nc" id="L39">      LocationEntity.builder()</span>
+<span class="nc" id="L40">          .name(&quot;Wimpy's&quot;)</span>
+<span class="nc" id="L41">          .description(&quot;American&quot;)</span>
+<span class="nc" id="L42">          .address(&quot;1323 St. Nicholas Ave&quot;)</span>
+<span class="nc" id="L43">          .owners(List.of(SeedUsers.USER2))</span>
+<span class="nc" id="L44">          .type(Type.RESTAURANT)</span>
+<span class="nc" id="L45">          .build();</span>
+  public static final LocationEntity LOCATION5 =
+<span class="nc" id="L47">      LocationEntity.builder()</span>
+<span class="nc" id="L48">          .name(&quot;Eugene Museum of Music&quot;)</span>
+<span class="nc" id="L49">          .description(</span>
+              &quot;A museum dedicated to preservation and celebration of &quot;
+                  + &quot;the history of all good music, this idea for the &quot;
+                  + &quot;museum was conceived in 1995 by generous philanthropist Eugene Kim.&quot;)
+<span class="nc" id="L53">          .address(&quot;263th E 103 St&quot;)</span>
+<span class="nc" id="L54">          .type(Type.MUSEUM)</span>
+<span class="nc" id="L55">          .owners(List.of(SeedUsers.USER2))</span>
+<span class="nc" id="L56">          .build();</span>
 
-<span class="fc" id="L50">  public static final List&lt;LocationEntity&gt; LOCATIONS =</span>
-<span class="fc" id="L51">      List.of(LOCATION_1, LOCATION_2, LOCATION_3, LOCATION_4, LOCATION_5);</span>
+  public static final LocationEntity LOCATION6 =
+<span class="nc" id="L59">      LocationEntity.builder()</span>
+<span class="nc" id="L60">          .name(&quot;Columbia Museum&quot;)</span>
+<span class="nc" id="L61">          .description(</span>
+              &quot;Located on the campus of Columbia University, this museum plays &quot;
+                  + &quot;a major role in developing and collecting modern art, and is &quot;
+                  + &quot;often identified as one of the largest and most influential &quot;
+                  + &quot;museums of modern art in the world. &quot;)
+<span class="nc" id="L66">          .address(&quot;569th W 120 St&quot;)</span>
+<span class="nc" id="L67">          .type(Type.MUSEUM)</span>
+<span class="nc" id="L68">          .owners(List.of(SeedUsers.USER2))</span>
+<span class="nc" id="L69">          .build();</span>
+
+<span class="nc" id="L71">  public static final List&lt;LocationEntity&gt; LOCATIONS =</span>
+<span class="nc" id="L72">      List.of(LOCATION1, LOCATION2, LOCATION3, LOCATION4, LOCATION5, LOCATION6);</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

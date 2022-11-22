@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,6 +27,9 @@ import lombok.ToString;
 @Table
 public class ReviewEntity extends BaseEntity {
   private String comment;
+
+  @Min(1)
+  @Max(5)
   private Integer rating;
 
   @ManyToOne
@@ -37,12 +42,11 @@ public class ReviewEntity extends BaseEntity {
 
   @Override
   public boolean equals(Object o) {
-<span class="nc" id="L40">    return super.equals(o);</span>
+<span class="fc" id="L45">    return super.equals(o);</span>
   }
 
-  @Override
-  public int hashCode() {
-<span class="nc" id="L45">    return super.hashCode();</span>
+  public ReviewGetDto toGetDto() {
+<span class="fc" id="L49">    return new ReviewGetDto(super.getId(), comment, rating, user.toGetDto(), location.toGetDto());</span>
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
