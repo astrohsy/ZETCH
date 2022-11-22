@@ -6,11 +6,9 @@ import io.zetch.app.domain.user.Affiliation;
 import io.zetch.app.domain.user.UserEntity;
 import io.zetch.app.repo.ReviewRepository;
 import io.zetch.app.repo.UserRepository;
-
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
@@ -70,6 +68,7 @@ public class SecurityService {
     return Objects.equals(getUsernameFromToken(token), caller.getUsername().toLowerCase());
   }
 
+  /** Returns True if the user owns the review. */
   public boolean isOwnedReview(JwtAuthenticationToken token, Long reviewId)
       throws NoSuchElementException {
     if (token == null) {
