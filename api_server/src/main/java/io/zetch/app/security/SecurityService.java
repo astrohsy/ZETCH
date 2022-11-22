@@ -76,7 +76,7 @@ public class SecurityService {
     }
 
     Optional<ReviewEntity> caller = reviewRepository.findById(reviewId);
-    if (!caller.isPresent()) {
+    if (caller.isEmpty()) {
       return false;
     }
     return Objects.equals(
