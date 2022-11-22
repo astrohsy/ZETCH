@@ -3,11 +3,15 @@ package io.zetch.app.web;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.Is.is;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -19,6 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import io.zetch.app.domain.review.ReviewEntity;
 import io.zetch.app.domain.review.ReviewPostDto;
+import io.zetch.app.security.SecurityService;
 import io.zetch.app.service.ReviewService;
 
 import java.util.ArrayList;
@@ -55,6 +60,7 @@ class ReviewControllerTest {
   private MockMvc mockMvc;
   @Autowired private WebApplicationContext context;
   @MockBean private ReviewService reviewServiceMock;
+  @MockBean private SecurityService securityServiceMock;
   private List<ReviewEntity> reviews;
   static Gson gson = new Gson();
 
@@ -150,13 +156,16 @@ class ReviewControllerTest {
   @Test
   void deleteOneReview() throws Exception {
     doThrow(NoSuchElementException.class).when(reviewServiceMock).deleteOne(2L);
+    when(securityServiceMock.isOwnedReview(any(), eq(1L))).thenReturn(true);
+    when(securityServiceMock.isOwnedReview(any(), eq(2L))).thenReturn(false);
+
     mockMvc
         .perform(delete(REVIEWS_ENDPOINT + 1L).contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isNoContent());
 
     mockMvc
         .perform(delete(REVIEWS_ENDPOINT + 2L).contentType(MediaType.APPLICATION_JSON))
-        .andExpect(status().isNotFound());
+        .andExpect(status().isForbidden());
   }
 
   @Test
