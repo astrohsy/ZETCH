@@ -131,7 +131,8 @@ class ReviewServiceIntegrationTest {
   @Test
   void getOneFails() {
     reviewRepository.save(r1);
-    assertThrows(NoSuchElementException.class, () -> reviewService.getOne(r1.getId() + 1));
+    Long id = r1.getId() + 1;
+    assertThrows(NoSuchElementException.class, () -> reviewService.getOne(id));
   }
 
   @Test
@@ -146,9 +147,10 @@ class ReviewServiceIntegrationTest {
 
   @Test
   void createNewFails() {
+    Long id = u1.getId();
+    Long id2 = l1.getId();
     assertThrows(
-        ConstraintViolationException.class,
-        () -> reviewService.createNew("Hello", 7, u1.getId(), l1.getId()));
+        ConstraintViolationException.class, () -> reviewService.createNew("Hello", 7, id, id2));
   }
 
   @Test
@@ -168,8 +170,8 @@ class ReviewServiceIntegrationTest {
   @Test
   void updateFails_wrongRating() {
     reviewRepository.save(r1);
-    assertThrows(
-        ConstraintViolationException.class, () -> reviewService.update(r1.getId(), "Bob", 10));
+    Long id = r1.getId();
+    assertThrows(ConstraintViolationException.class, () -> reviewService.update(id, "Bob", 10));
   }
 
   @Test
