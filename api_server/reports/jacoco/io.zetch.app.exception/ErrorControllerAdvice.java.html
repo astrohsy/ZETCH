@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ErrorControllerAdvice.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Zetch Reviews App</a> &gt; <a href="index.source.html" class="el_package">io.zetch.app.exception</a> &gt; <span class="el_source">ErrorControllerAdvice.java</span></div><h1>ErrorControllerAdvice.java</h1><pre class="source lang-java linenums">package io.zetch.app.exception;
+
+import java.time.LocalDateTime;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import javax.servlet.http.HttpServletRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+@ControllerAdvice
+<span class="fc" id="L18">class ErrorControllerAdvice {</span>
+  private Map&lt;String, Object&gt; buildErrorResponse(Exception e, HttpServletRequest r, HttpStatus s) {
+<span class="fc" id="L20">    Map&lt;String, Object&gt; response = new LinkedHashMap&lt;&gt;();</span>
+<span class="fc" id="L21">    response.put(&quot;timestamp&quot;, LocalDateTime.now());</span>
+<span class="fc" id="L22">    response.put(&quot;status&quot;, s.value());</span>
+<span class="fc" id="L23">    response.put(&quot;error&quot;, s.getReasonPhrase());</span>
+<span class="fc" id="L24">    response.put(&quot;path&quot;, r.getRequestURI());</span>
+<span class="fc" id="L25">    response.put(&quot;message&quot;, e.getMessage());</span>
+<span class="fc" id="L26">    return response;</span>
+  }
+
+  @ResponseStatus(HttpStatus.FORBIDDEN)
+  @ExceptionHandler(AccessDeniedException.class)
+  @ResponseBody
+  Map&lt;String, Object&gt; onAccessDeniedException(RuntimeException e, HttpServletRequest request) {
+<span class="fc" id="L33">    return buildErrorResponse(e, request, HttpStatus.FORBIDDEN);</span>
+  }
+
+  @ResponseStatus(HttpStatus.NOT_FOUND)
+  @ExceptionHandler(NoSuchElementException.class)
+  @ResponseBody
+  Map&lt;String, Object&gt; onNoSuchElementException(RuntimeException e, HttpServletRequest request) {
+<span class="fc" id="L40">    return buildErrorResponse(e, request, HttpStatus.BAD_REQUEST);</span>
+  }
+
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  @ExceptionHandler(MethodArgumentNotValidException.class)
+  @ResponseBody
+  public Map&lt;String, Object&gt; onMethodArgumentNotValidException(
+      MethodArgumentNotValidException e, HttpServletRequest request) {
+<span class="fc" id="L48">    Map&lt;String, Object&gt; response = buildErrorResponse(e, request, HttpStatus.BAD_REQUEST);</span>
+<span class="fc" id="L49">    Map&lt;String, String&gt; errors = new LinkedHashMap&lt;&gt;();</span>
+<span class="fc" id="L50">    e.getBindingResult()</span>
+<span class="fc" id="L51">        .getAllErrors()</span>
+<span class="fc" id="L52">        .forEach(</span>
+            error -&gt; {
+<span class="fc" id="L54">              String fieldName = ((FieldError) error).getField();</span>
+<span class="fc" id="L55">              String errorMessage = error.getDefaultMessage();</span>
+<span class="fc" id="L56">              errors.put(fieldName, errorMessage);</span>
+<span class="fc" id="L57">            });</span>
+<span class="fc" id="L58">    response.put(&quot;error_detail&quot;, errors);</span>
+<span class="fc" id="L59">    return response;</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

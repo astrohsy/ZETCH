@@ -1,10 +1,14 @@
 package io.zetch.app.security;
 
 import io.zetch.app.domain.reply.ReplyPostDto;
+import io.zetch.app.domain.review.ReviewEntity;
 import io.zetch.app.domain.user.Affiliation;
 import io.zetch.app.domain.user.UserEntity;
+import io.zetch.app.repo.ReviewRepository;
 import io.zetch.app.repo.UserRepository;
+import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
@@ -13,10 +17,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class SecurityService {
   private final UserRepository userRepository;
+  private final ReviewRepository reviewRepository;
 
   @Autowired
-  public SecurityService(UserRepository userRepository) {
+  public SecurityService(UserRepository userRepository, ReviewRepository reviewRepository) {
     this.userRepository = userRepository;
+    this.reviewRepository = reviewRepository;
   }
 
   /** Returns True if the user from the provided token is an admin. */
@@ -60,6 +66,21 @@ public class SecurityService {
 
     UserEntity caller = userRepository.getReferenceById(newReply.getReplyUserId());
     return Objects.equals(getUsernameFromToken(token), caller.getUsername().toLowerCase());
+  }
+
+  /** Returns True if the user owns the review. */
+  public boolean isOwnedReview(JwtAuthenticationToken token, Long reviewId)
+      throws NoSuchElementException {
+    if (token == null) {
+      return false;
+    }
+
+    Optional<ReviewEntity> caller = reviewRepository.findById(reviewId);
+    if (caller.isEmpty()) {
+      return false;
+    }
+    return Objects.equals(
+        getUsernameFromToken(token), caller.get().getUser().getUsername().toLowerCase());
   }
 
   /** Returns the UserEntity corresponding to the provided token. */

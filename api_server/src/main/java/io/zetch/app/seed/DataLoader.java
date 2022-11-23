@@ -22,8 +22,8 @@ public class DataLoader implements CommandLineRunner {
   Boolean seedGenerationFlag;
 
   @Override
-  public void run(String... args) throws Exception {
-    if (seedGenerationFlag) {
+  public void run(String... args) {
+    if (Boolean.TRUE.equals(seedGenerationFlag)) {
       seedUserData();
       seedLocationData();
       seedReviewData();

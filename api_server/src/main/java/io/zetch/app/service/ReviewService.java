@@ -9,7 +9,11 @@ import io.zetch.app.repo.UserRepository;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-
+import java.util.Set;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import javax.validation.Validation;
+import javax.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +23,7 @@ public class ReviewService {
   private final ReviewRepository reviewRepository;
   private final UserRepository userRepository;
   private final LocationRepository locationRepository;
+  private final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
   /** Review service constructor. */
   @Autowired
@@ -37,10 +42,17 @@ public class ReviewService {
    * @return List of all Reviews
    */
   public List<ReviewEntity> getAll(Optional<Long> locationId, Optional<Long> userId) {
-    if (locationId.isPresent() && userId.isPresent())
+    if (locationId.isPresent() && userId.isPresent()) {
       return reviewRepository.findByUserIdAndLocationId(userId.get(), locationId.get());
-    else if (locationId.isPresent()) return reviewRepository.findByLocationId(locationId.get());
-    else if (userId.isPresent()) return reviewRepository.findByUserId(userId.get());
+    } else if (locationId.isPresent()) {
+      return reviewRepository.findByLocationId(locationId.get());
+    } else if (userId.isPresent()) {
+      return reviewRepository.findByUserId(userId.get());
+    }
+    return reviewRepository.findAll();
+  }
+
+  public List<ReviewEntity> getAll() {
     return reviewRepository.findAll();
   }
 
@@ -72,7 +84,44 @@ public class ReviewService {
 
     ReviewEntity newReview =
         ReviewEntity.builder().comment(comment).rating(rating).user(u).location(l).build();
+
+    Set<ConstraintViolation<ReviewEntity>> violations = validator.validate(newReview);
+    if (!violations.isEmpty()) {
+      throw new ConstraintViolationException(violations);
+    }
     return reviewRepository.save(newReview);
+  }
+
+  /**
+   * Update existing Review with any non-null attributes.
+   *
+   * @param id id of Location to be updated
+   * @param newComment New comment
+   * @param newRating New rating
+   * @return Updated Review object
+   * @throws NoSuchElementException If Review not found
+   */
+  public ReviewEntity update(Long id, String newComment, Integer newRating)
+      throws IllegalArgumentException, NoSuchElementException {
+    ReviewEntity currReview =
+        reviewRepository
+            .findById(id)
+            .orElseThrow(() -> new NoSuchElementException("Review does not exist: " + id));
+
+    if (newComment != null) {
+      currReview.setComment(newComment);
+    }
+
+    if (newRating != null) {
+      currReview.setRating(newRating);
+    }
+
+    Set<ConstraintViolation<ReviewEntity>> violations = validator.validate(currReview);
+    if (!violations.isEmpty()) {
+      throw new ConstraintViolationException(violations);
+    }
+
+    return reviewRepository.save(currReview);
   }
 
   /** Deletes one review. */

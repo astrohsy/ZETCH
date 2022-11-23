@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SeedReviews.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Zetch Reviews App</a> &gt; <a href="index.source.html" class="el_package">io.zetch.app.seed</a> &gt; <span class="el_source">SeedReviews.java</span></div><h1>SeedReviews.java</h1><pre class="source lang-java linenums">package io.zetch.app.seed;
+
+import io.zetch.app.domain.review.ReviewEntity;
+import java.util.List;
+
+/** Helper class for adding sample reviews. */
+public class SeedReviews {
+
+  public static final ReviewEntity REVIEW1 =
+<span class="nc" id="L10">      ReviewEntity.builder()</span>
+<span class="nc" id="L11">          .comment(&quot;Great meal, I enjoyed the bacon and ranch pizza.&quot;)</span>
+<span class="nc" id="L12">          .rating(4)</span>
+<span class="nc" id="L13">          .user(SeedUsers.USER1)</span>
+<span class="nc" id="L14">          .location(SeedLocations.LOCATION1)</span>
+<span class="nc" id="L15">          .build();</span>
+  public static final ReviewEntity REVIEW2 =
+<span class="nc" id="L17">      ReviewEntity.builder()</span>
+<span class="nc" id="L18">          .comment(&quot;Most authentic Jamaican food in Manhattan.&quot;)</span>
+<span class="nc" id="L19">          .rating(5)</span>
+<span class="nc" id="L20">          .user(SeedUsers.USER2)</span>
+<span class="nc" id="L21">          .location(SeedLocations.LOCATION2)</span>
+<span class="nc" id="L22">          .build();</span>
+  public static final ReviewEntity REVIEW3 =
+<span class="nc" id="L24">      ReviewEntity.builder()</span>
+<span class="nc" id="L25">          .comment(&quot;The service is terrible and the food is stale.&quot;)</span>
+<span class="nc" id="L26">          .rating(1)</span>
+<span class="nc" id="L27">          .user(SeedUsers.USER3)</span>
+<span class="nc" id="L28">          .location(SeedLocations.LOCATION3)</span>
+<span class="nc" id="L29">          .build();</span>
+  public static final ReviewEntity REVIEW4 =
+<span class="nc" id="L31">      ReviewEntity.builder()</span>
+<span class="nc" id="L32">          .comment(&quot;This museum to American dining is a gastronomical experience.&quot;)</span>
+<span class="nc" id="L33">          .rating(3)</span>
+<span class="nc" id="L34">          .user(SeedUsers.USER4)</span>
+<span class="nc" id="L35">          .location(SeedLocations.LOCATION4)</span>
+<span class="nc" id="L36">          .build();</span>
+  public static final ReviewEntity REVIEW5 =
+<span class="nc" id="L38">      ReviewEntity.builder()</span>
+<span class="nc" id="L39">          .comment(&quot;Had a great time visiting from Michigan.&quot;)</span>
+<span class="nc" id="L40">          .rating(5)</span>
+<span class="nc" id="L41">          .user(SeedUsers.USER5)</span>
+<span class="nc" id="L42">          .location(SeedLocations.LOCATION4)</span>
+<span class="nc" id="L43">          .build();</span>
+
+  //  5-Stars
+  public static final ReviewEntity REVIEW6 =
+<span class="nc" id="L47">      ReviewEntity.builder()</span>
+<span class="nc" id="L48">          .comment(</span>
+              &quot;I love the activities and interaction that they offered. &quot;
+                  + &quot;I like this museum better than Guggenheim.&quot;)
+<span class="nc" id="L51">          .rating(5)</span>
+<span class="nc" id="L52">          .user(SeedUsers.USER1)</span>
+<span class="nc" id="L53">          .location(SeedLocations.LOCATION6)</span>
+<span class="nc" id="L54">          .build();</span>
+
+  public static final ReviewEntity REVIEW7 =
+<span class="nc" id="L57">      ReviewEntity.builder()</span>
+<span class="nc" id="L58">          .comment(</span>
+              &quot;My new favorite art museum. There’s about 6 levels and over &quot;
+                  + &quot;400+ rooms of art here from sculptures, paintings, to multi-media&quot;)
+<span class="nc" id="L61">          .rating(5)</span>
+<span class="nc" id="L62">          .user(SeedUsers.USER3)</span>
+<span class="nc" id="L63">          .location(SeedLocations.LOCATION6)</span>
+<span class="nc" id="L64">          .build();</span>
+
+  public static final ReviewEntity REVIEW8 =
+<span class="nc" id="L67">      ReviewEntity.builder()</span>
+<span class="nc" id="L68">          .comment(</span>
+              &quot;Came here on a Saturday for my birthday weekend and had a great time! &quot;
+                  + &quot;The museum is so spacious that even on a busy day, &quot;
+                  + &quot;you have your own space to move around and admire the artwork.&quot;)
+<span class="nc" id="L72">          .rating(5)</span>
+<span class="nc" id="L73">          .user(SeedUsers.USER4)</span>
+<span class="nc" id="L74">          .location(SeedLocations.LOCATION6)</span>
+<span class="nc" id="L75">          .build();</span>
+
+  public static final ReviewEntity REVIEW9 =
+<span class="nc" id="L78">      ReviewEntity.builder()</span>
+<span class="nc" id="L79">          .comment(</span>
+              &quot;Overall it's a good museum but there are a few &quot;
+                  + &quot;things that can be improved for a better experience of visitors.&quot;)
+<span class="nc" id="L82">          .rating(5)</span>
+<span class="nc" id="L83">          .user(SeedUsers.USER5)</span>
+<span class="nc" id="L84">          .location(SeedLocations.LOCATION6)</span>
+<span class="nc" id="L85">          .build();</span>
+
+  public static final ReviewEntity REVIEW10 =
+<span class="nc" id="L88">      ReviewEntity.builder()</span>
+<span class="nc" id="L89">          .comment(</span>
+              &quot;Fantastic collection, audio guides of most major pieces &quot;
+                  + &quot;of art available on your phone, and free WiFi to &quot;
+                  + &quot;access it without any restrictions.&quot;)
+<span class="nc" id="L93">          .rating(5)</span>
+<span class="nc" id="L94">          .user(SeedUsers.USER6)</span>
+<span class="nc" id="L95">          .location(SeedLocations.LOCATION6)</span>
+<span class="nc" id="L96">          .build();</span>
+
+  public static final ReviewEntity REVIEW11 =
+<span class="nc" id="L99">      ReviewEntity.builder()</span>
+<span class="nc" id="L100">          .comment(</span>
+              &quot;Excellent exhibits, can spend all day covering wide range!&quot;
+                  + &quot; Go back again and again to enjoy new exhibits periodically. &quot;)
+<span class="nc" id="L103">          .rating(5)</span>
+<span class="nc" id="L104">          .user(SeedUsers.USER7)</span>
+<span class="nc" id="L105">          .location(SeedLocations.LOCATION6)</span>
+<span class="nc" id="L106">          .build();</span>
+
+  public static final ReviewEntity REVIEW12 =
+<span class="nc" id="L109">      ReviewEntity.builder()</span>
+<span class="nc" id="L110">          .comment(</span>
+              &quot;Wonderful exhibition of art in its different times, &quot;
+                  + &quot;you have 5 floors of a wide variety of works by great artists.&quot;
+                  + &quot; It is easy to walk between the different rooms&quot;
+                  + &quot; as they are all connected to each other.&quot;)
+<span class="nc" id="L115">          .rating(5)</span>
+<span class="nc" id="L116">          .user(SeedUsers.USER8)</span>
+<span class="nc" id="L117">          .location(SeedLocations.LOCATION6)</span>
+<span class="nc" id="L118">          .build();</span>
+
+  public static final ReviewEntity REVIEW13 =
+<span class="nc" id="L121">      ReviewEntity.builder()</span>
+<span class="nc" id="L122">          .comment(</span>
+              &quot;An essential Manhattan destination. &quot;
+                  + &quot;The recent renovations made it brighter.&quot;
+                  + &quot; Supreme people watching. &quot;
+                  + &quot;Temporary exhibitions tend to tell good stories&quot;)
+<span class="nc" id="L127">          .rating(4)</span>
+<span class="nc" id="L128">          .user(SeedUsers.USER9)</span>
+<span class="nc" id="L129">          .location(SeedLocations.LOCATION6)</span>
+<span class="nc" id="L130">          .build();</span>
+
+  // 4 Stars
+  public static final ReviewEntity REVIEW14 =
+<span class="nc" id="L134">      ReviewEntity.builder()</span>
+<span class="nc" id="L135">          .comment(</span>
+              &quot;Some of the pieces were very outlandish and thought provoking,&quot;
+                  + &quot; while others were mundane yet done in such a way that&quot;
+                  + &quot; makes you rethink your own realities.&quot;)
+<span class="nc" id="L139">          .rating(4)</span>
+<span class="nc" id="L140">          .user(SeedUsers.USER10)</span>
+<span class="nc" id="L141">          .location(SeedLocations.LOCATION6)</span>
+<span class="nc" id="L142">          .build();</span>
+
+  public static final ReviewEntity REVIEW15 =
+<span class="nc" id="L145">      ReviewEntity.builder()</span>
+<span class="nc" id="L146">          .comment(</span>
+              &quot;It was worth it. Art works from amazing and highly recognized artists,&quot;
+                  + &quot; hundreds of different paintings to see… I really enjoyed it,&quot;
+                  + &quot; I can even say one of the best art museums in new York. &quot;)
+<span class="nc" id="L150">          .rating(4)</span>
+<span class="nc" id="L151">          .user(SeedUsers.USER11)</span>
+<span class="nc" id="L152">          .location(SeedLocations.LOCATION6)</span>
+<span class="nc" id="L153">          .build();</span>
+
+  public static final ReviewEntity REVIEW16 =
+<span class="nc" id="L156">      ReviewEntity.builder()</span>
+<span class="nc" id="L157">          .comment(</span>
+              &quot;Head straight to the top floor! Famous stuff is here,&quot;
+                  + &quot; and it’s get more modern as you descend floors. &quot;
+                  + &quot;Beautiful building, nice collections,&quot;
+                  + &quot; but almost all the best one and &quot;
+                  + &quot;so the crowds are concentrated at the top. &quot;)
+<span class="nc" id="L163">          .rating(4)</span>
+<span class="nc" id="L164">          .user(SeedUsers.USER12)</span>
+<span class="nc" id="L165">          .location(SeedLocations.LOCATION6)</span>
+<span class="nc" id="L166">          .build();</span>
+
+  // 3 Star
+  public static final ReviewEntity REVIEW17 =
+<span class="nc" id="L170">      ReviewEntity.builder()</span>
+<span class="nc" id="L171">          .comment(</span>
+              &quot;The first Friday of the month is free for local &quot;
+                  + &quot;New Yorkers to visit but you need to book the&quot;
+                  + &quot; tickets in advance. Also they have free pen and &quot;
+                  + &quot;paper and even chairs for visitors to participate drawing. &quot;)
+<span class="nc" id="L176">          .rating(3)</span>
+<span class="nc" id="L177">          .user(SeedUsers.USER13)</span>
+<span class="nc" id="L178">          .location(SeedLocations.LOCATION6)</span>
+<span class="nc" id="L179">          .build();</span>
+
+  public static final ReviewEntity REVIEW18 =
+<span class="nc" id="L182">      ReviewEntity.builder()</span>
+<span class="nc" id="L183">          .comment(</span>
+              &quot;The first Friday of the month is free for local &quot;
+                  + &quot;New Yorkers to visit but you need to book the&quot;
+                  + &quot; tickets in advance. Also they have free pen and &quot;
+                  + &quot;paper and even chairs for visitors to participate drawing. &quot;)
+<span class="nc" id="L188">          .rating(3)</span>
+<span class="nc" id="L189">          .user(SeedUsers.USER14)</span>
+<span class="nc" id="L190">          .location(SeedLocations.LOCATION6)</span>
+<span class="nc" id="L191">          .build();</span>
+
+  public static final ReviewEntity REVIEW19 =
+<span class="nc" id="L194">      ReviewEntity.builder()</span>
+<span class="nc" id="L195">          .comment(</span>
+              &quot;Other the seeing Starry Night up close, the monet painting, &quot;
+                  + &quot;and a painting by Edward Hopper there is &quot;
+                  + &quot;not much else interesting to look at here. &quot;
+                  + &quot;Everything else in the museum is tasteless modern art. &quot;)
+<span class="nc" id="L200">          .rating(2)</span>
+<span class="nc" id="L201">          .user(SeedUsers.USER15)</span>
+<span class="nc" id="L202">          .location(SeedLocations.LOCATION6)</span>
+<span class="nc" id="L203">          .build();</span>
+
+  public static final ReviewEntity REVIEW20 =
+<span class="nc" id="L206">      ReviewEntity.builder()</span>
+<span class="nc" id="L207">          .comment(</span>
+              &quot;It was very disappointing that they old us tickets &quot;
+                  + &quot;for the same evening (first Friday of the month) &quot;
+                  + &quot;that it was a pay what you wish hour. The museum was crazy busy. &quot;)
+<span class="nc" id="L211">          .rating(2)</span>
+<span class="nc" id="L212">          .user(SeedUsers.USER16)</span>
+<span class="nc" id="L213">          .location(SeedLocations.LOCATION6)</span>
+<span class="nc" id="L214">          .build();</span>
+
+  // 1 Star
+<span class="nc" id="L217">  public static final List&lt;ReviewEntity&gt; REVIEWS =</span>
+<span class="nc" id="L218">      List.of(</span>
+          REVIEW1, REVIEW2, REVIEW3, REVIEW4, REVIEW5, REVIEW6, REVIEW7, REVIEW8, REVIEW9, REVIEW10,
+          REVIEW11, REVIEW12, REVIEW13, REVIEW14, REVIEW15, REVIEW16, REVIEW17, REVIEW18, REVIEW19,
+          REVIEW20);
+
+<span class="nc" id="L223">  private SeedReviews() {</span>
+<span class="nc" id="L224">    throw new IllegalStateException(&quot;Utility class&quot;);</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

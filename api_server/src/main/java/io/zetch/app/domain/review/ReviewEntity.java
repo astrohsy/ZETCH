@@ -9,7 +9,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -40,16 +39,6 @@ public class ReviewEntity extends BaseEntity {
   @ManyToOne
   @JoinColumn(name = "location_id")
   private LocationEntity location;
-
-  @Override
-  public boolean equals(Object o) {
-    return super.equals(o);
-  }
-
-  @Override
-  public int hashCode() {
-    return super.hashCode();
-  }
 
   public ReviewGetDto toGetDto() {
     return new ReviewGetDto(super.getId(), comment, rating, user.toGetDto(), location.toGetDto());

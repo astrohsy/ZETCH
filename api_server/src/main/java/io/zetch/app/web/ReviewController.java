@@ -8,12 +8,22 @@ import io.zetch.app.domain.review.ReviewGetDto;
 import io.zetch.app.domain.review.ReviewPostDto;
 import io.zetch.app.service.ReviewService;
 import java.util.Optional;
-
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 /** Controller for the review endpoints. */
 @RestController
@@ -32,7 +42,7 @@ public class ReviewController {
   @Operation(summary = "Create a new review.")
   @SecurityRequirement(name = "OAuth2")
   @ResponseBody
-  ReviewGetDto addNewUser(@Valid @RequestBody ReviewPostDto newReviewDto) {
+  ReviewGetDto addNewReview(@Valid @RequestBody ReviewPostDto newReviewDto) {
     ReviewEntity r =
         reviewService.createNew(
             newReviewDto.comment(),
@@ -70,13 +80,13 @@ public class ReviewController {
    * Deletes a review.
    *
    * @param reviewId Review's id
-   * @return Nothing if successful
    */
   @DeleteMapping("/{reviewId}")
   @Operation(summary = "Delete a review with reviewId.")
   @SecurityRequirement(name = "OAuth2")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  void deleteOneReview(@PathVariable Long reviewId) {
+  @PreAuthorize("@securityService.isOwnedReview(#token, #reviewId)")
+  void deleteOneReview(@PathVariable Long reviewId, JwtAuthenticationToken token) {
     reviewService.deleteOne(reviewId);
   }
 }

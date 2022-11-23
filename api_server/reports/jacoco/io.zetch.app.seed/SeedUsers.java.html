@@ -7,46 +7,146 @@ import java.util.List;
 /** Sample users. */
 public class SeedUsers {
 
-<span class="nc" id="L10">  private SeedUsers() {</span>
-<span class="nc" id="L11">    throw new IllegalStateException(&quot;Utility class&quot;);</span>
+  public static final UserEntity USER1 =
+<span class="nc" id="L11">      UserEntity.builder()</span>
+<span class="nc" id="L12">          .username(&quot;admin&quot;)</span>
+<span class="nc" id="L13">          .affiliation(Affiliation.ADMIN)</span>
+<span class="nc" id="L14">          .displayName(&quot;Admin.&quot;)</span>
+<span class="nc" id="L15">          .email(null)</span>
+<span class="nc" id="L16">          .build();</span>
+  public static final UserEntity USER2 =
+<span class="nc" id="L18">      UserEntity.builder()</span>
+<span class="nc" id="L19">          .username(&quot;bob&quot;)</span>
+<span class="nc" id="L20">          .affiliation(Affiliation.OTHER)</span>
+<span class="nc" id="L21">          .displayName(&quot;Bob R.&quot;)</span>
+<span class="nc" id="L22">          .email(&quot;bob@me.com&quot;)</span>
+<span class="nc" id="L23">          .build();</span>
+  public static final UserEntity USER3 =
+<span class="nc" id="L25">      UserEntity.builder()</span>
+<span class="nc" id="L26">          .username(&quot;cat&quot;)</span>
+<span class="nc" id="L27">          .affiliation(Affiliation.OTHER)</span>
+<span class="nc" id="L28">          .displayName(&quot;Kat F.&quot;)</span>
+<span class="nc" id="L29">          .email(&quot;kat@kat.com&quot;)</span>
+<span class="nc" id="L30">          .build();</span>
+  public static final UserEntity USER4 =
+<span class="nc" id="L32">      UserEntity.builder()</span>
+<span class="nc" id="L33">          .username(&quot;amy&quot;)</span>
+<span class="nc" id="L34">          .affiliation(Affiliation.OTHER)</span>
+<span class="nc" id="L35">          .displayName(&quot;Amy T.&quot;)</span>
+<span class="nc" id="L36">          .email(&quot;amy@dog.com&quot;)</span>
+<span class="nc" id="L37">          .build();</span>
+  public static final UserEntity USER5 =
+<span class="nc" id="L39">      UserEntity.builder()</span>
+<span class="nc" id="L40">          .username(&quot;sam&quot;)</span>
+<span class="nc" id="L41">          .affiliation(Affiliation.OTHER)</span>
+<span class="nc" id="L42">          .displayName(&quot;Sam O.&quot;)</span>
+<span class="nc" id="L43">          .email(&quot;sam@from.com&quot;)</span>
+<span class="nc" id="L44">          .build();</span>
+  public static final UserEntity USER6 =
+<span class="nc" id="L46">      UserEntity.builder()</span>
+<span class="nc" id="L47">          .username(&quot;peter&quot;)</span>
+<span class="nc" id="L48">          .affiliation(Affiliation.OTHER)</span>
+<span class="nc" id="L49">          .displayName(&quot;Peter G.&quot;)</span>
+<span class="nc" id="L50">          .email(&quot;peter@meat.com&quot;)</span>
+<span class="nc" id="L51">          .build();</span>
+  public static final UserEntity USER7 =
+<span class="nc" id="L53">      UserEntity.builder()</span>
+<span class="nc" id="L54">          .username(&quot;finn&quot;)</span>
+<span class="nc" id="L55">          .affiliation(Affiliation.OTHER)</span>
+<span class="nc" id="L56">          .displayName(&quot;Finley R.&quot;)</span>
+<span class="nc" id="L57">          .email(&quot;finn@fish.com&quot;)</span>
+<span class="nc" id="L58">          .build();</span>
+  public static final UserEntity USER8 =
+<span class="nc" id="L60">      UserEntity.builder()</span>
+<span class="nc" id="L61">          .username(&quot;mike&quot;)</span>
+<span class="nc" id="L62">          .affiliation(Affiliation.OTHER)</span>
+<span class="nc" id="L63">          .displayName(&quot;Michael T.&quot;)</span>
+<span class="nc" id="L64">          .email(&quot;mike@may.com&quot;)</span>
+<span class="nc" id="L65">          .build();</span>
+  public static final UserEntity USER9 =
+<span class="nc" id="L67">      UserEntity.builder()</span>
+<span class="nc" id="L68">          .username(&quot;beck&quot;)</span>
+<span class="nc" id="L69">          .affiliation(Affiliation.OTHER)</span>
+<span class="nc" id="L70">          .displayName(&quot;Beckett W.&quot;)</span>
+<span class="nc" id="L71">          .email(&quot;sam@from.com&quot;)</span>
+<span class="nc" id="L72">          .build();</span>
+  public static final UserEntity USER10 =
+<span class="nc" id="L74">      UserEntity.builder()</span>
+<span class="nc" id="L75">          .username(&quot;archie&quot;)</span>
+<span class="nc" id="L76">          .affiliation(Affiliation.OTHER)</span>
+<span class="nc" id="L77">          .displayName(&quot;Archibald F.&quot;)</span>
+<span class="nc" id="L78">          .email(&quot;archie@kat.com&quot;)</span>
+<span class="nc" id="L79">          .build();</span>
+  public static final UserEntity USER11 =
+<span class="nc" id="L81">      UserEntity.builder()</span>
+<span class="nc" id="L82">          .username(&quot;logan&quot;)</span>
+<span class="nc" id="L83">          .affiliation(Affiliation.OTHER)</span>
+<span class="nc" id="L84">          .displayName(&quot;Logan T.&quot;)</span>
+<span class="nc" id="L85">          .email(&quot;logan@dog.com&quot;)</span>
+<span class="nc" id="L86">          .build();</span>
+  public static final UserEntity USER12 =
+<span class="nc" id="L88">      UserEntity.builder()</span>
+<span class="nc" id="L89">          .username(&quot;adrien&quot;)</span>
+<span class="nc" id="L90">          .affiliation(Affiliation.OTHER)</span>
+<span class="nc" id="L91">          .displayName(&quot;Adrien O.&quot;)</span>
+<span class="nc" id="L92">          .email(&quot;adrien@from.com&quot;)</span>
+<span class="nc" id="L93">          .build();</span>
+  public static final UserEntity USER13 =
+<span class="nc" id="L95">      UserEntity.builder()</span>
+<span class="nc" id="L96">          .username(&quot;caden&quot;)</span>
+<span class="nc" id="L97">          .affiliation(Affiliation.OTHER)</span>
+<span class="nc" id="L98">          .displayName(&quot;Caden G.&quot;)</span>
+<span class="nc" id="L99">          .email(&quot;caden@meat.com&quot;)</span>
+<span class="nc" id="L100">          .build();</span>
+  public static final UserEntity USER14 =
+<span class="nc" id="L102">      UserEntity.builder()</span>
+<span class="nc" id="L103">          .username(&quot;leslie&quot;)</span>
+<span class="nc" id="L104">          .affiliation(Affiliation.OTHER)</span>
+<span class="nc" id="L105">          .displayName(&quot;Leslie R.&quot;)</span>
+<span class="nc" id="L106">          .email(&quot;leslie@knope.com&quot;)</span>
+<span class="nc" id="L107">          .build();</span>
+  public static final UserEntity USER15 =
+<span class="nc" id="L109">      UserEntity.builder()</span>
+<span class="nc" id="L110">          .username(&quot;ali&quot;)</span>
+<span class="nc" id="L111">          .affiliation(Affiliation.OTHER)</span>
+<span class="nc" id="L112">          .displayName(&quot;Ali T.&quot;)</span>
+<span class="nc" id="L113">          .email(&quot;ali@butterfly.com&quot;)</span>
+<span class="nc" id="L114">          .build();</span>
+  public static final UserEntity USER16 =
+<span class="nc" id="L116">      UserEntity.builder()</span>
+<span class="nc" id="L117">          .username(&quot;clem&quot;)</span>
+<span class="nc" id="L118">          .affiliation(Affiliation.OTHER)</span>
+<span class="nc" id="L119">          .displayName(&quot;Clem H.&quot;)</span>
+<span class="nc" id="L120">          .email(&quot;clem@hardies.com&quot;)</span>
+<span class="nc" id="L121">          .build();</span>
+  public static final UserEntity USER17 =
+<span class="nc" id="L123">      UserEntity.builder()</span>
+<span class="nc" id="L124">          .username(&quot;jim&quot;)</span>
+<span class="nc" id="L125">          .affiliation(Affiliation.OTHER)</span>
+<span class="nc" id="L126">          .displayName(&quot;James H.&quot;)</span>
+<span class="nc" id="L127">          .email(&quot;jim@french.com&quot;)</span>
+<span class="nc" id="L128">          .build();</span>
+  public static final UserEntity USER18 =
+<span class="nc" id="L130">      UserEntity.builder()</span>
+<span class="nc" id="L131">          .username(&quot;vic&quot;)</span>
+<span class="nc" id="L132">          .affiliation(Affiliation.OTHER)</span>
+<span class="nc" id="L133">          .displayName(&quot;Victor L.&quot;)</span>
+<span class="nc" id="L134">          .email(&quot;vic@tour.com&quot;)</span>
+<span class="nc" id="L135">          .build();</span>
+  public static final UserEntity USER19 =
+<span class="nc" id="L137">      UserEntity.builder()</span>
+<span class="nc" id="L138">          .username(&quot;bill&quot;)</span>
+<span class="nc" id="L139">          .affiliation(Affiliation.OTHER)</span>
+<span class="nc" id="L140">          .displayName(&quot;William K.&quot;)</span>
+<span class="nc" id="L141">          .email(&quot;willy@boy.com&quot;)</span>
+<span class="nc" id="L142">          .build();</span>
+<span class="nc" id="L143">  public static final List&lt;UserEntity&gt; USERS =</span>
+<span class="nc" id="L144">      List.of(</span>
+          USER1, USER2, USER3, USER4, USER5, USER6, USER7, USER8, USER9, USER10, USER11, USER12,
+          USER13, USER14, USER15, USER16, USER17, USER18, USER19);
+
+<span class="nc" id="L148">  private SeedUsers() {</span>
+<span class="nc" id="L149">    throw new IllegalStateException(&quot;Utility class&quot;);</span>
   }
-
-  private static final UserEntity USER_1 =
-<span class="fc" id="L15">      UserEntity.builder()</span>
-<span class="fc" id="L16">          .username(&quot;admin&quot;)</span>
-<span class="fc" id="L17">          .affiliation(Affiliation.ADMIN)</span>
-<span class="fc" id="L18">          .displayName(&quot;Admin.&quot;)</span>
-<span class="fc" id="L19">          .email(null)</span>
-<span class="fc" id="L20">          .build();</span>
-  private static final UserEntity USER_2 =
-<span class="fc" id="L22">      UserEntity.builder()</span>
-<span class="fc" id="L23">          .username(&quot;bob&quot;)</span>
-<span class="fc" id="L24">          .affiliation(Affiliation.STUDENT)</span>
-<span class="fc" id="L25">          .displayName(&quot;Bob R.&quot;)</span>
-<span class="fc" id="L26">          .email(&quot;bob@me.com&quot;)</span>
-<span class="fc" id="L27">          .build();</span>
-  private static final UserEntity USER_3 =
-<span class="fc" id="L29">      UserEntity.builder()</span>
-<span class="fc" id="L30">          .username(&quot;cat&quot;)</span>
-<span class="fc" id="L31">          .affiliation(Affiliation.STUDENT)</span>
-<span class="fc" id="L32">          .displayName(&quot;Kat F.&quot;)</span>
-<span class="fc" id="L33">          .email(&quot;kat@kat.com&quot;)</span>
-<span class="fc" id="L34">          .build();</span>
-  private static final UserEntity USER_4 =
-<span class="fc" id="L36">      UserEntity.builder()</span>
-<span class="fc" id="L37">          .username(&quot;amy&quot;)</span>
-<span class="fc" id="L38">          .affiliation(Affiliation.FACULTY)</span>
-<span class="fc" id="L39">          .displayName(&quot;Amy T.&quot;)</span>
-<span class="fc" id="L40">          .email(&quot;amy@dog.com&quot;)</span>
-<span class="fc" id="L41">          .build();</span>
-  private static final UserEntity USER_5 =
-<span class="fc" id="L43">      UserEntity.builder()</span>
-<span class="fc" id="L44">          .username(&quot;sam&quot;)</span>
-<span class="fc" id="L45">          .affiliation(Affiliation.OTHER)</span>
-<span class="fc" id="L46">          .displayName(&quot;Sam 2.&quot;)</span>
-<span class="fc" id="L47">          .email(&quot;sam@from.com&quot;)</span>
-<span class="fc" id="L48">          .build();</span>
-
-<span class="fc" id="L50">  public static final List&lt;UserEntity&gt; USERS = List.of(USER_1, USER_2, USER_3, USER_4, USER_5);</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

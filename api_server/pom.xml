@@ -12,6 +12,11 @@
       </plugin>
       <plugin>
         <artifactId>jacoco-maven-plugin</artifactId>
+        <configuration>
+          <excludes>
+            <exclude>io/zetch/app/seed/*</exclude>
+          </excludes>
+        </configuration>
         <executions>
           <execution>
             <goals>

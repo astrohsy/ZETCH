@@ -9,7 +9,6 @@ import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.cognitoidentityprovider.CognitoIdentityProviderClient;
-import software.amazon.awssdk.services.cognitoidentityprovider.model.AdminDeleteUserRequest;
 import software.amazon.awssdk.services.cognitoidentityprovider.model.CognitoIdentityProviderException;
 import software.amazon.awssdk.services.cognitoidentityprovider.model.SignUpRequest;
 import software.amazon.awssdk.services.cognitoidentityprovider.model.UsernameExistsException;
@@ -19,7 +18,6 @@ import software.amazon.awssdk.services.cognitoidentityprovider.model.UsernameExi
 public class CognitoService {
   private final CognitoIdentityProviderClient cognito;
   private final String clientId;
-  private final String userPoolId;
   private final Logger logger = LoggerFactory.getLogger(CognitoService.class);
 
   /** Initialize a Cognito service using AWS and Cognito keys. */
@@ -27,11 +25,9 @@ public class CognitoService {
   public CognitoService(
       @Value("${cognito.access-key-id}") String accessKey,
       @Value("${cognito.secret-key}") String secretKey,
-      @Value("${cognito.client-id}") String clientId,
-      @Value("${cognito.user-pool-id}") String userPoolId) {
+      @Value("${cognito.client-id}") String clientId) {
 
     this.clientId = clientId;
-    this.userPoolId = userPoolId;
 
     AwsBasicCredentials awsCreds = AwsBasicCredentials.create(accessKey, secretKey);
     this.cognito =
@@ -56,22 +52,6 @@ public class CognitoService {
       // Ignore this exception for now. Since we may not have data persistence during dev, we might
       // create multiple users with the same username.
       logger.warn("Username already exists in Cognito. Ignoring.");
-    } catch (CognitoIdentityProviderException e) {
-      logger.error(String.format("Cognito failed: %s", e.getMessage()));
-    }
-  }
-
-  /**
-   * Delete a user from Cognito.
-   *
-   * @param username User's username
-   */
-  public void delete(String username) {
-    AdminDeleteUserRequest deleteRequest =
-        AdminDeleteUserRequest.builder().username(username).userPoolId(userPoolId).build();
-
-    try {
-      cognito.adminDeleteUser(deleteRequest);
     } catch (CognitoIdentityProviderException e) {
       logger.error(String.format("Cognito failed: %s", e.getMessage()));
     }

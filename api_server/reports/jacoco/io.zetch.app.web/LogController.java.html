@@ -33,23 +33,25 @@ public class LogController {
 <span class="fc" id="L33">  }</span>
 
   @GetMapping(&quot;/{clientId}&quot;)
-  @Operation(summary = &quot;Retrieve all logs for the user's client.&quot;)
+  @Operation(
+      summary = &quot;Retrieve all logs for the user's client. Auth: user has to belong to the client.&quot;)
   @SecurityRequirement(name = &quot;OAuth2&quot;)
   @PreAuthorize(&quot;@securityService.isSelfClient(#token, #clientId)&quot;)
   public List&lt;LogEntity&gt; getAllClientLogs(
       JwtAuthenticationToken token, @PathVariable String clientId) {
-<span class="fc" id="L41">    return logRepository.findByClientId(clientId);</span>
+<span class="fc" id="L42">    return logRepository.findByClientId(clientId);</span>
   }
 
   @DeleteMapping(&quot;/{clientId}&quot;)
-  @Operation(summary = &quot;Delete all logs for the user's client.&quot;)
+  @Operation(
+      summary = &quot;Delete all logs for the user's client. Auth: user has to belong to the client.&quot;)
   @SecurityRequirement(name = &quot;OAuth2&quot;)
   @PreAuthorize(&quot;@securityService.isSelfClient(#token, #clientId)&quot;)
   @Transactional
   public LogDeleteDto deleteClientLogs(
       JwtAuthenticationToken token, @PathVariable String clientId) {
-<span class="fc" id="L51">    long count = logRepository.deleteByClientId(clientId);</span>
-<span class="fc" id="L52">    return new LogDeleteDto(count);</span>
+<span class="fc" id="L53">    long count = logRepository.deleteByClientId(clientId);</span>
+<span class="fc" id="L54">    return new LogDeleteDto(count);</span>
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

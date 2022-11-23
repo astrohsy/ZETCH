@@ -3,10 +3,14 @@
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import io.zetch.app.domain.location.LocationAvgRatingDto;
 import io.zetch.app.domain.location.LocationDto;
 import io.zetch.app.domain.location.LocationEntity;
 import io.zetch.app.domain.location.LocationGetDto;
+import io.zetch.app.domain.location.LocationRatingHistogramDto;
+import io.zetch.app.domain.location.LocationSearchDto;
 import io.zetch.app.service.LocationService;
+import java.util.List;
 import java.util.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,17 +38,17 @@ public class LocationController {
   private final LocationService locationService;
 
   @Autowired
-<span class="fc" id="L37">  public LocationController(LocationService locationService) {</span>
-<span class="fc" id="L38">    this.locationService = locationService;</span>
-<span class="fc" id="L39">  }</span>
+<span class="fc" id="L41">  public LocationController(LocationService locationService) {</span>
+<span class="fc" id="L42">    this.locationService = locationService;</span>
+<span class="fc" id="L43">  }</span>
 
   /** Returns a list of all locations. */
   @GetMapping(path = &quot;/&quot;)
-  @Operation(summary = &quot;Retrieve all locations&quot;)
+  @Operation(summary = &quot;Retrieve all locations.&quot;)
   @SecurityRequirement(name = &quot;OAuth2&quot;)
   @ResponseBody
   Iterable&lt;LocationGetDto&gt; getAllLocations(JwtAuthenticationToken token) {
-<span class="fc" id="L47">    return locationService.getAll().stream().map(LocationEntity::toGetDto).toList();</span>
+<span class="fc" id="L51">    return locationService.getAll().stream().map(LocationEntity::toGetDto).toList();</span>
   }
 
   /**
@@ -54,24 +58,23 @@ public class LocationController {
    * @return A location by name
    */
   @GetMapping(&quot;/{name}&quot;)
-  @Operation(summary = &quot;Retrieve a single location&quot;)
+  @Operation(summary = &quot;Retrieve a single location.&quot;)
   @SecurityRequirement(name = &quot;OAuth2&quot;)
   LocationGetDto getOneLocation(@PathVariable String name, JwtAuthenticationToken token) {
-<span class="fc" id="L60">    return locationService.getOne(name).toGetDto();</span>
+<span class="fc" id="L64">    return locationService.getOne(name).toGetDto();</span>
   }
 
-  /**
-   * Searches for a location.
-   *
-   * @param name Location's name
-   * @return A location by name
-   */
-  @GetMapping(&quot;/{name}/{type}&quot;)
-  @Operation(summary = &quot;Search locations by name and type&quot;)
+  /** Searches for a location. */
+  @GetMapping(&quot;/search&quot;)
+  @Operation(summary = &quot;Search for locations.&quot;)
   @SecurityRequirement(name = &quot;OAuth2&quot;)
   Iterable&lt;LocationGetDto&gt; searchLocation(
-      @PathVariable String name, @PathVariable String type, JwtAuthenticationToken token) {
-<span class="fc" id="L74">    return locationService.search(name, type).stream().map(LocationEntity::toGetDto).toList();</span>
+      LocationSearchDto searchParams, JwtAuthenticationToken token) {
+<span class="fc" id="L73">    return locationService</span>
+<span class="fc" id="L74">        .search(searchParams.name(), searchParams.description(), searchParams.type())</span>
+<span class="fc" id="L75">        .stream()</span>
+<span class="fc" id="L76">        .map(LocationEntity::toGetDto)</span>
+<span class="fc" id="L77">        .toList();</span>
   }
 
   /**
@@ -81,34 +84,34 @@ public class LocationController {
    * @return A location by name
    */
   @PutMapping(&quot;/{name}&quot;)
-  @Operation(summary = &quot;Modify a single location&quot;)
+  @Operation(summary = &quot;Modify a single location.&quot;)
   @SecurityRequirement(name = &quot;OAuth2&quot;)
   LocationGetDto updateLocation(
       @RequestBody LocationDto newLocationDto,
       @PathVariable String name,
       JwtAuthenticationToken token) {
-<span class="fc" id="L90">    return locationService</span>
-<span class="fc" id="L91">        .update(</span>
+<span class="fc" id="L93">    return locationService</span>
+<span class="fc" id="L94">        .update(</span>
             name,
-<span class="fc" id="L93">            newLocationDto.name(),</span>
-<span class="fc" id="L94">            newLocationDto.description(),</span>
-<span class="fc" id="L95">            newLocationDto.address(),</span>
-<span class="fc" id="L96">            newLocationDto.type())</span>
-<span class="fc" id="L97">        .toGetDto();</span>
+<span class="fc" id="L96">            newLocationDto.name(),</span>
+<span class="fc" id="L97">            newLocationDto.description(),</span>
+<span class="fc" id="L98">            newLocationDto.address(),</span>
+<span class="fc" id="L99">            newLocationDto.type())</span>
+<span class="fc" id="L100">        .toGetDto();</span>
   }
 
   /**
    * Assigns an owner to a location.
    *
    * @param name Location's name
-   * @param name Owner's name return Confirmation message if successful
+   * @param owner Owner's name
    */
   @PutMapping(&quot;/{name}/{owner}&quot;)
-  @Operation(summary = &quot;Assign owner to a location&quot;)
+  @Operation(summary = &quot;Assign owner to a location.&quot;)
   @SecurityRequirement(name = &quot;OAuth2&quot;)
   LocationGetDto assignLocationOwner(
       @PathVariable String name, @PathVariable String owner, JwtAuthenticationToken token) {
-<span class="fc" id="L111">    return locationService.assignOwner(name, owner).toGetDto();</span>
+<span class="fc" id="L114">    return locationService.assignOwner(name, owner).toGetDto();</span>
   }
 
   /**
@@ -118,18 +121,18 @@ public class LocationController {
    * @return Confirmation message if successful
    */
   @PostMapping(path = &quot;/&quot;)
-  @Operation(summary = &quot;Create a new location&quot;)
+  @Operation(summary = &quot;Create a new location.&quot;)
   @SecurityRequirement(name = &quot;OAuth2&quot;)
   @ResponseBody
   LocationGetDto addNewLocation(
       @RequestBody @Validated LocationDto locationDto, JwtAuthenticationToken token) {
-<span class="fc" id="L126">    return locationService</span>
-<span class="fc" id="L127">        .createNew(</span>
-<span class="fc" id="L128">            locationDto.name(),</span>
-<span class="fc" id="L129">            locationDto.description(),</span>
-<span class="fc" id="L130">            locationDto.address(),</span>
-<span class="fc" id="L131">            locationDto.type())</span>
-<span class="fc" id="L132">        .toGetDto();</span>
+<span class="fc" id="L129">    return locationService</span>
+<span class="fc" id="L130">        .createNew(</span>
+<span class="fc" id="L131">            locationDto.name(),</span>
+<span class="fc" id="L132">            locationDto.description(),</span>
+<span class="fc" id="L133">            locationDto.address(),</span>
+<span class="fc" id="L134">            locationDto.type())</span>
+<span class="fc" id="L135">        .toGetDto();</span>
   }
 
   /**
@@ -139,11 +142,49 @@ public class LocationController {
    * @return Confirmation message if successful
    */
   @DeleteMapping(path = &quot;/{name}&quot;)
-  @Operation(summary = &quot;Delete a location&quot;)
+  @Operation(summary = &quot;Delete a location.&quot;)
   @SecurityRequirement(name = &quot;OAuth2&quot;)
   @ResponseBody
   LocationDto deleteLocation(@PathVariable String name, JwtAuthenticationToken token) {
-<span class="fc" id="L146">    return locationService.delete(name).toDto();</span>
+<span class="fc" id="L149">    return locationService.delete(name).toDto();</span>
+  }
+
+  /**
+   * Get location's rating histogram.
+   *
+   * @param name Name of Location to delete
+   * @return Location's rating histogram.
+   */
+  @GetMapping(path = &quot;/{name}/ratingHistogram&quot;)
+  @Operation(summary = &quot;Get location's rating histogram.&quot;)
+  @SecurityRequirement(name = &quot;OAuth2&quot;)
+  @ResponseBody
+  LocationRatingHistogramDto getRatingHistogram(
+      @PathVariable String name, JwtAuthenticationToken token) {
+<span class="fc" id="L164">    return new LocationRatingHistogramDto(locationService.getRatingHistogram(name));</span>
+  }
+
+  /* Returns an average rating for a location.
+   *
+   * @param name Location's name
+   * @return Location's average rating.
+   */
+  @GetMapping(&quot;/{name}/averageRating&quot;)
+  @Operation(summary = &quot;Retrieve the average rating of a location.&quot;)
+  @SecurityRequirement(name = &quot;OAuth2&quot;)
+  LocationAvgRatingDto getAverageRating(@PathVariable String name, JwtAuthenticationToken token) {
+<span class="fc" id="L176">    return new LocationAvgRatingDto(locationService.averageRating(name));</span>
+  }
+
+  /* Returns locations that the caller owns. */
+  @GetMapping(&quot;/mine&quot;)
+  @Operation(summary = &quot;Retrieve the location(s) that the caller owns.&quot;)
+  @SecurityRequirement(name = &quot;OAuth2&quot;)
+  List&lt;LocationGetDto&gt; getOwnedLocations(JwtAuthenticationToken token) {
+<span class="nc" id="L184">    String username = token.getToken().getClaimAsString(&quot;username&quot;).toLowerCase();</span>
+<span class="nc" id="L185">    return locationService.getLocationsByOwner(username).stream()</span>
+<span class="nc" id="L186">        .map(LocationEntity::toGetDto)</span>
+<span class="nc" id="L187">        .toList();</span>
   }
 
   /**
@@ -155,7 +196,7 @@ public class LocationController {
   @ResponseStatus(HttpStatus.NOT_FOUND)
   @ExceptionHandler(NoSuchElementException.class)
   String return404(NoSuchElementException ex) {
-<span class="fc" id="L158">    return ex.getMessage();</span>
+<span class="fc" id="L199">    return ex.getMessage();</span>
   }
 
   /**
@@ -167,7 +208,7 @@ public class LocationController {
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   @ExceptionHandler(IllegalArgumentException.class)
   String return404(IllegalArgumentException ex) {
-<span class="fc" id="L170">    return ex.getMessage();</span>
+<span class="fc" id="L211">    return ex.getMessage();</span>
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

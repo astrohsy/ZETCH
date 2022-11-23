@@ -1,5 +1,6 @@
 package io.zetch.app.domain.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.zetch.app.domain.BaseEntity;
 import io.zetch.app.domain.location.LocationEntity;
 import java.util.ArrayList;
@@ -7,9 +8,6 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
