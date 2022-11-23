@@ -84,7 +84,7 @@ public class SeedLocations {
                   + "ever-changing exhibits. For over fifteen years, the Museum of Sex "
                   + "has sustained its mission to preserve and present the history, "
                   + "evolution, and cultural significance of human sexuality ")
-          .address("233 5th Ave, New York, NY 10016")
+          .address("233 5th Ave, New York, NY 10017")
           .type(Type.MUSEUM)
           .owners(List.of(SeedUsers.USER4))
           .build();
