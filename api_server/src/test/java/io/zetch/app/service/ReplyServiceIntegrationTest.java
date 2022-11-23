@@ -101,30 +101,32 @@ class ReplyServiceIntegrationTest {
 
   @Test
   void createNew_UserDoesNotExists() {
+    Long id = re1.getId();
     assertThrows(
-        NoSuchElementException.class,
-        () -> replyService.createNew("New Reply", 123456L, re1.getId()));
+        NoSuchElementException.class, () -> replyService.createNew("New Reply", 123456L, id));
   }
 
   @Test
   void createNew_ReviewDoesNotExists() {
+    Long id = u1.getId();
     assertThrows(
-        NoSuchElementException.class,
-        () -> replyService.createNew("New Reply", u1.getId(), 123456L));
+        NoSuchElementException.class, () -> replyService.createNew("New Reply", id, 123456L));
   }
 
   @Test
   void createNew_UserNotOwner() {
+    Long id = u4.getId();
+    Long id2 = re1.getId();
     assertThrows(
-        IllegalArgumentException.class,
-        () -> replyService.createNew("New Reply", u4.getId(), re1.getId()));
+        IllegalArgumentException.class, () -> replyService.createNew("New Reply", id, id2));
   }
 
   @Test
   void deleteOne() {
     ReplyEntity newReply = replyService.createNew("New Reply", u1.getId(), re1.getId());
-    replyService.deleteOne(newReply.getId());
+    Long id = newReply.getId();
+    replyService.deleteOne(id);
 
-    assertThrows(NoSuchElementException.class, () -> replyService.getOne(newReply.getId()));
+    assertThrows(NoSuchElementException.class, () -> replyService.getOne(id));
   }
 }

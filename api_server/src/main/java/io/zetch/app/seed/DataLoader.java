@@ -23,7 +23,7 @@ public class DataLoader implements CommandLineRunner {
 
   @Override
   public void run(String... args) {
-    if (seedGenerationFlag) {
+    if (Boolean.TRUE.equals(seedGenerationFlag)) {
       seedUserData();
       seedLocationData();
       seedReviewData();
