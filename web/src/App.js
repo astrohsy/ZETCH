@@ -103,9 +103,9 @@ function App() {
           locations ? renderSelectLocation() : null
         }
         {selectedLocation ?
-          [<Information location={selectedLocation} onEditLocation={onEditLocation} />,
-          <Rating location={selectedLocation} />,
-          <Reviews location={selectedLocation} user={user} />] : null}
+          [<Information location={selectedLocation} onEditLocation={onEditLocation} editable={true}/>,
+          <Rating location={selectedLocation} editable={true}/>,
+          <Reviews location={selectedLocation} user={user} editable={true}/>] : null}
         {!accessToken ? <Button variant="contained" onClick={() => { window.location.href = authorize_url; }}>Login</Button> : null}
 
         {locations ? <><Competitors myLocations={locations} /><hr /></> : null}
