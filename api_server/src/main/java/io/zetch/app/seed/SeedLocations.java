@@ -20,7 +20,7 @@ public class SeedLocations {
           .name("Fireball Restaurant")
           .description("Caribbean")
           .address("3920 Broadway")
-          .type(Type.MUSEUM)
+          .type(Type.RESTAURANT)
           .owners(List.of(SeedUsers.USER3))
           .build();
   public static final LocationEntity LOCATION3 =
@@ -69,7 +69,6 @@ public class SeedLocations {
               "An art museum in Harlem, New York City. Its permanent collection "
                   + "features Old Master paintings and European fine and"
                   + " decorative arts, including works by Bellini, Fragonard, "
-                  + "Goya, Holbein, Rembrandt, Titian, Turner, Velázquez, "
                   + "Vermeer, Thomas Gainsborough, and many others. ")
           .address("1 E 70th St, New York, NY 10021")
           .type(Type.MUSEUM)
@@ -79,9 +78,7 @@ public class SeedLocations {
       LocationEntity.builder()
           .name("Museum of Sex")
           .description(
-              "The world's foremost museum of the cultural significance of human sexuality."
-                  + " Intimate museum chronicling the evolution of human sexuality in "
-                  + "ever-changing exhibits. For over fifteen years, the Museum of Sex "
+              "For over fifteen years, the Museum of Sex "
                   + "has sustained its mission to preserve and present the history, "
                   + "evolution, and cultural significance of human sexuality ")
           .address("233 5th Ave, New York, NY 10017")
