@@ -34,6 +34,12 @@ jobs:
       - name: Build with Maven
         working-directory: ./${{ env.API_SERVER_PROJECT }}
         run: ./mvnw clean install
+      - name: API Server Unit Test
+        working-directory: ./${{ env.API_SERVER_PROJECT }}
+        run: ./mvnw test -Punit-tests
+      - name: API Server Integration Test
+        working-directory: ./${{ env.API_SERVER_PROJECT }}
+        run: ./mvnw test -Pintegration-tests
 
   sonar-lint:
     name: SonarLint Check
