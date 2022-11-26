@@ -118,3 +118,10 @@ Utilizing [variables](https://learning.postman.com/docs/sending-requests/variabl
 ##### In Swagger UI
 
 In Swagger UI, click on Authorize, then enter a client id from `.env`.
+
+
+#### API Test
+
+API Testing is done by Newman using the setting in our Postman, and it is run everytime we push to `main`.
+It generates API Test reports as the picture below. You can check the report in this [link](https://github.com/astrohsy/ZETCH/suites/9456825682/artifacts/447560614).
+<img width="1144" alt="Screen Shot 2022-11-25 at 11 34 31 PM" src="https://user-images.githubusercontent.com/16847671/204072374-45c08bac-75d5-4754-9f29-06258fea6d43.png">
