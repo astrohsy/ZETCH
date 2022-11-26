@@ -125,3 +125,12 @@ In Swagger UI, click on Authorize, then enter a client id from `.env`.
 API Testing is done by Newman using the setting in our Postman, and it is run everytime we push to `main`.
 It generates API Test reports as the picture below. You can check the report in this [link](https://github.com/astrohsy/ZETCH/suites/9456825682/artifacts/447560614).
 <img width="1144" alt="Screen Shot 2022-11-25 at 11 34 31 PM" src="https://user-images.githubusercontent.com/16847671/204072374-45c08bac-75d5-4754-9f29-06258fea6d43.png">
+
+
+#### Stress Test (JMeter)
+
+Used to local machien to testing most used features GET `/reviews` and POST `/reviews`. In the local machine it processes approximately 110 req/min, but we can improve performance by deploying more containers on AWS Beanstalk and scale up RDS instance.
+<img width="1297" alt="Screen Shot 2022-11-26 at 12 51 59 AM" src="https://user-images.githubusercontent.com/16847671/204074455-453f0c51-a5f4-4429-b182-5e6fdfec53b9.png">
+
+The configuration for JMeter is included in the repo `jmeter_stress_test.jmx`. To actually run the test, you should see a Zetch member to get an issued user token.
+
