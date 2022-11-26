@@ -7,10 +7,6 @@ import java.util.List;
 /** Sample locations. */
 public class SeedLocations {
 
-  private SeedLocations() {
-    throw new IllegalStateException("Utility class");
-  }
-
   public static final LocationEntity LOCATION1 =
       LocationEntity.builder()
           .name("Maggiano's Pizza")
@@ -24,7 +20,7 @@ public class SeedLocations {
           .name("Fireball Restaurant")
           .description("Caribbean")
           .address("3920 Broadway")
-          .type(Type.MUSEUM)
+          .type(Type.RESTAURANT)
           .owners(List.of(SeedUsers.USER3))
           .build();
   public static final LocationEntity LOCATION3 =
@@ -54,7 +50,6 @@ public class SeedLocations {
           .type(Type.MUSEUM)
           .owners(List.of(SeedUsers.USER2))
           .build();
-
   public static final LocationEntity LOCATION6 =
       LocationEntity.builder()
           .name("Columbia Museum")
@@ -67,7 +62,34 @@ public class SeedLocations {
           .type(Type.MUSEUM)
           .owners(List.of(SeedUsers.USER2))
           .build();
-
+  public static final LocationEntity LOCATION7 =
+      LocationEntity.builder()
+          .name("Harlem Portrait Museum")
+          .description(
+              "An art museum in Harlem, New York City. Its permanent collection "
+                  + "features Old Master paintings and European fine and"
+                  + " decorative arts, including works by Bellini, Fragonard, "
+                  + "Vermeer, Thomas Gainsborough, and many others. ")
+          .address("1 E 70th St, New York, NY 10021")
+          .type(Type.MUSEUM)
+          .owners(List.of(SeedUsers.USER3))
+          .build();
+  public static final LocationEntity LOCATION8 =
+      LocationEntity.builder()
+          .name("Museum of Sex")
+          .description(
+              "For over fifteen years, the Museum of Sex "
+                  + "has sustained its mission to preserve and present the history, "
+                  + "evolution, and cultural significance of human sexuality ")
+          .address("233 5th Ave, New York, NY 10017")
+          .type(Type.MUSEUM)
+          .owners(List.of(SeedUsers.USER4))
+          .build();
   public static final List<LocationEntity> LOCATIONS =
-      List.of(LOCATION1, LOCATION2, LOCATION3, LOCATION4, LOCATION5, LOCATION6);
+      List.of(
+          LOCATION1, LOCATION2, LOCATION3, LOCATION4, LOCATION5, LOCATION6, LOCATION7, LOCATION8);
+
+  private SeedLocations() {
+    throw new IllegalStateException("Utility class");
+  }
 }

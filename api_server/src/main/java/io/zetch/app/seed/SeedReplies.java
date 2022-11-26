@@ -115,7 +115,7 @@ public class SeedReplies {
     try {
       REPLY7 =
           ReplyEntity.builder()
-              .replyUser(SeedUsers.USER2)
+              .replyUser(SeedUsers.USER4)
               .replyComment("Please let us know how we could improve!")
               .createdAt(formatter.parse("05/12/2019").getTime())
               .review(SeedReviews.REVIEW9)
@@ -147,10 +147,10 @@ public class SeedReplies {
     try {
       REPLY9 =
           ReplyEntity.builder()
-              .replyUser(SeedUsers.USER2)
+              .replyUser(SeedUsers.USER3)
               .replyComment("We are sorry you did not enjoy our location.")
               .createdAt(formatter.parse("10/01/2020").getTime())
-              .review(SeedReviews.REVIEW19)
+              .review(SeedReviews.REVIEW20)
               .build();
     } catch (ParseException e) {
       throw new RuntimeException(e);
