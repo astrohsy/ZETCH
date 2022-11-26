@@ -47,7 +47,11 @@ import org.springframework.web.context.WebApplicationContext;
     claims =
         @OpenIdClaims(
             otherClaims =
-                @Claims(stringClaims = @StringClaim(name = "username", value = "some_user"))))
+                @Claims(
+                    stringClaims = {
+                      @StringClaim(name = "username", value = "some_user"),
+                      @StringClaim(name = "client_id", value = "test")
+                    })))
 class UserControllerTest {
 
   private static final String USERS_ENDPOINT = "/users/";
@@ -133,7 +137,11 @@ class UserControllerTest {
   @Test
   void createUser() throws Exception {
     when(userServiceMock.createNew(
-            u1.getUsername(), u1.getDisplayName(), u1.getEmail(), u1.getAffiliation().toString()))
+            u1.getUsername(),
+            u1.getDisplayName(),
+            u1.getEmail(),
+            u1.getAffiliation().toString(),
+            "test"))
         .thenReturn(u1);
 
     MockHttpServletRequestBuilder mockRequest =
@@ -153,7 +161,7 @@ class UserControllerTest {
 
   @Test
   void createUser_UnavailableUsername() throws Exception {
-    when(userServiceMock.createNew(any(), any(), any(), any()))
+    when(userServiceMock.createNew(any(), any(), any(), any(), any()))
         .thenThrow(IllegalArgumentException.class);
 
     MockHttpServletRequestBuilder mockRequest =
