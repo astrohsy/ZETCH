@@ -39,7 +39,7 @@ public class SeedReviews {
           .comment("Had a great time visiting from Michigan.")
           .rating(5)
           .user(SeedUsers.USER5)
-          .location(SeedLocations.LOCATION4)
+          .location(SeedLocations.LOCATION5)
           .build();
 
   //  5-Stars
@@ -50,7 +50,7 @@ public class SeedReviews {
                   + "I like this museum better than Guggenheim.")
           .rating(5)
           .user(SeedUsers.USER1)
-          .location(SeedLocations.LOCATION6)
+          .location(SeedLocations.LOCATION5)
           .build();
 
   public static final ReviewEntity REVIEW7 =
@@ -71,7 +71,7 @@ public class SeedReviews {
                   + "you have your own space to move around and admire the artwork.")
           .rating(5)
           .user(SeedUsers.USER4)
-          .location(SeedLocations.LOCATION6)
+          .location(SeedLocations.LOCATION7)
           .build();
 
   public static final ReviewEntity REVIEW9 =
@@ -81,7 +81,7 @@ public class SeedReviews {
                   + "things that can be improved for a better experience of visitors.")
           .rating(5)
           .user(SeedUsers.USER5)
-          .location(SeedLocations.LOCATION6)
+          .location(SeedLocations.LOCATION8)
           .build();
 
   public static final ReviewEntity REVIEW10 =
@@ -92,7 +92,7 @@ public class SeedReviews {
                   + "access it without any restrictions.")
           .rating(5)
           .user(SeedUsers.USER6)
-          .location(SeedLocations.LOCATION6)
+          .location(SeedLocations.LOCATION5)
           .build();
 
   public static final ReviewEntity REVIEW11 =
@@ -114,7 +114,7 @@ public class SeedReviews {
                   + " as they are all connected to each other.")
           .rating(5)
           .user(SeedUsers.USER8)
-          .location(SeedLocations.LOCATION6)
+          .location(SeedLocations.LOCATION7)
           .build();
 
   public static final ReviewEntity REVIEW13 =
@@ -126,7 +126,7 @@ public class SeedReviews {
                   + "Temporary exhibitions tend to tell good stories")
           .rating(4)
           .user(SeedUsers.USER9)
-          .location(SeedLocations.LOCATION6)
+          .location(SeedLocations.LOCATION8)
           .build();
 
   // 4 Stars
@@ -138,7 +138,7 @@ public class SeedReviews {
                   + " makes you rethink your own realities.")
           .rating(4)
           .user(SeedUsers.USER10)
-          .location(SeedLocations.LOCATION6)
+          .location(SeedLocations.LOCATION5)
           .build();
 
   public static final ReviewEntity REVIEW15 =
@@ -162,7 +162,7 @@ public class SeedReviews {
                   + "so the crowds are concentrated at the top. ")
           .rating(4)
           .user(SeedUsers.USER12)
-          .location(SeedLocations.LOCATION6)
+          .location(SeedLocations.LOCATION7)
           .build();
 
   // 3 Star
@@ -175,7 +175,7 @@ public class SeedReviews {
                   + "paper and even chairs for visitors to participate drawing. ")
           .rating(3)
           .user(SeedUsers.USER13)
-          .location(SeedLocations.LOCATION6)
+          .location(SeedLocations.LOCATION8)
           .build();
 
   public static final ReviewEntity REVIEW18 =
@@ -187,7 +187,7 @@ public class SeedReviews {
                   + "paper and even chairs for visitors to participate drawing. ")
           .rating(3)
           .user(SeedUsers.USER14)
-          .location(SeedLocations.LOCATION6)
+          .location(SeedLocations.LOCATION5)
           .build();
 
   public static final ReviewEntity REVIEW19 =
@@ -210,7 +210,28 @@ public class SeedReviews {
                   + "that it was a pay what you wish hour. The museum was crazy busy. ")
           .rating(2)
           .user(SeedUsers.USER16)
-          .location(SeedLocations.LOCATION6)
+          .location(SeedLocations.LOCATION7)
+          .build();
+  public static final ReviewEntity REVIEW21 =
+      ReviewEntity.builder()
+          .comment(
+              "This was an amazing, if not slightly bizarre experience. "
+                  + "We came here after seeing it was included on the New York pass. ")
+          .rating(2)
+          .user(SeedUsers.USER15)
+          .location(SeedLocations.LOCATION8)
+          .build();
+
+  public static final ReviewEntity REVIEW22 =
+      ReviewEntity.builder()
+          .comment(
+              "Awesome place to visit. It started off slow but by the end"
+                  + " it was well worth the price of admission. "
+                  + "You're met with a couple galleries to start with "
+                  + "but it really turns up with the games. ")
+          .rating(2)
+          .user(SeedUsers.USER16)
+          .location(SeedLocations.LOCATION5)
           .build();
 
   // 1 Star
@@ -218,7 +239,7 @@ public class SeedReviews {
       List.of(
           REVIEW1, REVIEW2, REVIEW3, REVIEW4, REVIEW5, REVIEW6, REVIEW7, REVIEW8, REVIEW9, REVIEW10,
           REVIEW11, REVIEW12, REVIEW13, REVIEW14, REVIEW15, REVIEW16, REVIEW17, REVIEW18, REVIEW19,
-          REVIEW20);
+          REVIEW20, REVIEW21, REVIEW22);
 
   private SeedReviews() {
     throw new IllegalStateException("Utility class");
