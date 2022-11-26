@@ -8,6 +8,7 @@ on:
 
 jobs:
   build:
+    name: Build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -21,6 +22,7 @@ jobs:
         run: ./mvnw clean install
 
   formatting:
+    name: Format Styles
     needs: [build]
     runs-on: ubuntu-latest
     steps:
