@@ -18,7 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Generate deployment package
-        run: zip -r deploy.zip . -x '*.git*'
+        run: zip -r deploy.zip ./api-server -x '*.git*'
       - name: Add SHORT_SHA env
         run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
       - name: Deploy to EB
@@ -29,9 +29,11 @@ jobs:
           application_name: zetch-api
           environment_name: Zetchapi-env
           region: us-east-1
-          version_label: ${SHORT_SHA}
+          version_label: ${{ env.SHORT_SHA }}
           deployment_package: deploy.zip
+
   api-test:
+    needs: [deploy]
     runs-on: ubuntu-latest
     name: "Run API Tests"
     steps:
