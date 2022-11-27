@@ -18,7 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Generate deployment package
-        run: zip -r deploy.zip ./api-server -x '*.git*'
+        run: zip -r deploy.zip ./api_server -x '*.git*'
       - name: Add SHORT_SHA env
         run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
       - name: Deploy to EB
