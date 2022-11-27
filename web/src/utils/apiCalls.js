@@ -173,3 +173,14 @@ export async function getRepliesToReview(reviewId) {
 
     return request(url, requestOptions);
 }
+
+export async function deleteReply(replyId) {
+
+    const requestOptions = {
+        method: 'DELETE'
+    };
+
+    const url = `replies/${replyId}`;
+
+    return request(url, requestOptions);
+}
