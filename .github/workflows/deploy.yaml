@@ -10,7 +10,6 @@ on:
   push:
     branches:
       - main
-      - 149-deploy-beanstalk-in-github-actions
 
 jobs:
   deploy:
