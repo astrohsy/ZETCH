@@ -1,4 +1,4 @@
-name: ZETCH API Test
+name: ZETCH Deployment and API Tests
 
 env:
   COLLECTION_FILENAME: zetch.collection.json
