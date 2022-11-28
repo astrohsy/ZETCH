@@ -1,5 +1,5 @@
 import Typography from '@mui/material/Typography';
-import { getReviewsForMuseum, replyToReview, getRepliesToReview } from '../../utils/apiCalls';
+import { getReviewsForMuseum, replyToReview, getRepliesToReview, deleteReply } from '../../utils/apiCalls';
 import { useCallback, useEffect, useState } from 'react';
 import { Box, Button } from '@mui/material';
 import TextField from '@mui/material/TextField';
@@ -33,7 +33,7 @@ const Reviews = (props) => {
                 <div>Comment: {review.comment}</div>
                 <div>Rating: {review.rating}</div>
                 <div style={{ paddingBottom: 10 }}>User: {review.user.display_name}</div>
-                <ViewRepliesDialog key={`reply_dialog_${review.id}`} review={review} user={user} editable={editable}/>
+                <ViewRepliesDialog key={`reply_dialog_${review.id}`} review={review} user={user} editable={editable} />
                 <hr />
             </div>
         })
@@ -79,6 +79,11 @@ const ViewRepliesDialog = (props) => {
         setOpen(false);
     };
 
+    const handleDeleteReply = async (replyId) => {
+        await deleteReply(replyId);
+        init();
+    }
+
 
     return (
         <div>
@@ -88,13 +93,18 @@ const ViewRepliesDialog = (props) => {
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Replies</DialogTitle>
                 <DialogContent>
-                    {replies.map(reply => {
-                        return <div key={`reply_comment_${reply.id}`}><DialogContentText>
-                            {reply.reply_comment}
-                        </DialogContentText>
-                            <hr />
-                        </div>
-                    })}
+                    {replies.length === 0 ? <DialogContentText>No existing replies</DialogContentText> :
+                        replies.map(reply => {
+                            return <div key={`reply_comment_${reply.id}`}>
+                                <div style={{ flexDirection: "row", justifyContent: "space-between", display: "flex", alignItems: "center" }}>
+                                    <div style={{ paddingRight: 20 }}>
+                                        {reply.reply_comment}
+                                    </div>
+                                    {editable ? <Button variant="contained" onClick={() => handleDeleteReply(reply.id)}>Delete Reply</Button> : null}
+                                </div>
+                                <hr />
+                            </div>
+                        })}
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>Close</Button>

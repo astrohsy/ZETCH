@@ -18,8 +18,9 @@ import { useEffect, useState } from 'react';
 
 
 const clientId = process.env.REACT_APP_COGNITO_CLIENT_ID;
+const authorize_url_base = process.env.REACT_APP_AUTHORIZE_URL;
 const redirect_uri = "http%3A%2F%2Flocalhost%3A3000"
-const authorize_url = `https://zetch-app-4.auth.us-east-1.amazoncognito.com/login?response_type=code&client_id=${clientId}&redirect_uri=${redirect_uri}`;
+const authorize_url = `${authorize_url_base}?response_type=code&client_id=${clientId}&redirect_uri=${redirect_uri}`;
 
 function App() {
 
