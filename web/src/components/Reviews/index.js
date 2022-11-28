@@ -93,17 +93,18 @@ const ViewRepliesDialog = (props) => {
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Replies</DialogTitle>
                 <DialogContent>
-                    {replies.map(reply => {
-                        return <div key={`reply_comment_${reply.id}`}>
-                            <div style={{ flexDirection: "row", justifyContent: "space-between", display: "flex", alignItems: "center" }}>
-                                <div style={{paddingRight: 20}}>
-                                    {reply.reply_comment}
+                    {replies.length === 0 ? <DialogContentText>No existing replies</DialogContentText> :
+                        replies.map(reply => {
+                            return <div key={`reply_comment_${reply.id}`}>
+                                <div style={{ flexDirection: "row", justifyContent: "space-between", display: "flex", alignItems: "center" }}>
+                                    <div style={{ paddingRight: 20 }}>
+                                        {reply.reply_comment}
+                                    </div>
+                                    {editable ? <Button variant="contained" onClick={() => handleDeleteReply(reply.id)}>Delete Reply</Button> : null}
                                 </div>
-                                <Button variant="contained" onClick={() => handleDeleteReply(reply.id)}>Delete Reply</Button>
+                                <hr />
                             </div>
-                            <hr />
-                        </div>
-                    })}
+                        })}
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>Close</Button>
