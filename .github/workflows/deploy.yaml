@@ -17,6 +17,16 @@ jobs:
     name: "Deploy to AWS Beanstalk"
     steps:
       - uses: actions/checkout@v3
+      - name: Create .env
+        run: |
+          env_path=api_server/src/main/resources/.env
+          echo COGNITO_CLIENT_ID=${{ secrets.COGNITO_CLIENT_ID }} >> env_path
+          echo COGNITO_USER_POOL_ID=us-east-1_ZP3VqeNX8 >> env_path
+          echo COGNITO_AUTH_URL=https://zetch-app-4.auth.us-east-1.amazoncognito.com/login >> env_path
+          echo COGNITO_TOKEN_URL=https://zetch-app-4.auth.us-east-1.amazoncognito.com/oauth2/token >> env_path
+          echo AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} >> env_path
+          echo AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} >> env_path
+      - run: "cat api_server/src/main/resources/.env"
       - name: Generate deployment package
         run: zip -r deploy.zip ./api_server -x '*.git*'
       - name: Add SHORT_SHA env
