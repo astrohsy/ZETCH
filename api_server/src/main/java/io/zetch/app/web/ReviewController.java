@@ -82,7 +82,8 @@ public class ReviewController {
    * @param reviewId Review's id
    */
   @DeleteMapping("/{reviewId}")
-  @Operation(summary = "Delete a review with reviewId.")
+  @Operation(
+      summary = "Delete a review with reviewId. Auth: user cannot delete another user's review.")
   @SecurityRequirement(name = "OAuth2")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize("@securityService.isOwnedReview(#token, #reviewId)")

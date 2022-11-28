@@ -39,7 +39,7 @@ public class ReplyController {
   }
 
   @PostMapping(path = "/")
-  @Operation(summary = "Create a new reply")
+  @Operation(summary = "Create a new reply. Auth: user must be the owner of the reviewed location.")
   @SecurityRequirement(name = "OAuth2")
   @PreAuthorize("@securityService.isSelfPostReply(#token, #newReply)")
   @ResponseBody

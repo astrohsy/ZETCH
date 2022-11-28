@@ -33,13 +33,15 @@ API: `docker-compose up api -d`
 
 ### 5. Testing
 
+#### Unit and integration tests
+
 Run all tests:
 
 ```shell
 ZETCH/api_server$ ./mvnw test
 ```
 
-Jacoco coverage is generated in `api_server/target/site/jacoco/index.html`.
+Jacoco test coverage report is included in the repository in `api_server/reports/jacoco/index.html`.
 
 Run unit tests only:
 
@@ -53,7 +55,17 @@ Run integration tests only:
 ZETCH/api_server$ ./mvnw test -Pintegration-tests
 ```
 
-System tests are run in postman:
+#### System tests
+
+System tests are run in Postman every time we push to `main`. Each test run generates a report,
+which can be downloaded from the the Github Actions
+logs [here](https://github.com/astrohsy/ZETCH/actions/workflows/api-test.yaml).
+
+An example can be seen in the image
+below:
+![api_test_reports.png](docs/api_test_reports.png)
+
+System tests can also be run manually with Newman:
 
 ```shell
 newman run https://api.getpostman.com/collections/23680701-9829f32b-1694-4065-b6b9-93cbc808c454?apikey={{postman-api-key}}
@@ -61,13 +73,23 @@ newman run https://api.getpostman.com/collections/23680701-9829f32b-1694-4065-b6
 
 **Important:** See a ZETCH team member for postman-api-key.
 
+#### Stress tests
+
+Used on a local machine for testing most used features GET `/reviews` and POST `/reviews`. On the
+local machine it processes approximately 110 req/min, but we can improve performance by deploying
+more containers on AWS Beanstalk and scale up RDS instance.
+![stress_test_example.png](docs/stress_test_example.png)
+
+The configuration for JMeter is included in the repo `./jmeter_stress_test.jmx`. To actually run the
+test, you should see a Zetch member to get an issued user token.
+
 ## Style checker
 
 ```shell
 ZETCH/api_server$ ./mvnw checkstyle:checkstyle
 ```
 
-Checkstyle report is in `api_server/reports/checkstyle.html`.
+Checkstyle report is included in the repositorty in `api_server/reports/checkstyle.html`.
 
 ## Static analysis
 
@@ -75,21 +97,43 @@ Checkstyle report is in `api_server/reports/checkstyle.html`.
 ZETCH/api_server$ ./mvnw pmd:pmd
 ```
 
-PMD report is generated in `api_server/target/site/pmd.html`.
+PMD report is included in the repository in `api_server/reports/pmd.html`.
 
-In addition, we are utilizing SonarCloud:
+In addition, we are utilizing SonarCloud for static analysis:
 
 ```
 https://sonarcloud.io/project/overview?id=astrohsy_ZETCH
 ```
 
+## CI / CD
+
+Github Actions is used to perform automated build, tests, and deployment.
+
+### .github/build.yml
+
+![github_build.png](docs/github_build.png)
+
+- Try Build the project and check if it has bugs while building.
+- Run `mvn tests` to perform Unit & Integration testing.
+- Check awkward code styles and reformat the code.
+
+### .github/deploy.yml
+
+![github_deploy.png](docs/github_deploy.png)
+
+- Build & Deploy to AWS Beanstalk Instance (http://zetch.tech).
+- Fetch the Postman collection for API Tests and execute the test suite.
+- The report of API tests created and attached to the pipeline artifact.
+
+###        
+
 ## API Documentation
 
-### View Swagger UI
+### View Swagger UI in development
 
 `localhost:8080/swagger-ui/index.html`
 
-### View deployed Swagger UI
+### View Swagger UI in production
 
 `https://zetch.tech/swagger-ui/index.html`
 
@@ -119,18 +163,40 @@ Utilizing [variables](https://learning.postman.com/docs/sending-requests/variabl
 
 In Swagger UI, click on Authorize, then enter a client id from `.env`.
 
+## Client
 
-#### API Test
+A sample client is located in the `web` folder.
 
-API Testing is done by Newman using the setting in our Postman, and it is run everytime we push to `main`.
-It generates API Test reports as the picture below. You can check the report in this [link](https://github.com/astrohsy/ZETCH/suites/9456825682/artifacts/447560614).
-<img width="1144" alt="Screen Shot 2022-11-25 at 11 34 31 PM" src="https://user-images.githubusercontent.com/16847671/204072374-45c08bac-75d5-4754-9f29-06258fea6d43.png">
+### End-to-end tests
 
+The checklist for manual end-to-end test is in the `web/README.md` file.
 
-#### Stress Test (JMeter)
+### How to develop your own third-party client
 
-Used to local machien to testing most used features GET `/reviews` and POST `/reviews`. In the local machine it processes approximately 110 req/min, but we can improve performance by deploying more containers on AWS Beanstalk and scale up RDS instance.
-<img width="1297" alt="Screen Shot 2022-11-26 at 12 51 59 AM" src="https://user-images.githubusercontent.com/16847671/204074455-453f0c51-a5f4-4429-b182-5e6fdfec53b9.png">
-
-The configuration for JMeter is included in the repo `jmeter_stress_test.jmx`. To actually run the test, you should see a Zetch member to get an issued user token.
-
+1. Contact the ZETCH team to get your own `client_id` and admin account credentials.
+2. Develop your own frontend using available rest apis.
+    - If the client needs to create new users, client must first login using their admin account
+      credentials to retrieve an `access_token`. Then the client can access the `POST /users` api to
+      create new users using the admin token.
+    - Any api calls related to client end-users(e.g. create review) must include the
+      user’s `access_token` which is retrieved by logging in using the given `client_id` and the
+      created user’s username and password.
+3. Some functionality our service can provide:
+    - Manage users, locations, replies, and reviews and their respective relations.
+    - Get data analysis on various locations, for example their average rating and a rating
+      histogram.
+    - Get logs of your client’s api requests to be used for KPI analysis.
+4. Some example clients you can create!
+    - A museum manager app - If you own a museum, we will authenticate your relationship with the
+      museum and give you the credentials to manage the museum’s presence.
+        - You will be able to see data analysis on your museum’s ratings, edit your museum’s
+          information(e.g.
+          description, address), reply to reviews on your museum, and view information about other
+          competitor
+          museums.
+    - A restaurant recommender app - You can create an app where users can learn about different
+      restaurants and rate the restaurants they have visited. You can then recommend similar
+      restaurants from our service to end-users based on their previous ratings.
+    - A food delivery app - You can use our service to populate your app with existing restaurants
+      and their corresponding ratings and reviews. Then your end-users will be able to learn more
+      about the restaurants before ordering food from them. 

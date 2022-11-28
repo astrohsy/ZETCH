@@ -3,7 +3,7 @@
     "_postman_id": "9829f32b-1694-4065-b6b9-93cbc808c454",
     "name": "CI Tests",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_exporter_id": "23690080"
+    "_exporter_id": "23680701"
   },
   "item": [
     {
@@ -47,15 +47,8 @@
         "url": {
           "raw": "https://cognito-idp.us-east-1.amazonaws.com/",
           "protocol": "https",
-          "host": [
-            "cognito-idp",
-            "us-east-1",
-            "amazonaws",
-            "com"
-          ],
-          "path": [
-            ""
-          ]
+          "host": ["cognito-idp", "us-east-1", "amazonaws", "com"],
+          "path": [""]
         }
       },
       "response": []
@@ -101,15 +94,8 @@
         "url": {
           "raw": "https://cognito-idp.us-east-1.amazonaws.com/",
           "protocol": "https",
-          "host": [
-            "cognito-idp",
-            "us-east-1",
-            "amazonaws",
-            "com"
-          ],
-          "path": [
-            ""
-          ]
+          "host": ["cognito-idp", "us-east-1", "amazonaws", "com"],
+          "path": [""]
         }
       },
       "response": []
@@ -155,15 +141,8 @@
         "url": {
           "raw": "https://cognito-idp.us-east-1.amazonaws.com/",
           "protocol": "https",
-          "host": [
-            "cognito-idp",
-            "us-east-1",
-            "amazonaws",
-            "com"
-          ],
-          "path": [
-            ""
-          ]
+          "host": ["cognito-idp", "us-east-1", "amazonaws", "com"],
+          "path": [""]
         }
       },
       "response": []
@@ -198,13 +177,8 @@
         "header": [],
         "url": {
           "raw": "{{SERVER_ENDPOINT}}/logs/{{CLIENT_ID}}",
-          "host": [
-            "{{SERVER_ENDPOINT}}"
-          ],
-          "path": [
-            "logs",
-            "{{CLIENT_ID}}"
-          ]
+          "host": ["{{SERVER_ENDPOINT}}"],
+          "path": ["logs", "{{CLIENT_ID}}"]
         }
       },
       "response": []
@@ -239,13 +213,8 @@
         "header": [],
         "url": {
           "raw": "{{SERVER_ENDPOINT}}/logs/{{CLIENT_ID_2}}",
-          "host": [
-            "{{SERVER_ENDPOINT}}"
-          ],
-          "path": [
-            "logs",
-            "{{CLIENT_ID_2}}"
-          ]
+          "host": ["{{SERVER_ENDPOINT}}"],
+          "path": ["logs", "{{CLIENT_ID_2}}"]
         }
       },
       "response": []
@@ -285,13 +254,8 @@
         "header": [],
         "url": {
           "raw": "{{SERVER_ENDPOINT}}/users/",
-          "host": [
-            "{{SERVER_ENDPOINT}}"
-          ],
-          "path": [
-            "users",
-            ""
-          ]
+          "host": ["{{SERVER_ENDPOINT}}"],
+          "path": ["users", ""]
         }
       },
       "response": []
@@ -350,13 +314,8 @@
         },
         "url": {
           "raw": "{{SERVER_ENDPOINT}}/users/",
-          "host": [
-            "{{SERVER_ENDPOINT}}"
-          ],
-          "path": [
-            "users",
-            ""
-          ]
+          "host": ["{{SERVER_ENDPOINT}}"],
+          "path": ["users", ""]
         }
       },
       "response": []
@@ -401,13 +360,8 @@
         },
         "url": {
           "raw": "{{SERVER_ENDPOINT}}/users/",
-          "host": [
-            "{{SERVER_ENDPOINT}}"
-          ],
-          "path": [
-            "users",
-            ""
-          ]
+          "host": ["{{SERVER_ENDPOINT}}"],
+          "path": ["users", ""]
         }
       },
       "response": []
@@ -454,13 +408,8 @@
         "header": [],
         "url": {
           "raw": "{{SERVER_ENDPOINT}}/users/citestuser",
-          "host": [
-            "{{SERVER_ENDPOINT}}"
-          ],
-          "path": [
-            "users",
-            "citestuser"
-          ]
+          "host": ["{{SERVER_ENDPOINT}}"],
+          "path": ["users", "citestuser"]
         }
       },
       "response": []
@@ -516,13 +465,8 @@
         },
         "url": {
           "raw": "{{SERVER_ENDPOINT}}/users/citestuser",
-          "host": [
-            "{{SERVER_ENDPOINT}}"
-          ],
-          "path": [
-            "users",
-            "citestuser"
-          ]
+          "host": ["{{SERVER_ENDPOINT}}"],
+          "path": ["users", "citestuser"]
         }
       },
       "response": []
@@ -567,13 +511,8 @@
         },
         "url": {
           "raw": "{{SERVER_ENDPOINT}}/users/citestuser",
-          "host": [
-            "{{SERVER_ENDPOINT}}"
-          ],
-          "path": [
-            "users",
-            "citestuser"
-          ]
+          "host": ["{{SERVER_ENDPOINT}}"],
+          "path": ["users", "citestuser"]
         }
       },
       "response": []
@@ -620,13 +559,8 @@
         "header": [],
         "url": {
           "raw": "{{SERVER_ENDPOINT}}/users/citestuser",
-          "host": [
-            "{{SERVER_ENDPOINT}}"
-          ],
-          "path": [
-            "users",
-            "citestuser"
-          ]
+          "host": ["{{SERVER_ENDPOINT}}"],
+          "path": ["users", "citestuser"]
         }
       },
       "response": []
@@ -661,13 +595,8 @@
         "header": [],
         "url": {
           "raw": "{{SERVER_ENDPOINT}}/users/",
-          "host": [
-            "{{SERVER_ENDPOINT}}"
-          ],
-          "path": [
-            "users",
-            ""
-          ]
+          "host": ["{{SERVER_ENDPOINT}}"],
+          "path": ["users", ""]
         }
       },
       "response": []
@@ -707,13 +636,8 @@
         "header": [],
         "url": {
           "raw": "{{SERVER_ENDPOINT}}/locations/",
-          "host": [
-            "{{SERVER_ENDPOINT}}"
-          ],
-          "path": [
-            "locations",
-            ""
-          ]
+          "host": ["{{SERVER_ENDPOINT}}"],
+          "path": ["locations", ""]
         }
       },
       "response": []
@@ -773,13 +697,8 @@
         },
         "url": {
           "raw": "{{SERVER_ENDPOINT}}/locations/",
-          "host": [
-            "{{SERVER_ENDPOINT}}"
-          ],
-          "path": [
-            "locations",
-            ""
-          ]
+          "host": ["{{SERVER_ENDPOINT}}"],
+          "path": ["locations", ""]
         }
       },
       "response": []
@@ -824,13 +743,8 @@
         },
         "url": {
           "raw": "{{SERVER_ENDPOINT}}/locations/",
-          "host": [
-            "{{SERVER_ENDPOINT}}"
-          ],
-          "path": [
-            "locations",
-            ""
-          ]
+          "host": ["{{SERVER_ENDPOINT}}"],
+          "path": ["locations", ""]
         }
       },
       "response": []
@@ -878,13 +792,8 @@
         "header": [],
         "url": {
           "raw": "{{SERVER_ENDPOINT}}/locations/citestlocation",
-          "host": [
-            "{{SERVER_ENDPOINT}}"
-          ],
-          "path": [
-            "locations",
-            "citestlocation"
-          ]
+          "host": ["{{SERVER_ENDPOINT}}"],
+          "path": ["locations", "citestlocation"]
         }
       },
       "response": []
@@ -941,13 +850,8 @@
         },
         "url": {
           "raw": "{{SERVER_ENDPOINT}}/locations/citestlocation",
-          "host": [
-            "{{SERVER_ENDPOINT}}"
-          ],
-          "path": [
-            "locations",
-            "citestlocation"
-          ]
+          "host": ["{{SERVER_ENDPOINT}}"],
+          "path": ["locations", "citestlocation"]
         }
       },
       "response": []
@@ -995,13 +899,8 @@
         "header": [],
         "url": {
           "raw": "{{SERVER_ENDPOINT}}/locations/citestlocation",
-          "host": [
-            "{{SERVER_ENDPOINT}}"
-          ],
-          "path": [
-            "locations",
-            "citestlocation"
-          ]
+          "host": ["{{SERVER_ENDPOINT}}"],
+          "path": ["locations", "citestlocation"]
         }
       },
       "response": []
@@ -1049,13 +948,8 @@
         "header": [],
         "url": {
           "raw": "{{SERVER_ENDPOINT}}/locations/search?name=test",
-          "host": [
-            "{{SERVER_ENDPOINT}}"
-          ],
-          "path": [
-            "locations",
-            "search"
-          ],
+          "host": ["{{SERVER_ENDPOINT}}"],
+          "path": ["locations", "search"],
           "query": [
             {
               "key": "name",
@@ -1121,13 +1015,8 @@
         },
         "url": {
           "raw": "{{SERVER_ENDPOINT}}/locations/search?description=test",
-          "host": [
-            "{{SERVER_ENDPOINT}}"
-          ],
-          "path": [
-            "locations",
-            "search"
-          ],
+          "host": ["{{SERVER_ENDPOINT}}"],
+          "path": ["locations", "search"],
           "query": [
             {
               "key": "description",
@@ -1156,7 +1045,7 @@
               "\r",
               "pm.test(\"The response has all properties\", () => {\r",
               "    const responseJson = pm.response.json();\r",
-              "    pm.expect(responseJson.length).to.be.eql(3);\r",
+              "    pm.expect(responseJson.length).to.be.eql(4);\r",
               "});"
             ],
             "type": "text/javascript"
@@ -1190,13 +1079,8 @@
         },
         "url": {
           "raw": "{{SERVER_ENDPOINT}}/locations/search?type=restaurant",
-          "host": [
-            "{{SERVER_ENDPOINT}}"
-          ],
-          "path": [
-            "locations",
-            "search"
-          ],
+          "host": ["{{SERVER_ENDPOINT}}"],
+          "path": ["locations", "search"],
           "query": [
             {
               "key": "type",
@@ -1247,13 +1131,8 @@
         "header": [],
         "url": {
           "raw": "{{SERVER_ENDPOINT}}/locations/mine",
-          "host": [
-            "{{SERVER_ENDPOINT}}"
-          ],
-          "path": [
-            "locations",
-            "mine"
-          ]
+          "host": ["{{SERVER_ENDPOINT}}"],
+          "path": ["locations", "mine"]
         }
       },
       "response": []
@@ -1310,14 +1189,8 @@
         },
         "url": {
           "raw": "{{SERVER_ENDPOINT}}/locations/citestlocation/citestuser",
-          "host": [
-            "{{SERVER_ENDPOINT}}"
-          ],
-          "path": [
-            "locations",
-            "citestlocation",
-            "citestuser"
-          ]
+          "host": ["{{SERVER_ENDPOINT}}"],
+          "path": ["locations", "citestlocation", "citestuser"]
         }
       },
       "response": []
@@ -1365,13 +1238,8 @@
         "header": [],
         "url": {
           "raw": "{{SERVER_ENDPOINT}}/locations/mine",
-          "host": [
-            "{{SERVER_ENDPOINT}}"
-          ],
-          "path": [
-            "locations",
-            "mine"
-          ]
+          "host": ["{{SERVER_ENDPOINT}}"],
+          "path": ["locations", "mine"]
         }
       },
       "response": []
@@ -1431,13 +1299,8 @@
         },
         "url": {
           "raw": "{{SERVER_ENDPOINT}}/reviews/",
-          "host": [
-            "{{SERVER_ENDPOINT}}"
-          ],
-          "path": [
-            "reviews",
-            ""
-          ]
+          "host": ["{{SERVER_ENDPOINT}}"],
+          "path": ["reviews", ""]
         }
       },
       "response": []
@@ -1485,13 +1348,8 @@
         "header": [],
         "url": {
           "raw": "{{SERVER_ENDPOINT}}/reviews/{{citest_review_id}}",
-          "host": [
-            "{{SERVER_ENDPOINT}}"
-          ],
-          "path": [
-            "reviews",
-            "{{citest_review_id}}"
-          ]
+          "host": ["{{SERVER_ENDPOINT}}"],
+          "path": ["reviews", "{{citest_review_id}}"]
         }
       },
       "response": []
@@ -1514,7 +1372,7 @@
               "",
               "pm.test(\"The response has correct review count\", () => {",
               "    const responseJson = pm.response.json();",
-              "    pm.expect(responseJson).to.have.lengthOf(21);",
+              "    pm.expect(responseJson).to.have.lengthOf(23);",
               "});"
             ],
             "type": "text/javascript"
@@ -1536,13 +1394,8 @@
         "header": [],
         "url": {
           "raw": "{{SERVER_ENDPOINT}}/reviews/",
-          "host": [
-            "{{SERVER_ENDPOINT}}"
-          ],
-          "path": [
-            "reviews",
-            ""
-          ]
+          "host": ["{{SERVER_ENDPOINT}}"],
+          "path": ["reviews", ""]
         }
       },
       "response": []
@@ -1591,15 +1444,8 @@
         "header": [],
         "url": {
           "raw": "{{SERVER_ENDPOINT}}/locations/citestlocation/ratingHistogram/",
-          "host": [
-            "{{SERVER_ENDPOINT}}"
-          ],
-          "path": [
-            "locations",
-            "citestlocation",
-            "ratingHistogram",
-            ""
-          ]
+          "host": ["{{SERVER_ENDPOINT}}"],
+          "path": ["locations", "citestlocation", "ratingHistogram", ""]
         }
       },
       "response": []
@@ -1645,15 +1491,8 @@
         "header": [],
         "url": {
           "raw": "{{SERVER_ENDPOINT}}/locations/citestlocation/averageRating/",
-          "host": [
-            "{{SERVER_ENDPOINT}}"
-          ],
-          "path": [
-            "locations",
-            "citestlocation",
-            "averageRating",
-            ""
-          ]
+          "host": ["{{SERVER_ENDPOINT}}"],
+          "path": ["locations", "citestlocation", "averageRating", ""]
         }
       },
       "response": []
@@ -1710,13 +1549,8 @@
         },
         "url": {
           "raw": "{{SERVER_ENDPOINT}}/replies/",
-          "host": [
-            "{{SERVER_ENDPOINT}}"
-          ],
-          "path": [
-            "replies",
-            ""
-          ]
+          "host": ["{{SERVER_ENDPOINT}}"],
+          "path": ["replies", ""]
         }
       },
       "response": []
@@ -1761,13 +1595,8 @@
         },
         "url": {
           "raw": "{{SERVER_ENDPOINT}}/replies/",
-          "host": [
-            "{{SERVER_ENDPOINT}}"
-          ],
-          "path": [
-            "replies",
-            ""
-          ]
+          "host": ["{{SERVER_ENDPOINT}}"],
+          "path": ["replies", ""]
         }
       },
       "response": []
@@ -1812,13 +1641,8 @@
         "header": [],
         "url": {
           "raw": "{{SERVER_ENDPOINT}}/replies/{{citest_reply_id}}",
-          "host": [
-            "{{SERVER_ENDPOINT}}"
-          ],
-          "path": [
-            "replies",
-            "{{citest_reply_id}}"
-          ]
+          "host": ["{{SERVER_ENDPOINT}}"],
+          "path": ["replies", "{{citest_reply_id}}"]
         }
       },
       "response": []
@@ -1863,14 +1687,8 @@
         "header": [],
         "url": {
           "raw": "{{SERVER_ENDPOINT}}/replies/user/{{citest_user_id}}",
-          "host": [
-            "{{SERVER_ENDPOINT}}"
-          ],
-          "path": [
-            "replies",
-            "user",
-            "{{citest_user_id}}"
-          ]
+          "host": ["{{SERVER_ENDPOINT}}"],
+          "path": ["replies", "user", "{{citest_user_id}}"]
         }
       },
       "response": []
@@ -1915,14 +1733,8 @@
         "header": [],
         "url": {
           "raw": "{{SERVER_ENDPOINT}}/replies/review/{{citest_review_id}}",
-          "host": [
-            "{{SERVER_ENDPOINT}}"
-          ],
-          "path": [
-            "replies",
-            "review",
-            "{{citest_review_id}}"
-          ]
+          "host": ["{{SERVER_ENDPOINT}}"],
+          "path": ["replies", "review", "{{citest_review_id}}"]
         }
       },
       "response": []
@@ -1963,13 +1775,8 @@
         "header": [],
         "url": {
           "raw": "{{SERVER_ENDPOINT}}/replies/{{citest_reply_id}}",
-          "host": [
-            "{{SERVER_ENDPOINT}}"
-          ],
-          "path": [
-            "replies",
-            "{{citest_reply_id}}"
-          ]
+          "host": ["{{SERVER_ENDPOINT}}"],
+          "path": ["replies", "{{citest_reply_id}}"]
         }
       },
       "response": []
@@ -2004,13 +1811,8 @@
         "header": [],
         "url": {
           "raw": "{{SERVER_ENDPOINT}}/reviews/{{citest_review_id}}",
-          "host": [
-            "{{SERVER_ENDPOINT}}"
-          ],
-          "path": [
-            "reviews",
-            "{{citest_review_id}}"
-          ]
+          "host": ["{{SERVER_ENDPOINT}}"],
+          "path": ["reviews", "{{citest_review_id}}"]
         }
       },
       "response": []
@@ -2058,13 +1860,8 @@
         "header": [],
         "url": {
           "raw": "{{SERVER_ENDPOINT}}/locations/citestlocation",
-          "host": [
-            "{{SERVER_ENDPOINT}}"
-          ],
-          "path": [
-            "locations",
-            "citestlocation"
-          ]
+          "host": ["{{SERVER_ENDPOINT}}"],
+          "path": ["locations", "citestlocation"]
         }
       },
       "response": []
@@ -2111,13 +1908,8 @@
         "header": [],
         "url": {
           "raw": "{{SERVER_ENDPOINT}}/users/citestuser",
-          "host": [
-            "{{SERVER_ENDPOINT}}"
-          ],
-          "path": [
-            "users",
-            "citestuser"
-          ]
+          "host": ["{{SERVER_ENDPOINT}}"],
+          "path": ["users", "citestuser"]
         }
       },
       "response": []
@@ -2152,13 +1944,8 @@
         "header": [],
         "url": {
           "raw": "{{SERVER_ENDPOINT}}/users/citestuser",
-          "host": [
-            "{{SERVER_ENDPOINT}}"
-          ],
-          "path": [
-            "users",
-            "citestuser"
-          ]
+          "host": ["{{SERVER_ENDPOINT}}"],
+          "path": ["users", "citestuser"]
         }
       },
       "response": []
@@ -2193,13 +1980,8 @@
         "header": [],
         "url": {
           "raw": "{{SERVER_ENDPOINT}}/locations/citestlocation",
-          "host": [
-            "{{SERVER_ENDPOINT}}"
-          ],
-          "path": [
-            "locations",
-            "citestlocation"
-          ]
+          "host": ["{{SERVER_ENDPOINT}}"],
+          "path": ["locations", "citestlocation"]
         }
       },
       "response": []
@@ -2234,13 +2016,8 @@
         "header": [],
         "url": {
           "raw": "{{SERVER_ENDPOINT}}/reviews/{{citest_review_id}}",
-          "host": [
-            "{{SERVER_ENDPOINT}}"
-          ],
-          "path": [
-            "reviews",
-            "{{citest_review_id}}"
-          ]
+          "host": ["{{SERVER_ENDPOINT}}"],
+          "path": ["reviews", "{{citest_review_id}}"]
         }
       },
       "response": []
@@ -2280,13 +2057,8 @@
         "header": [],
         "url": {
           "raw": "{{SERVER_ENDPOINT}}/users/",
-          "host": [
-            "{{SERVER_ENDPOINT}}"
-          ],
-          "path": [
-            "users",
-            ""
-          ]
+          "host": ["{{SERVER_ENDPOINT}}"],
+          "path": ["users", ""]
         }
       },
       "response": []
@@ -2333,13 +2105,8 @@
         "header": [],
         "url": {
           "raw": "{{SERVER_ENDPOINT}}/logs/{{CLIENT_ID}}",
-          "host": [
-            "{{SERVER_ENDPOINT}}"
-          ],
-          "path": [
-            "logs",
-            "{{CLIENT_ID}}"
-          ]
+          "host": ["{{SERVER_ENDPOINT}}"],
+          "path": ["logs", "{{CLIENT_ID}}"]
         }
       },
       "response": []
@@ -2386,13 +2153,8 @@
         "header": [],
         "url": {
           "raw": "{{SERVER_ENDPOINT}}/logs/{{CLIENT_ID_2}}",
-          "host": [
-            "{{SERVER_ENDPOINT}}"
-          ],
-          "path": [
-            "logs",
-            "{{CLIENT_ID_2}}"
-          ]
+          "host": ["{{SERVER_ENDPOINT}}"],
+          "path": ["logs", "{{CLIENT_ID_2}}"]
         }
       },
       "response": []
@@ -2427,13 +2189,8 @@
         "header": [],
         "url": {
           "raw": "{{SERVER_ENDPOINT}}/logs/{{CLIENT_ID_2}}",
-          "host": [
-            "{{SERVER_ENDPOINT}}"
-          ],
-          "path": [
-            "logs",
-            "{{CLIENT_ID_2}}"
-          ]
+          "host": ["{{SERVER_ENDPOINT}}"],
+          "path": ["logs", "{{CLIENT_ID_2}}"]
         }
       },
       "response": []
@@ -2484,18 +2241,14 @@
       "listen": "prerequest",
       "script": {
         "type": "text/javascript",
-        "exec": [
-          ""
-        ]
+        "exec": [""]
       }
     },
     {
       "listen": "test",
       "script": {
         "type": "text/javascript",
-        "exec": [
-          ""
-        ]
+        "exec": [""]
       }
     }
   ],

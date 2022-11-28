@@ -52,10 +52,15 @@ public class UserController {
   @Operation(summary = "Create a new user.")
   @SecurityRequirement(name = "OAuth2")
   @ResponseBody
-  UserGetDto addNewUser(@RequestBody UserDto newUserDto) {
+  UserGetDto addNewUser(@RequestBody UserDto newUserDto, JwtAuthenticationToken token) {
+    String clientId = token.getToken().getClaimAsString("client_id");
     return userService
         .createNew(
-            newUserDto.username(), newUserDto.name(), newUserDto.email(), newUserDto.affiliation())
+            newUserDto.username(),
+            newUserDto.name(),
+            newUserDto.email(),
+            newUserDto.affiliation(),
+            clientId)
         .toGetDto();
   }
 
