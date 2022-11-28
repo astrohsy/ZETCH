@@ -68,7 +68,7 @@ class UserServiceIntegrationTest {
 
   @Test
   void createNew() {
-    UserEntity newUser = userService.createNew("bob", "Bob", "bob@me.com", "other");
+    UserEntity newUser = userService.createNew("bob", "Bob", "bob@me.com", "other", "test");
     assertThat(userService.getAll().size(), is(1));
     assertThat(newUser.getUsername(), is("bob"));
     assertThat(newUser.getDisplayName(), is("Bob"));
@@ -81,7 +81,7 @@ class UserServiceIntegrationTest {
     userRepository.save(u1);
     assertThrows(
         IllegalArgumentException.class,
-        () -> userService.createNew(NAME_1, "Bob", "bob@me.com", "other"));
+        () -> userService.createNew(NAME_1, "Bob", "bob@me.com", "other", "test"));
   }
 
   @Test

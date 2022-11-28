@@ -50,14 +50,15 @@ public class UserService {
    * @return User
    * @throws IllegalArgumentException If username unavailable or invalid Affiliation passed
    */
-  public UserEntity createNew(String username, String name, String email, String affiliation)
+  public UserEntity createNew(
+      String username, String name, String email, String affiliation, String clientId)
       throws IllegalArgumentException {
     if (userRepository.existsByUsername(username)) {
       throw new IllegalArgumentException("Username unavailable: " + username);
     }
 
     // Add user to Cognito
-    cognitoService.signUp(username);
+    cognitoService.signUp(username, clientId);
 
     UserEntity newUser =
         UserEntity.builder()

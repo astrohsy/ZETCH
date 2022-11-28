@@ -29,6 +29,7 @@ class UserServiceTest {
   private static final String NAME = "Bob";
   private static final String EMAIL = "bob@example.com";
   private static final String AFFILIATION = "other";
+  private static final String CLIENTID = "test";
 
   @Mock private UserRepository userRepositoryMock;
   @Mock private UserEntity userMock;
@@ -104,11 +105,11 @@ class UserServiceTest {
     // Prepare to capture a User object
     ArgumentCaptor<UserEntity> userCaptor = ArgumentCaptor.forClass(UserEntity.class);
 
-    service.createNew(USERNAME, NAME, EMAIL, AFFILIATION);
+    service.createNew(USERNAME, NAME, EMAIL, AFFILIATION, CLIENTID);
 
     // Verify save() invoked
     verify(userRepositoryMock).save(userCaptor.capture());
-    verify(cognitoServiceMock).signUp(USERNAME);
+    verify(cognitoServiceMock).signUp(USERNAME, CLIENTID);
 
     // Verify the attributes of the User object
     UserEntity value = userCaptor.getValue();
@@ -124,6 +125,6 @@ class UserServiceTest {
     when(userRepositoryMock.existsByUsername(USERNAME)).thenReturn(true);
     assertThrows(
         IllegalArgumentException.class,
-        () -> service.createNew(USERNAME, NAME, EMAIL, AFFILIATION));
+        () -> service.createNew(USERNAME, NAME, EMAIL, AFFILIATION, CLIENTID));
   }
 }
