@@ -21,6 +21,10 @@ const request = async (url, requestOptions, isRawUrl = false) => {
     }
     try {
         const res = await fetch(url, requestOptions);
+        const code = res.status;
+        if (code === 204) {
+            return null;
+        }
         const response = await res.json()
         const returned = await JSON.parse(JSON.stringify(response));
         // console.log('Success', returned);
@@ -37,8 +41,8 @@ export async function getAuthToken(code) {
         method: 'POST',
         headers
     };
-
-    return request(`https://zetch-app-4.auth.us-east-1.amazoncognito.com/oauth2/token?grant_type=authorization_code&client_id=${clientId}&redirect_uri=http%3A%2F%2Flocalhost%3A3000&code=${code}`, requestOptions, true);
+    const tokenUrl = process.env.REACT_APP_TOKEN_URL;
+    return request(`${tokenUrl}?grant_type=authorization_code&client_id=${clientId}&redirect_uri=http%3A%2F%2Flocalhost%3A3000&code=${code}`, requestOptions, true);
 }
 
 export async function getCognitoUser(accessToken) {
