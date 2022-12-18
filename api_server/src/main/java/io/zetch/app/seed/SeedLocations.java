@@ -9,35 +9,48 @@ public class SeedLocations {
 
   public static final LocationEntity LOCATION1 =
       LocationEntity.builder()
-          .name("Maggiano's Pizza")
-          .description("Italian")
+          .name("Whitney Museum of American Art")
+          .description(
+              "The Whitney Museum of American Art is an art museum in the "
+                  + "Meatpacking District and West Village neighborhoods of"
+                  + " Manhattan in New York City.")
           .address("1100 Riverside Drive")
-          .type(Type.RESTAURANT)
+          .type(Type.MUSEUM)
           .owners(List.of(SeedUsers.USER2))
           .build();
   public static final LocationEntity LOCATION2 =
       LocationEntity.builder()
-          .name("Fireball Restaurant")
-          .description("Caribbean")
+          .name("The Frick Collection")
+          .description(
+              " Its permanent collection features Old Master paintings "
+                  + "and European fine and decorative arts, including "
+                  + "works by Bellini, Fragonard, Goya, Holbein, "
+                  + "Rembrandt, Titian, Turner, Velazquez, Vermeer,"
+                  + " Thomas Gainsborough, and many others.")
           .address("3920 Broadway")
-          .type(Type.RESTAURANT)
+          .type(Type.MUSEUM)
           .owners(List.of(SeedUsers.USER3))
           .build();
   public static final LocationEntity LOCATION3 =
       LocationEntity.builder()
-          .name("Havana Heights")
-          .description("Cuban")
+          .name("Tenement Museum")
+          .description("Explore historically recreated tenement apartments "
+              + "and discover how immigrants lived on New York's Lower East "
+              + "Side in the 19th and 20th centuries.")
           .address("4029 Morningside Drive")
-          .type(Type.BUILDING)
+          .type(Type.MUSEUM)
           .owners(List.of(SeedUsers.USER4))
           .build();
   public static final LocationEntity LOCATION4 =
       LocationEntity.builder()
-          .name("Wimpy's")
-          .description("American")
+          .name("Brooklyn Museum")
+          .description("The Brooklyn Museum is an art museum located in the "
+              + "New York City borough of Brooklyn. At 560,000 square feet,"
+              + " the museum is New York City's second largest and contains "
+              + "an art collection with around 1.5 million objects.")
           .address("1323 St. Nicholas Ave")
           .owners(List.of(SeedUsers.USER2))
-          .type(Type.RESTAURANT)
+          .type(Type.MUSEUM)
           .build();
   public static final LocationEntity LOCATION5 =
       LocationEntity.builder()
