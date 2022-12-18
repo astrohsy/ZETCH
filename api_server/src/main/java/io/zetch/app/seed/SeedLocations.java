@@ -34,9 +34,10 @@ public class SeedLocations {
   public static final LocationEntity LOCATION3 =
       LocationEntity.builder()
           .name("Tenement Museum")
-          .description("Explore historically recreated tenement apartments "
-              + "and discover how immigrants lived on New York's Lower East "
-              + "Side in the 19th and 20th centuries.")
+          .description(
+              "Explore historically recreated tenement apartments "
+                  + "and discover how immigrants lived on New York's Lower East "
+                  + "Side in the 19th and 20th centuries.")
           .address("4029 Morningside Drive")
           .type(Type.MUSEUM)
           .owners(List.of(SeedUsers.USER4))
@@ -44,10 +45,11 @@ public class SeedLocations {
   public static final LocationEntity LOCATION4 =
       LocationEntity.builder()
           .name("Brooklyn Museum")
-          .description("The Brooklyn Museum is an art museum located in the "
-              + "New York City borough of Brooklyn. At 560,000 square feet,"
-              + " the museum is New York City's second largest and contains "
-              + "an art collection with around 1.5 million objects.")
+          .description(
+              "The Brooklyn Museum is an art museum located in the "
+                  + "New York City borough of Brooklyn. At 560,000 square feet,"
+                  + " the museum is New York City's second largest and contains "
+                  + "an art collection with around 1.5 million objects.")
           .address("1323 St. Nicholas Ave")
           .owners(List.of(SeedUsers.USER2))
           .type(Type.MUSEUM)
